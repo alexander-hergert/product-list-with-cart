@@ -1,9 +1,16 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 export const metadata = {
   metadataBase: new URL("https://postgres-prisma.vercel.app"),
-  title: "Vercel Postgres Demo with Prisma",
+  title: "Product-List-With-Cart",
   description:
     "A simple Next.js app with Vercel Postgres as the database and Prisma as the ORM",
 };
@@ -20,8 +27,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.variable}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.variable}>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
