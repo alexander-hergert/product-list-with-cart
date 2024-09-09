@@ -7,6 +7,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import Providers from "./providers";
 
 export const metadata = {
   metadataBase: new URL("https://postgres-prisma.vercel.app"),
@@ -27,18 +28,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.variable}>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={inter.variable}>
+        <Providers>
+          <ClerkProvider>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            {children}
+          </ClerkProvider>
+        </Providers>
+      </body>
+    </html>
   );
 }

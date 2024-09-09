@@ -30,9 +30,11 @@ export async function POST(request: Request) {
     const existingUser = await prisma.users.findUnique({
       where: { email },
     });
+
     if (existingUser) {
-      return NextResponse.json(existingUser, { status: 200 });
+      return NextResponse.json(existingUser, { status: 400 });
     }
+
     // Create a new user in the database
     const user = await prisma.users.create({
       data: { name, email, image },

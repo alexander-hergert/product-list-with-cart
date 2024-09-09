@@ -4,18 +4,16 @@
 "use client";
 
 import { useAuth } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function SignUpPage() {
+export default function SignUpHandler() {
   const { isLoaded, userId } = useAuth();
-
-  useEffect(() => {
-    if (isLoaded && userId) {
-      handlePostSignUp();
-    }
-  }, [isLoaded, userId]);
+  const router = useRouter();
+  const createdUser = localStorage.getItem("createdUser");
 
   const handlePostSignUp = async () => {
+    if (createdUser) return;
     try {
       const response = await fetch("/api/signup", {
         method: "POST",
@@ -25,7 +23,10 @@ export default function SignUpPage() {
       });
 
       if (response.ok) {
+        console.log(response);
         console.log("Custom logic executed successfully");
+        localStorage.setItem("createdUser", "true");
+        router.push("/success");
       } else {
         console.error("Failed to execute custom logic");
       }
@@ -33,6 +34,12 @@ export default function SignUpPage() {
       console.error("Error:", error);
     }
   };
+
+  useEffect(() => {
+    if (isLoaded && userId) {
+      handlePostSignUp();
+    }
+  }, [isLoaded, userId]);
 
   return <></>;
 }
