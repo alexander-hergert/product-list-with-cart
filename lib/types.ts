@@ -2,8 +2,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  image: string | null;
-  createdAt: Date;
+  image: string;
 };
 
 export type Product = {
@@ -11,7 +10,7 @@ export type Product = {
   name: string;
   price: number;
   description: string;
-  image: string | null;
+  image: string;
   rating: number;
 };
 
@@ -36,3 +35,5 @@ export type Feedback = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export default User;

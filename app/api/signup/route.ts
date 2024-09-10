@@ -3,6 +3,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import User from "@/lib/types";
 
 const prisma = new PrismaClient();
 
@@ -15,20 +16,22 @@ export async function POST(request: Request) {
   try {
     const clerkUser = userId ? await clerkClient().users.getUser(userId) : null;
 
-    const id: string = userId;
-    const name: string = clerkUser?.fullName || "Anonymous";
-    const email: string | undefined =
-      clerkUser?.emailAddresses[0]?.emailAddress;
+    const userInput: User = {
+      id: userId,
+      name: clerkUser?.fullName || "Unknown",
+      email: clerkUser?.emailAddresses[0]?.emailAddress || "",
+      image:
+        "https://images.ctfassets.net/e5382hct74si/4QEuVLNyZUg5X6X4cW4pVH/eb7cd219e21b29ae976277871cd5ca4b/profile.jpg",
+    };
+
+    const { id, name, email, image } = userInput;
 
     if (!email) {
       return NextResponse.json({ error: "Email not found" }, { status: 400 });
     }
 
-    const image =
-      "https://images.ctfassets.net/e5382hct74si/4QEuVLNyZUg5X6X4cW4pVH/eb7cd219e21b29ae976277871cd5ca4b/profile.jpg";
-
     // Check if user already exists
-    const existingUser = await prisma.users.findUnique({
+    const existingUser: User | null = await prisma.users.findUnique({
       where: { email },
     });
 

@@ -15,7 +15,7 @@ model users {
   id        String   @id
   name      String
   email     String   @unique
-  image     String?
+  image     String
   createdAt DateTime @default(now())
 }
 
@@ -25,7 +25,7 @@ model products {
   name        String
   price       Float
   description String
-  image       String?
+  image       String
   rating      Float
 }
 
