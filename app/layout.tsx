@@ -8,6 +8,8 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import Providers from "./providers";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 
 export const metadata = {
   metadataBase: new URL("https://postgres-prisma.vercel.app"),
@@ -22,6 +24,11 @@ const inter = Inter({
   display: "swap",
 });
 
+//moved to layout for now
+const SignUpHandler = dynamic(() => import("@/components/SignUpHandler"), {
+  ssr: false,
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -33,9 +40,13 @@ export default function RootLayout({
         <Providers>
           <ClerkProvider>
             <SignedOut>
-              <SignInButton />
+              <div className="flex justify-between items-center w-[140px] ml-2">
+                <SignInButton />
+                <Link href="/signup">To SignUp</Link>
+              </div>
             </SignedOut>
             <SignedIn>
+              <SignUpHandler />
               <UserButton />
             </SignedIn>
             {children}

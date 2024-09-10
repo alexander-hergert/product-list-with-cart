@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { SignUp } from "@clerk/nextjs";
 
 export default function SignUpPage() {
