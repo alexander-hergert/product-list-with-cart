@@ -2,7 +2,6 @@
 
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
 const prisma = new PrismaClient();
@@ -16,8 +15,10 @@ export async function POST(request: Request) {
   try {
     const clerkUser = userId ? await clerkClient().users.getUser(userId) : null;
 
-    const name = clerkUser?.fullName || "Anonymous";
-    const email = clerkUser?.emailAddresses[0]?.emailAddress;
+    const id: string = userId;
+    const name: string = clerkUser?.fullName || "Anonymous";
+    const email: string | undefined =
+      clerkUser?.emailAddresses[0]?.emailAddress;
 
     if (!email) {
       return NextResponse.json({ error: "Email not found" }, { status: 400 });
@@ -37,17 +38,10 @@ export async function POST(request: Request) {
 
     // Create a new user in the database
     const user = await prisma.users.create({
-      data: { name, email, image },
+      data: { id, name, email, image },
     });
 
-    revalidatePath("/api/signup");
-
     const response = NextResponse.json(user, { status: 201 });
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=10, stale-while-revalidate=30"
-    );
-
     return response;
   } catch (error) {
     console.error("Error creating user:", error);
@@ -55,5 +49,7 @@ export async function POST(request: Request) {
       { error: "Failed to create user" },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
