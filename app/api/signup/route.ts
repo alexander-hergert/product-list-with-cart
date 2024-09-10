@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     const userInput: User = {
       id: userId,
       name: clerkUser?.fullName || "Unknown",
-      email: clerkUser?.emailAddresses[0]?.emailAddress || "",
+      email: clerkUser?.emailAddresses[0]?.emailAddress || "Unknown",
       image:
         "https://images.ctfassets.net/e5382hct74si/4QEuVLNyZUg5X6X4cW4pVH/eb7cd219e21b29ae976277871cd5ca4b/profile.jpg",
     };
