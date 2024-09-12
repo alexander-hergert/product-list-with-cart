@@ -35,5 +35,3 @@ export type Feedback = {
   createdAt: Date;
   updatedAt: Date;
 };
-
-export default User;

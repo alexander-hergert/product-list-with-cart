@@ -19,9 +19,9 @@ const getProducts = async (): Promise<Product[]> => {
 const ProductsList = async () => {
   const products = await getProducts();
   return (
-    <div>
+    <div className="grid grid-cols-3 gap-4">
       {products.map((singleProduct: Product) => (
-        <SingleProduct key={singleProduct.id} />
+        <SingleProduct key={singleProduct.id} singleProduct={singleProduct} />
       ))}
     </div>
   );
