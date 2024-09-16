@@ -8,7 +8,11 @@ const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   try {
-    const products = await prisma.products.findMany();
+    const products = await prisma.products.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
     return NextResponse.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);

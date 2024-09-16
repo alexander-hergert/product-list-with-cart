@@ -1,24 +1,36 @@
 import { createContext, useState } from "react";
 import { ReactNode } from "react";
+import { Cart } from "@/lib/types";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState([]);
+  const localCart = localStorage.getItem("cart");
+  const [cart, setCart] = useState<Cart>(
+    localCart ? JSON.parse(localCart) : {}
+  );
 
-  const addToCart = (product) => {
-    //setCart([...cart, product]);
-    console.log("Product +++");
-    
-  };
-
-  const removeFromCart = (productId) => {
-    //setCart(cart.filter((product) => product.id !== productId));
-    console.log("Product ---");
+  const changeCart = (
+    id: number,
+    name: string,
+    price: number,
+    newQuantity: number
+  ) => {
+    const updatedCart = {
+      ...cart,
+      [id]: {
+        name,
+        price,
+        quantity: newQuantity,
+      },
+    };
+    setCart(updatedCart);
+    //set local storage
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, changeCart }}>
       {children}
     </CartContext.Provider>
   );

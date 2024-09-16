@@ -2,15 +2,37 @@
 
 import Image from "next/image";
 import { Product } from "@/lib/types";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { CartContext } from "@/lib/cartContext";
+import { Cart } from "@/lib/types";
 
 interface SingleProductProps {
   singleProduct: Product;
 }
 
 const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
-  const { addToCart, removeFromCart } = useContext(CartContext);
+  const { cart, changeCart } = useContext(CartContext);
+  const { id, name, description, price, image } = singleProduct;
+
+  const handleUpClick = () => {
+    const newQuantity = cart[id] ? cart[id].quantity + 1 : 1;
+    changeCart(id, name, price, newQuantity);
+  };
+
+  const handleDownClick = () => {
+    const newQuantity = cart[id] ? cart[id].quantity - 1 : 0;
+    if (newQuantity < 0) return;
+    changeCart(id, name, price, newQuantity);
+  };
+
+  useEffect(() => {
+    //check if localstorage has the cart
+    const localCart = localStorage.getItem("cart");
+    if (!localCart) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, []);
+
   return (
     <div>
       <Image
@@ -19,13 +41,14 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
         height={200}
         alt={singleProduct.name}
       />
-      <h2>{singleProduct.name}</h2>
-      <p>{singleProduct.description}</p>
-      <p>Price: ${singleProduct.price}</p>
+      <h2>{name}</h2>
+      <p>{description}</p>
+      <p>Price: ${price}</p>
       <div>
-        <button onClick={addToCart}>Add to Cart</button>
-        <button onClick={removeFromCart}>Remove from Cart</button>
+        <button onClick={handleUpClick}>Add to Cart</button>
+        <button onClick={handleDownClick}>Remove from Cart</button>
       </div>
+      <div>Quantity: {cart[id] ? cart[id].quantity : 0}</div>
     </div>
   );
 };

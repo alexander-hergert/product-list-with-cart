@@ -35,3 +35,11 @@ export type Feedback = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type Cart = {
+  [productId: number]: {
+    name: string;
+    price: number;
+    quantity: number;
+  };
+};
