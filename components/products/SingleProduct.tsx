@@ -45,8 +45,12 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
       <p>{description}</p>
       <p>Price: ${price}</p>
       <div>
-        <button onClick={handleUpClick}>Add to Cart</button>
-        <button onClick={handleDownClick}>Remove from Cart</button>
+        <div>
+          <button onClick={handleUpClick}>Add to Cart</button>
+        </div>
+        <div>
+          <button onClick={handleDownClick}>Remove from Cart</button>
+        </div>
       </div>
       <div>Quantity: {cart[id] ? cart[id].quantity : 0}</div>
     </div>

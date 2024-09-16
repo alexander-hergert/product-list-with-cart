@@ -29,8 +29,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+  const removeProduct = (id: number) => {
+    const updatedCart = { ...cart };
+    delete updatedCart[id];
+    setCart(updatedCart);
+    //set local storage
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  }
+
   return (
-    <CartContext.Provider value={{ cart, changeCart }}>
+    <CartContext.Provider value={{ cart, changeCart, removeProduct }}>
       {children}
     </CartContext.Provider>
   );

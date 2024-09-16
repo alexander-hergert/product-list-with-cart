@@ -6,7 +6,7 @@ export default function ProductsPage() {
   return (
       <div>
         <h1>Products</h1>
-        <div className="flex justify-between gap-8 w-[600px]">
+        <div className="flex justify-between gap-8 min-w-[800px]">
           <ProductsList />
           <Cart />
         </div>
