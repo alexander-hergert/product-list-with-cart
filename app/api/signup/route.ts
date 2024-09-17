@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import User from "@/lib/types";
+import { User } from "@/lib/types";
 
 const prisma = new PrismaClient();
 
@@ -34,6 +34,8 @@ export async function POST(request: Request) {
     const existingUser: User | null = await prisma.users.findUnique({
       where: { email },
     });
+
+    console.log(existingUser);
 
     if (existingUser) {
       return NextResponse.json(existingUser, { status: 400 });

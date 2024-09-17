@@ -4,14 +4,14 @@ import ProductsList from "@/components/products/ProductsList";
 
 export default function ProductsPage() {
   return (
-      <div>
-        <h1>Products</h1>
-        <div className="flex justify-between gap-8 min-w-[800px]">
-          <ProductsList />
-          <Cart />
-        </div>
-        <br />
-        <Link href="/">To Home</Link>
+    <div>
+      <h1>Products</h1>
+      <div className="flex justify-between gap-8 min-w-[800px]">
+        <ProductsList />
+        <Cart />
       </div>
+      <br />
+      <Link href="/">To Home</Link>
+    </div>
   );
 }

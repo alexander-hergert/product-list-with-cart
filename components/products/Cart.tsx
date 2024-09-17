@@ -16,6 +16,23 @@ const Cart = () => {
     return acc + cart[id].price * cart[id].quantity;
   }, 0);
 
+  //SendOder function POST request to the server
+  const sendOrder = async () => {
+    try {
+      const response = await fetch("/api/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cart),
+      });
+      const res = await response.json();
+      console.log(res.message);
+    } catch (error) {
+      console.error("Error sending order:", error);
+    }
+  };
+
   return (
     <div className="min-w-[150px] mr-8">
       <h2>Cart</h2>
@@ -34,6 +51,7 @@ const Cart = () => {
           )
       )}
       <div>Total Price: ${totalPrice}</div>
+      <button onClick={sendOrder}>Confirm Order</button>
     </div>
   );
 };
