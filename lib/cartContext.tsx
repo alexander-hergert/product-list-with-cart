@@ -2,7 +2,14 @@ import { createContext, useState } from "react";
 import { ReactNode } from "react";
 import { Cart } from "@/lib/types";
 
-export const CartContext = createContext();
+interface CartContextType {
+  cart: Cart;
+  changeCart: (id: string, name: string, price: number, newQuantity: number) => void;
+  removeProduct: (id: string) => void;
+}
+
+
+export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const localCart = localStorage.getItem("cart");
@@ -11,7 +18,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const changeCart = (
-    id: number,
+    id: string,
     name: string,
     price: number,
     newQuantity: number
@@ -29,7 +36,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  const removeProduct = (id: number) => {
+  const removeProduct = (id: string) => {
     const updatedCart = { ...cart };
     delete updatedCart[id];
     setCart(updatedCart);

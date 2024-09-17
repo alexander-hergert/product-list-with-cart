@@ -11,7 +11,14 @@ interface SingleProductProps {
 }
 
 const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
-  const { cart, changeCart } = useContext(CartContext);
+  const cartContext = useContext(CartContext);
+
+  if (!cartContext) {
+    return <div>Error: CartContext is not available.</div>;
+  }
+
+  const { cart, changeCart } = cartContext;
+
   const { id, name, description, price, image } = singleProduct;
 
   const handleUpClick = () => {

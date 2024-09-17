@@ -37,7 +37,7 @@ export type Feedback = {
 };
 
 export type Cart = {
-  [productId: number]: {
+  [productId: string]: {
     name: string;
     price: number;
     quantity: number;
