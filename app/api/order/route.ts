@@ -2,9 +2,26 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+
+const orderSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  name: z.string().min(2, "Name must be more than 1 character"),
+  email: z.string().email("Invalid email address"),
+  productIds: z
+    .array(z.string())
+    .nonempty("Product IDs cannot be an empty array"),
+  productIdsQuantity: z
+    .array(z.number().int().min(1, "Quantity must be at least 1"))
+    .nonempty("Product quantity cannot be empty"),
+  productIdsPrice: z
+    .array(z.number().positive("Price must be a positive number"))
+    .nonempty("Product price array cannot be empty"),
+  totalPrice: z.number().positive("Total price must be a positive number"),
+});
 
 const uniqueId = uuidv4();
-console.log(uniqueId); // Outputs something like '6f1b44d2-5d90-4f6b-bc8c-dbf09b7747e5'
 
 const prisma = new PrismaClient();
 
@@ -27,6 +44,26 @@ export async function POST(request: Request) {
     const totalPrice = Object.keys(cart).reduce((acc, id) => {
       return acc + cart[id].price * cart[id].quantity;
     }, 0);
+
+    // Validate the order
+    try {
+      const orderValidate = orderSchema.parse({
+        id,
+        userId,
+        name,
+        email,
+        productIds,
+        productIdsQuantity,
+        productIdsPrice,
+        totalPrice,
+      });
+    } catch (error) {
+      console.error("Error validating order:", error);
+      return NextResponse.json(
+        { error: "Failed to validate order" },
+        { status: 400 }
+      );
+    }
 
     // Create a new order in the database
     const order = await prisma.orders.create({

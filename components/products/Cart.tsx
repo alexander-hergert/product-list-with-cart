@@ -27,9 +27,10 @@ const Cart = () => {
         body: JSON.stringify(cart),
       });
       const res = await response.json();
-      console.log(res.message);
+      console.log(res.message || res.error);
     } catch (error) {
-      console.error("Error sending order:", error);
+      //client error
+      console.log(error);
     }
   };
 
