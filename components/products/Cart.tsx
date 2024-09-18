@@ -2,15 +2,23 @@
 
 import { useContext } from "react";
 import { CartContext } from "@/lib/cartContext";
+import { ModalContext } from "@/lib/modalContext";
+import { set } from "zod";
 
 const Cart = () => {
   const cartContext = useContext(CartContext);
+  const modalContext = useContext(ModalContext);
 
   if (!cartContext) {
     return <div>Error: CartContext is not available.</div>;
   }
 
+  if (!modalContext) {
+    return <div>Error: ModalContext is not available.</div>;
+  }
+
   const { cart, removeProduct } = cartContext;
+  const { setIsModal } = modalContext;
 
   const totalPrice = Object.keys(cart).reduce((acc, id) => {
     return acc + cart[id].price * cart[id].quantity;
@@ -28,6 +36,7 @@ const Cart = () => {
       });
       const res = await response.json();
       console.log(res.message || res.error);
+      setIsModal(true);
     } catch (error) {
       //client error
       console.log(error);

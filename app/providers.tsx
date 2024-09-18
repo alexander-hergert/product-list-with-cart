@@ -8,6 +8,7 @@ import {
 import { ReactNode } from "react";
 
 import { CartProvider } from "../lib/cartContext";
+import { ModalProvider } from "@/lib/modalContext";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -41,7 +42,9 @@ export default function Providers({ children }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>{children}</CartProvider>
+      <CartProvider>
+        <ModalProvider>{children}</ModalProvider>
+      </CartProvider>
     </QueryClientProvider>
   );
 }

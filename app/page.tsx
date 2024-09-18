@@ -18,7 +18,6 @@ const SignUpHandler = dynamic(() => import("@/components/SignUpHandler"), {
 export default async function Home() {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center">
-      {/* <SignUpHandler /> */}
       <section className="flex justify-between gap-12">
         <aside className="flex flex-col gap-4 items-center">
           <h1 className="pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl">

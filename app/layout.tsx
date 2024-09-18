@@ -37,8 +37,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <Providers>
-          <ClerkProvider>
+        <ClerkProvider>
+          <Providers>
             <SignedOut>
               <div className="flex justify-between items-center w-[140px] ml-2">
                 <SignInButton />
@@ -50,8 +50,8 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
             {children}
-          </ClerkProvider>
-        </Providers>
+          </Providers>
+        </ClerkProvider>
       </body>
     </html>
   );

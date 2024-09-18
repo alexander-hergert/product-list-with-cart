@@ -6,6 +6,7 @@ import { Cart } from "@/lib/types";
 
 interface CartContextType {
   cart: Cart;
+  setCart: React.Dispatch<React.SetStateAction<Cart>>;
   changeCart: (
     id: string,
     name: string,
@@ -57,7 +58,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, changeCart, removeProduct }}>
+    <CartContext.Provider value={{ cart, setCart, changeCart, removeProduct }}>
       {children}
     </CartContext.Provider>
   );
