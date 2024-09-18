@@ -38,23 +38,102 @@ async function main() {
     }),
   ];
 
-  // Add 3 products to the database
+  // Add all initial products to the database
   const productPromises = [];
-  for (let i = 1; i < 4; i++) {
-    productPromises.push(
-      prisma.products.create({
-        data: {
-          id: `${i}`,
-          name: `Vercel ${i}`,
-          price: i * 100,
-          description: "Develop. Preview. Ship.",
-          image:
-            "https://images.ctfassets.net/e5382hct74si/2P1iOve0LZJRZWUzfXpi9r/9d4d27765764fb1ad7379d7cbe5f1043/ucxb4lHy_400x400.jpg",
-          rating: 5,
-        },
-      })
-    );
-  }
+
+  productPromises.push(
+    prisma.products.create({
+      data: {
+        id: "1",
+        name: "Waffle",
+        price: 6.5,
+        description: "Waffle with Berries",
+        image: "/images/image-waffle-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "2",
+        name: "Vanilla Bean Crème Brûlée",
+        price: 7.0,
+        description: "Crème Brûlée",
+        image: "/images/image-creme-brulee-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "3",
+        name: "Macaron",
+        price: 8.0,
+        description: "Macaron Mix of Five",
+        image: "/images/image-macaron-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "4",
+        name: "Classic Tiramisu",
+        price: 5.5,
+        description: "Tiramisu",
+        image: "/images/image-tiramisu-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "5",
+        name: "Pistachio Baklava",
+        price: 4.0,
+        description: "Baklava",
+        image: "/images/image-baklava-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "6",
+        name: "Lemon Meringue Pie",
+        price: 5.0,
+        description: "Pie",
+        image: "/images/image-meringue-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "7",
+        name: "Red Velvet Cake",
+        price: 4.5,
+        description: "Cake",
+        image: "/images/image-cake-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "8",
+        name: "Salted Caramel Brownie",
+        price: 4.5,
+        description: "Brownie",
+        image: "/images/image-brownie-desktop.jpg",
+        rating: 0,
+      },
+    }),
+    prisma.products.create({
+      data: {
+        id: "9",
+        name: "Vanilla Panna Cotta",
+        price: 6.5,
+        description: "Panna Cotta",
+        image: "/images/image-panna-cotta-desktop.jpg",
+        rating: 0,
+      },
+    })
+  );
+
   //Add 6 orders to the database
   const orderPromises = [];
   for (let i = 1; i < 7; i++) {
