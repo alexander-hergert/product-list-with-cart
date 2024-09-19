@@ -20,8 +20,7 @@ export async function POST(request: Request) {
       id: userId,
       name: clerkUser?.fullName || "Unknown",
       email: clerkUser?.emailAddresses[0]?.emailAddress || "Unknown",
-      image:
-        "https://images.ctfassets.net/e5382hct74si/4QEuVLNyZUg5X6X4cW4pVH/eb7cd219e21b29ae976277871cd5ca4b/profile.jpg",
+      image: clerkUser?.imageUrl || "/images/default-avatar.png",
     };
 
     const { id, name, email, image } = userInput;
@@ -34,8 +33,6 @@ export async function POST(request: Request) {
     const existingUser: User | null = await prisma.users.findUnique({
       where: { email },
     });
-
-    console.log(existingUser);
 
     if (existingUser) {
       return NextResponse.json(existingUser, { status: 400 });
