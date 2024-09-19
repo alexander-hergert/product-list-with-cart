@@ -13,6 +13,7 @@ datasource db {
 
 model users {
   id        String   @id
+  role      String
   name      String
   email     String   @unique
   image     String

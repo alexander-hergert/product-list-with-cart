@@ -8,6 +8,7 @@ async function main() {
       update: {},
       create: {
         id: "1",
+        role: "USER",
         name: "Guillermo Rauch",
         email: "rauchg@vercel.com",
         image:
@@ -19,6 +20,7 @@ async function main() {
       update: {},
       create: {
         id: "2",
+        role: "USER",
         name: "Lee Robinson",
         email: "lee@vercel.com",
         image:
@@ -30,10 +32,22 @@ async function main() {
       update: {},
       create: {
         id: "3",
+        role: "USER",
         name: "Steven Tey",
         email: "stey@vercel.com",
         image:
           "https://images.ctfassets.net/e5382hct74si/4QEuVLNyZUg5X6X4cW4pVH/eb7cd219e21b29ae976277871cd5ca4b/profile.jpg",
+      },
+    }),
+    prisma.users.upsert({
+      where: { email: "admin@gmail.com" },
+      update: {},
+      create: {
+        id: process.env.ADMIN_ID || "",
+        role: "ADMIN",
+        name: "Alexander Hergert",
+        email: process.env.ADMIN_EMAIL || "admin@gmail.com",
+        image: process.env.ADMIN_PROFILE || "/images/profilePic.avif",
       },
     }),
   ];

@@ -18,12 +18,13 @@ export async function POST(request: Request) {
 
     const userInput: User = {
       id: userId,
+      role: "USER",
       name: clerkUser?.fullName || "Unknown",
       email: clerkUser?.emailAddresses[0]?.emailAddress || "Unknown",
       image: clerkUser?.imageUrl || "/images/default-avatar.png",
     };
 
-    const { id, name, email, image } = userInput;
+    const { id, role, name, email, image } = userInput;
 
     if (!email) {
       return NextResponse.json({ error: "Email not found" }, { status: 400 });
@@ -40,7 +41,7 @@ export async function POST(request: Request) {
 
     // Create a new user in the database
     const user = await prisma.users.create({
-      data: { id, name, email, image },
+      data: { id, role, name, email, image },
     });
 
     const response = NextResponse.json(user, { status: 201 });
