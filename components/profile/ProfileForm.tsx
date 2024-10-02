@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ProfileFormProps {
   name: string | undefined;
@@ -17,6 +17,8 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address, image }) => {
     address,
   });
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: async (updatedData: typeof input) => {
       return await fetch("/api/profile", {
@@ -28,7 +30,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address, image }) => {
       }).then((res) => res.json());
     },
     onSuccess: (data) => {
-      console.log("Profile updated successfully!", data);
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error) => {
       console.error("Error updating profile:", error);

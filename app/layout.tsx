@@ -10,6 +10,7 @@ import {
 import Providers from "./providers";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import Navlinks from "@/components/Navlinks";
 
 export const metadata = {
   metadataBase: new URL("https://postgres-prisma.vercel.app"),
@@ -46,8 +47,11 @@ export default function RootLayout({
               </div>
             </SignedOut>
             <SignedIn>
-              <SignUpHandler />
-              <UserButton />
+              <div className="flex gap-4 items-center">
+                <SignUpHandler />
+                <UserButton />
+                <Navlinks />
+              </div>
             </SignedIn>
             {children}
           </Providers>
