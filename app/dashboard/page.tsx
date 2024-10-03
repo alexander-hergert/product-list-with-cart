@@ -11,6 +11,28 @@ const prisma = new PrismaClient();
 const { userId } = auth();
 
 const getDashboardData = async (): Promise<DashboardData> => {
+  //Check if user is admin
+  try {
+    const user = await prisma.users.findUnique({
+      where: {
+        id: userId ? userId : undefined,
+      },
+    });
+    if (user?.role !== "ADMIN") {
+      throw new Error("User is not an admin");
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return {
+      customers: [],
+      products: [],
+      orders: [],
+      feedbacks: [],
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+  //Fetch data
   try {
     const customers = await prisma.users.findMany({
       where: {

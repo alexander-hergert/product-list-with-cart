@@ -16,8 +16,6 @@ export default function ProductsPage() {
           <ProductsList />
           <Cart />
         </div>
-        <br />
-        <Link href="/">To Home</Link>
       </div>
     </>
   );

@@ -1,14 +1,14 @@
 import Link from "next/link";
-export default function ProductDetailsPage() {
+export default function OrderDetailsPage() {
   return (
     <div>
-      <h1>Product Details</h1>
+      <h1>Order Details</h1>
       <br />
       <Link
         className="text-blue-500 hover:text-blue-700"
-        href="/dashboard/products"
+        href="/dashboard/orders"
       >
-        ... Back to Products
+        ... Back to Orders
       </Link>
     </div>
   );

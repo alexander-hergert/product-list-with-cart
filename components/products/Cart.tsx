@@ -3,7 +3,6 @@
 import { useContext } from "react";
 import { CartContext } from "@/lib/cartContext";
 import { ModalContext } from "@/lib/modalContext";
-import { set } from "zod";
 
 const Cart = () => {
   const cartContext = useContext(CartContext);
