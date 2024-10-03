@@ -64,12 +64,23 @@ const DashboardPage = async () => {
   return (
     <div>
       <h1>Dashboard</h1>
-      <Customers customers={customers} />
-      <Products products={products} />
-      <Orders orders={orders} />
-      <Feedback feedbacks={feedbacks} />
-      <br />
-      <Link href="/">To Home</Link>
+      <div className="grid grid-cols-2 gap-4">
+        <Customers customers={customers} />
+        <Products products={products} />
+        <Orders orders={orders} />
+        <Feedback feedbacks={feedbacks} />
+      </div>
+      <div className="flex gap-4">
+        <Link
+          className="text-blue-500 hover:text-blue-700"
+          href="/dashboard/profile"
+        >
+          To Profile
+        </Link>
+        <Link className="text-blue-500 hover:text-blue-700" href="/">
+          To Home
+        </Link>
+      </div>
     </div>
   );
 };

@@ -34,7 +34,9 @@ export default async function ProfilePage() {
       <h1>Profile</h1>
       <Image src={img} alt="Profile Image" width={200} height={200} />
       <ProfileForm {...userData} />
-      <Link href="/">To Home</Link>
+      <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
+        To Dashboard
+      </Link>
     </div>
   );
 }

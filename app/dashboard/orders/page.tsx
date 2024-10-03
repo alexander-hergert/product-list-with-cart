@@ -4,7 +4,9 @@ export default function OrdersPage() {
     <div>
       <h1>Orders</h1>
       <br />
-      <Link href="/">To Home</Link>
+      <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
+        To Dashboard
+      </Link>
     </div>
   );
 }
