@@ -7,7 +7,6 @@ const Navlinks = () => {
     { href: "/dashboard", label: "Dashboard" },
     { href: "/dashboard/profile", label: "Profile" },
     { href: "/dashboard/orders", label: "Orders" },
-    { href: "/dashboard/invoices", label: "Invoices" },
     { href: "/dashboard/feedback", label: "Feedback" },
     { href: "/dashboard/customers", label: "Customers" },
     { href: "/dashboard/products", label: "Products" },

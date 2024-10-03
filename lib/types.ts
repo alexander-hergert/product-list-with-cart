@@ -45,3 +45,10 @@ export type Cart = {
     quantity: number;
   };
 };
+
+export type DashboardData = {
+  customers: User[];
+  products: Product[];
+  orders: Order[];
+  feedbacks: Feedback[];
+};
