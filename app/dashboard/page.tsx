@@ -29,8 +29,6 @@ const getDashboardData = async (): Promise<DashboardData> => {
       orders: [],
       feedbacks: [],
     };
-  } finally {
-    await prisma.$disconnect();
   }
   //Fetch data
   try {
