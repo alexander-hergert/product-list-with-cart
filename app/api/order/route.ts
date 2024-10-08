@@ -7,8 +7,6 @@ import { z } from "zod";
 const orderSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  name: z.string().min(2, "Name must be more than 1 character"),
-  email: z.string().email("Invalid email address"),
   productIds: z
     .array(z.string())
     .nonempty("Product IDs cannot be an empty array"),
@@ -34,8 +32,6 @@ export async function POST(request: Request) {
 
   try {
     const clerkUser = userId ? await clerkClient().users.getUser(userId) : null;
-    const name = clerkUser?.fullName || "Unknown";
-    const email = clerkUser?.emailAddresses[0]?.emailAddress || "Unknown";
     const cart = await request.json();
     const id = uuidv4();
     const productIds = Object.keys(cart);
@@ -50,8 +46,6 @@ export async function POST(request: Request) {
       const orderValidate = orderSchema.parse({
         id,
         userId,
-        name,
-        email,
         productIds,
         productIdsQuantity,
         productIdsPrice,
@@ -70,8 +64,6 @@ export async function POST(request: Request) {
       data: {
         id,
         userId,
-        name,
-        email,
         productIds,
         productIdsQuantity,
         productIdsPrice,

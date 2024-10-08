@@ -19,8 +19,6 @@ export type Product = {
 export type Order = {
   id: string;
   userId: string;
-  name: string;
-  email: string;
   productIds: string[];
   productIdsQuantity: number[];
   productIdsPrice: number[];
