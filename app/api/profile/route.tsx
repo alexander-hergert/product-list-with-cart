@@ -20,6 +20,7 @@ export async function POST(request: Request) {
       where: { id: userId },
       data: { name, email, address },
     });
+    return NextResponse.json(updatedUser);
   } catch (error) {
     console.error("Error updating profile:", error);
     return NextResponse.json(

@@ -10,7 +10,7 @@ interface ProfileFormProps {
   image: string | undefined;
 }
 
-const ProfileForm: FC<ProfileFormProps> = ({ name, email, address, image }) => {
+const ProfileForm: FC<ProfileFormProps> = ({ name, email, address }) => {
   const [input, setInput] = useState({
     name,
     email,
@@ -18,6 +18,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address, image }) => {
   });
 
   const queryClient = useQueryClient();
+  const [data, setData] = useState({ name, email, address });
 
   const mutation = useMutation({
     mutationFn: async (updatedData: typeof input) => {
@@ -31,6 +32,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address, image }) => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      setData(data);
     },
     onError: (error) => {
       console.error("Error updating profile:", error);
@@ -51,27 +53,37 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address, image }) => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <label htmlFor="name">Name</label>
-      <input
-        type="text"
-        id="name"
-        defaultValue={name}
-        onChange={(e) => handleChange(e)}
-      />
-      <label htmlFor="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        defaultValue={email}
-        onChange={(e) => handleChange(e)}
-      />
-      <label htmlFor="address">Address</label>
-      <input
-        type="text"
-        id="address"
-        defaultValue={address}
-        onChange={(e) => handleChange(e)}
-      />
+      <div className="flex gap-4 items-center">
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          defaultValue={name || data?.name}
+          onChange={(e) => handleChange(e)}
+        />
+      </div>
+      <div className="flex gap-4 items-center">
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          defaultValue={email || data?.email}
+          onChange={(e) => handleChange(e)}
+        />
+      </div>
+      <div className="flex gap-4 items-center">
+        <label htmlFor="address">Address:</label>
+        <input
+          type="text"
+          id="address"
+          defaultValue={address || data?.address}
+          onChange={(e) => handleChange(e)}
+        />
+      </div>
+      <br />
+      <p>Name: {data?.name}</p>
+      <p>Email: {data?.email}</p>
+      <p>Address: {data?.address}</p>
       <button className="border" type="submit">
         Change Data
       </button>
