@@ -34,7 +34,7 @@ const fetchFeedbacks = async () => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 const FeedbackPage = async () => {
   const feedbacks = await fetchFeedbacks();
   return (
@@ -43,10 +43,23 @@ const FeedbackPage = async () => {
       <br />
       <div className="grid grid-cols-2">
         {feedbacks.map((feedback) => (
-          <Link href={`/dashboard/feedback/${feedback.id}`} key={feedback.id} className="border">
-            <h2>{feedback.title}</h2>
-            <p>{feedback.comment}</p>
-            <p>{feedback.createdAt.toDateString()}</p>
+          <Link
+            href={`/dashboard/feedback/${feedback.id}`}
+            key={feedback.id}
+            className="border"
+          >
+            <div className="flex gap-4 items-center">
+              <label>Title:</label>
+              <h2>{feedback?.title}</h2>
+            </div>
+            <div className="flex gap-4 items-center">
+              <label>Comment:</label>
+              <p>{feedback?.comment}</p>
+            </div>
+            <div className="flex gap-4 items-center">
+              <label>Date:</label>
+              <p>{feedback?.createdAt.toDateString()}</p>
+            </div>
           </Link>
         ))}
       </div>
@@ -55,6 +68,6 @@ const FeedbackPage = async () => {
       </Link>
     </div>
   );
-}
+};
 
 export default FeedbackPage;

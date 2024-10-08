@@ -54,9 +54,18 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
           width={200}
           height={200}
         />
-        <h2>{customer?.name}</h2>
-        <p>{customer?.email}</p>
-        <p>{customer?.address}</p>
+        <div className="flex gap-4 items-center">
+          <label>Username:</label>
+          <h2>{customer?.name}</h2>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Email:</label>
+          <h2>{customer?.email}</h2>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Address:</label>
+          <h2>{customer?.address}</h2>
+        </div>
       </div>
       <Link
         className="text-blue-500 hover:text-blue-700"

@@ -49,12 +49,30 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
       <h1>Order Details</h1>
       <br />
       <div>
-        <h2>{order?.id}</h2>
-        <p>{order?.productIds}</p>
-        <p>{order?.productIdsPrice}</p>
-        <p>{order?.productIdsQuantity}</p>
-        <p>{order?.totalPrice}</p>
-        <p>{order?.createdAt.toDateString()}</p>
+        <div className="flex gap-4 items-center">
+          <label>Order ID:</label>
+          <h2>{order?.id}</h2>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Products IDs:</label>
+          <p>{order?.productIds.join("/")}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Price:</label>
+          <p>${order?.productIdsPrice.join("/$")}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Quantity:</label>
+          <p>{order?.productIdsQuantity.join("/")}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Total Price:</label>
+          <p>${order?.totalPrice}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Date:</label>
+          <p>{order?.createdAt.toDateString()}</p>
+        </div>
       </div>
       <Link
         className="text-blue-500 hover:text-blue-700"

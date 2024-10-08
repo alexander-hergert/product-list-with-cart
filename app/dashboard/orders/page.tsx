@@ -44,13 +44,35 @@ const OrdersPage = async () => {
       <br />
       <div className="grid grid-cols-2">
         {orders.map((order) => (
-          <Link href={`/dashboard/orders/${order.id}`} key={order.id} className="border">
-            <h2>{order.id}</h2>
-            <p>{order.productIds}</p>
-            <p>{order.productIdsPrice}</p>
-            <p>{order.productIdsQuantity}</p>
-            <p>{order.totalPrice}</p>
-            <p>{order.createdAt.toDateString()}</p>
+          <Link
+            href={`/dashboard/orders/${order.id}`}
+            key={order.id}
+            className="border"
+          >
+            <div className="flex gap-4 items-center">
+              <label>Order ID:</label>
+              <h2>{order.id}</h2>
+            </div>
+            <div className="flex gap-4 items-center">
+              <label>Products IDs:</label>
+              <p>{order.productIds.join("/")}</p>
+            </div>
+            <div className="flex gap-4 items-center">
+              <label>Price:</label>
+              <p>${order.productIdsPrice.join("/$")}</p>
+            </div>
+            <div className="flex gap-4 items-center">
+              <label>Quantity:</label>
+              <p>{order.productIdsQuantity.join("/")}</p>
+            </div>
+            <div className="flex gap-4 items-center">
+              <label>Total Price:</label>
+              <p>${order.totalPrice}</p>
+            </div>
+            <div className="flex gap-4 items-center">
+              <label>Date:</label>
+              <p>{order.createdAt.toDateString()}</p>
+            </div>
           </Link>
         ))}
       </div>

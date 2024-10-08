@@ -55,10 +55,22 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
           width={200}
           height={200}
         />
-        <h2>{product?.name}</h2>
-        <p>{product?.description}</p>
-        <p>{product?.price}</p>
-        <p>{product?.rating}</p>
+        <div className="flex gap-4 items-center">
+          <label>Name:</label>
+          <h2>{product?.name}</h2>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Description:</label>
+          <p>{product?.description}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Price:</label>
+          <p>${product?.price}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Rating:</label>
+          <p>{product?.rating}</p>
+        </div>
       </div>
       <Link
         className="text-blue-500 hover:text-blue-700"

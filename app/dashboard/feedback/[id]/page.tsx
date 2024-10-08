@@ -65,10 +65,22 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
       <h1>Feedback Details</h1>
       <br />
       <div>
-        <h2>{feedback?.title}</h2>
-        <p>{userName}</p>
-        <p>{feedback?.comment}</p>
-        <p>{feedback?.createdAt.toDateString()}</p>
+        <div className="flex gap-4 items-center">
+          <label>Title:</label>
+          <h2>{feedback?.title}</h2>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Username:</label>
+          <p>{userName}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Comment:</label>
+          <p>{feedback?.comment}</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label>Date:</label>
+          <p>{feedback?.createdAt.toDateString()}</p>
+        </div>
       </div>
       <Link
         className="text-blue-500 hover:text-blue-700"
