@@ -19,6 +19,8 @@ model users {
   address   String   @default("")
   image     String
   createdAt DateTime @default(now())
+  orders  orders[]
+  feedbacks feedbacks[]
 }
 
 
@@ -29,13 +31,13 @@ model products {
   description String
   image       String
   rating      Float
+  feedbacks   feedbacks[]
 }
 
 model orders {
   id                String   @id
   userId            String
-  name              String
-  email             String
+  user              users    @relation(fields: [userId], references: [id])
   productIds        String[]
   productIdsQuantity Int[]
   productIdsPrice   Float[]
@@ -45,9 +47,11 @@ model orders {
 
 model feedbacks {
   id        String   @id
-  userId    String
-  title     String
   productId String
+  product   products @relation(fields: [productId], references: [id])
+  userId    String
+  user      users    @relation(fields: [userId], references: [id])
+  title     String
   comment   String
   createdAt DateTime @default(now())
   updatedAt DateTime

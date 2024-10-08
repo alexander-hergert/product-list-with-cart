@@ -160,8 +160,6 @@ async function main() {
         data: {
           id: `${i}`,
           userId: `${Math.floor(Math.random() * 3) + 1}`,
-          name: "John Doe",
-          email: "dummy@gmail.com",
           productIds: ["1", "2", "3"],
           productIdsQuantity: [1, 2, 3],
           productIdsPrice: [100, 200, 300],
