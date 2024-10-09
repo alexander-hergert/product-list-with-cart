@@ -2,8 +2,14 @@
 
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { auth, clerkClient } from "@clerk/nextjs/server";
-import { User } from "@/lib/types";
+import { auth } from "@clerk/nextjs/server";
+import { z } from "zod";
+
+const profileSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email"),
+  address: z.string().min(5, "Address must be at least 5 characters"),
+});
 
 const prisma = new PrismaClient();
 
@@ -13,6 +19,21 @@ export async function POST(request: Request) {
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Validate the profile
+  try {
+    const profileValidate = profileSchema.parse({
+      name,
+      email,
+      address,
+    });
+  } catch (error) {
+    console.error("Error validating profile:", error);
+    return NextResponse.json(
+      { error: "Failed to validate profile" },
+      { status: 400 }
+    );
   }
 
   try {

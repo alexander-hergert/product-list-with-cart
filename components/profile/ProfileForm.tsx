@@ -2,19 +2,31 @@
 
 import { FC, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 
-interface ProfileFormProps {
+const profileSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email"),
+  address: z.string().min(5, "Address must be at least 5 characters"),
+});
+
+interface ProfileInput {
   name: string | undefined;
   email: string | undefined;
   address: string | undefined;
-  image: string | undefined;
 }
 
-const ProfileForm: FC<ProfileFormProps> = ({ name, email, address }) => {
-  const [input, setInput] = useState({
+const ProfileForm: FC<ProfileInput> = ({ name, email, address }) => {
+  const [input, setInput] = useState<ProfileInput>({
     name,
     email,
     address,
+  });
+
+  const [errors, setErrors] = useState<ProfileInput>({
+    name: "",
+    email: "",
+    address: "",
   });
 
   const queryClient = useQueryClient();
@@ -32,10 +44,14 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address }) => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      if (data.error) {
+        throw new Error(data.error);
+      }
       setData(data);
     },
     onError: (error) => {
-      console.error("Error updating profile:", error);
+      setData({ name, email, address });
+      console.log(error.message);
     },
   });
 
@@ -48,6 +64,20 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Validate input using Zod
+    const validationResult = profileSchema.safeParse(input);
+    if (!validationResult.success) {
+      // Collect errors and set them to state
+      const newErrors = validationResult.error.formErrors.fieldErrors;
+      setErrors({
+        name: newErrors.name?.[0],
+        email: newErrors.email?.[0],
+        address: newErrors.address?.[0],
+      });
+      return;
+    }
+    // If validation passes, clear errors and submit
+    setErrors({ name: "", email: "", address: "" });
     mutation.mutate(input);
   };
 
@@ -61,15 +91,16 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address }) => {
           defaultValue={name || data?.name}
           onChange={(e) => handleChange(e)}
         />
+        {errors.name && <p className="text-red-500">{errors.name}</p>}
       </div>
       <div className="flex gap-4 items-center">
         <label htmlFor="email">Email:</label>
         <input
-          type="email"
           id="email"
           defaultValue={email || data?.email}
           onChange={(e) => handleChange(e)}
         />
+        {errors.email && <p className="text-red-500">{errors.email}</p>}
       </div>
       <div className="flex gap-4 items-center">
         <label htmlFor="address">Address:</label>
@@ -79,6 +110,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ name, email, address }) => {
           defaultValue={address || data?.address}
           onChange={(e) => handleChange(e)}
         />
+        {errors.address && <p className="text-red-500">{errors.address}</p>}
       </div>
       <br />
       <p>Name: {data?.name}</p>
