@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
+import dynamic from "next/dynamic";
 import { PrismaClient } from "@prisma/client";
+
+const OrderChangeStatus = dynamic(
+  () => import("@/components/orders/OrderStatusChange"),
+  {
+    ssr: false,
+  }
+);
 
 const prisma = new PrismaClient();
 
@@ -80,6 +88,7 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
       >
         ... Back to Orders
       </Link>
+      <OrderChangeStatus id={id} status={order?.status} />
     </div>
   );
 };

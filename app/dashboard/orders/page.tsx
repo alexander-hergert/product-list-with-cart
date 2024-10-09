@@ -73,6 +73,10 @@ const OrdersPage = async () => {
               <label>Date:</label>
               <p>{order.createdAt.toDateString()}</p>
             </div>
+            <div className="flex gap-4 items-center">
+              <label>Status:</label>
+              <p>{order.status}</p>
+            </div>
           </Link>
         ))}
       </div>
