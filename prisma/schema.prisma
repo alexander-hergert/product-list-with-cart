@@ -34,6 +34,13 @@ model products {
   feedbacks   feedbacks[]
 }
 
+enum OrderStatus {
+  Pending
+  Shipped
+  Delivered
+  Cancelled
+}
+
 model orders {
   id                String   @id
   userId            String
@@ -43,6 +50,7 @@ model orders {
   productIdsPrice   Float[]
   totalPrice        Float
   createdAt         DateTime @default(now())
+  status            OrderStatus @default(Pending)
 }
 
 model feedbacks {

@@ -16,6 +16,13 @@ export type Product = {
   rating: number;
 };
 
+enum OrderStatus {
+  Pending = "Pending",
+  Shipped = "Shipped",
+  Delivered = "Delivered",
+  Cancelled = "Cancelled",
+}
+
 export type Order = {
   id: string;
   userId: string;
@@ -24,6 +31,7 @@ export type Order = {
   productIdsPrice: number[];
   totalPrice: number;
   createdAt: Date;
+  status: OrderStatus;
 };
 
 export type Feedback = {
