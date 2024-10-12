@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Cart from "@/components/products/Cart";
 import ProductsList from "@/components/products/ProductsList";
 import dynamic from "next/dynamic";
