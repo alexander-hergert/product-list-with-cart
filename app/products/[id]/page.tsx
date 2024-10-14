@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
+import Rating from "@mui/material/Rating";
 
 const prisma = new PrismaClient();
 
@@ -78,7 +79,10 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
         <h2>{product?.name}</h2>
         <p>{product?.description}</p>
         <p>Price: ${product?.price}</p>
-        <p>Rating: {product?.rating}</p>
+        <div className="flex gap-2">
+          <label htmlFor="rating">Rating</label>
+          <Rating name="rating" value={product?.rating} readOnly />
+        </div>
       </div>
       <div>
         <h3>Feedback</h3>

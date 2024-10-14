@@ -1,5 +1,16 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import { Roboto } from "next/font/google";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-roboto",
+});
+
 import {
   ClerkProvider,
   SignInButton,
@@ -39,22 +50,26 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.variable}>
         <ClerkProvider>
-          <Providers>
-            <SignedOut>
-              <div className="flex justify-between items-center w-[140px] ml-2">
-                <SignInButton />
-                <Link href="/signup">To SignUp</Link>
-              </div>
-            </SignedOut>
-            <SignedIn>
-              <div className="flex gap-4 items-center">
-                <SignUpHandler />
-                <UserButton />
-                <Navlinks />
-              </div>
-            </SignedIn>
-            {children}
-          </Providers>
+          <AppRouterCacheProvider options={{ key: "css" }}>
+            <ThemeProvider theme={theme}>
+              <Providers>
+                <SignedOut>
+                  <div className="flex justify-between items-center w-[140px] ml-2">
+                    <SignInButton />
+                    <Link href="/signup">To SignUp</Link>
+                  </div>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex gap-4 items-center">
+                    <SignUpHandler />
+                    <UserButton />
+                    <Navlinks />
+                  </div>
+                </SignedIn>
+                {children}
+              </Providers>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
         </ClerkProvider>
       </body>
     </html>
