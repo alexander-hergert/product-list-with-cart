@@ -64,6 +64,7 @@ model feedbacks {
   order     orders   @relation(fields: [orderId], references: [id])
   title     String
   comment   String
+  rating    Float   @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime
 }

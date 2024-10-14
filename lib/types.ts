@@ -41,6 +41,7 @@ export type Feedback = {
   title: string;
   productId: string;
   comment: string;
+  rating: number;
   createdAt: Date;
   updatedAt: Date;
 };

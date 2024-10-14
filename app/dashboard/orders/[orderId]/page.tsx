@@ -47,12 +47,12 @@ const fetchOrder = async (id: string) => {
 };
 
 interface Params {
-  id: string;
+  orderId: string;
 }
 
 const OrderDetailsPage = async ({ params }: { params: Params }) => {
-  const { id } = params;
-  const order = await fetchOrder(id);
+  const { orderId } = params;
+  const order = await fetchOrder(orderId);
 
   return (
     <div>
@@ -90,8 +90,8 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
       >
         ... Back to Orders
       </Link>
-      <OrderChangeStatus id={id} status={order?.status} />
-      <OrderProducts productIds={order?.productIds} productIdsQuantity={order?.productIdsQuantity}/>
+      <OrderChangeStatus id={orderId} status={order?.status} />
+      <OrderProducts orderId={orderId} productIds={order?.productIds} productIdsQuantity={order?.productIdsQuantity}/>
       <OrderCustomer userId={order?.userId} />
     </div>
   );

@@ -8,11 +8,13 @@ import dynamic from "next/dynamic";
 const prisma = new PrismaClient();
 
 interface OrderProductsProps {
+  orderId: string | undefined;
   productIds: string[] | undefined;
   productIdsQuantity: number[] | undefined;
 }
 
 const OrderProducts: FC<OrderProductsProps> = async ({
+  orderId,
   productIds,
   productIdsQuantity,
 }) => {
@@ -53,7 +55,9 @@ const OrderProducts: FC<OrderProductsProps> = async ({
               <p>Price: ${product.price.toFixed(2)}</p>
             </div>
           </Link>
-          <p>Give Feedback and Rate.</p>
+          <Link href={`/dashboard/orders/${orderId}/${product.id}`}>
+            <button className="border">Leave Feedback...</button>
+          </Link>
         </div>
       ))}
     </div>
