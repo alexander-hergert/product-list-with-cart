@@ -37,6 +37,7 @@ export type Order = {
 export type Feedback = {
   id: string;
   userId: string;
+  orderId: string;
   title: string;
   productId: string;
   comment: string;

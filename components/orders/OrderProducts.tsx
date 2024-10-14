@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 const prisma = new PrismaClient();
 
@@ -33,23 +34,27 @@ const OrderProducts: FC<OrderProductsProps> = async ({
   return (
     <div>
       {products.map((product) => (
-        <Link key={product.id} href={`/dashboard/products/${product.id}`}>
-          <div key={product.id} className="border">
-            <h3>{product.name}</h3>
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={100}
-              height={100}
-            />
-            {productIds && (
-              <p>
-                Quantity: {productIdsQuantity?.[productIds.indexOf(product.id)]}
-              </p>
-            )}
-            <p>Price: ${product.price.toFixed(2)}</p>
-          </div>
-        </Link>
+        <div>
+          <Link key={product.id} href={`/dashboard/products/${product.id}`}>
+            <div key={product.id} className="border">
+              <h3>{product.name}</h3>
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={100}
+                height={100}
+              />
+              {productIds && (
+                <p>
+                  Quantity:{" "}
+                  {productIdsQuantity?.[productIds.indexOf(product.id)]}
+                </p>
+              )}
+              <p>Price: ${product.price.toFixed(2)}</p>
+            </div>
+          </Link>
+          <p>Give Feedback and Rate.</p>
+        </div>
       ))}
     </div>
   );

@@ -170,6 +170,7 @@ async function main() {
   }
 
   // Add 3 feedbacks to the database
+  // can create issues need to rework, must match the constraints
   const feedbackPromises = [];
   for (let i = 1; i < 4; i++) {
     feedbackPromises.push(
@@ -177,6 +178,7 @@ async function main() {
         data: {
           id: `${i}`,
           userId: `${Math.floor(Math.random() * 3) + 1}`,
+          orderId: `${Math.floor(Math.random() * 3) + 1}`,
           title: "Great product",
           productId: `${i}`,
           comment: "I love this product",

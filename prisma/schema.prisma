@@ -51,6 +51,7 @@ model orders {
   totalPrice        Float
   createdAt         DateTime @default(now())
   status            OrderStatus @default(Pending)
+  feedbacks         feedbacks[]
 }
 
 model feedbacks {
@@ -59,6 +60,8 @@ model feedbacks {
   product   products @relation(fields: [productId], references: [id])
   userId    String
   user      users    @relation(fields: [userId], references: [id])
+  orderId   String   
+  order     orders   @relation(fields: [orderId], references: [id])
   title     String
   comment   String
   createdAt DateTime @default(now())
