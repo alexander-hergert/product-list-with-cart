@@ -42,6 +42,12 @@ const ProductsPage = async () => {
   return (
     <div>
       <h1>Products</h1>
+      <Link
+        className="text-blue-500 hover:text-blue-700"
+        href="/dashboard/products/new_product"
+      >
+        Create New...
+      </Link>
       <br />
       <div className="grid grid-cols-2">
         {products.map((product) => (

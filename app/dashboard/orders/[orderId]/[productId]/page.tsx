@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { auth } from "@clerk/nextjs/dist/types/server";
 
 const CreateFeedback = dynamic(
   () => import("@/components/orders/CreateFeedback"),

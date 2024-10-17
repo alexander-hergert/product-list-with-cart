@@ -87,7 +87,6 @@ const CreateFeedback: FC<CreateFeedbackProps> = ({ productId, orderId }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate(input);
     // Validate input using Zod schema
     try {
       feedbackSchema.parse(input);
