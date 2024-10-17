@@ -80,5 +80,28 @@ export async function POST(request: Request) {
     },
   });
 
+  // Update product rating
+  // Get all feedbacks for the product
+  const feedbacks = await prisma.feedbacks.findMany({
+    where: {
+      productId,
+    },
+  });
+  // Calculate the average rating
+  const totalRating = feedbacks.reduce((acc, feedback) => {
+    return acc + feedback.rating;
+  }, 0);
+  const averageRating = totalRating / feedbacks.length;
+
+  // Update the product rating
+  await prisma.products.update({
+    where: {
+      id: productId,
+    },
+    data: {
+      rating: averageRating,
+    },
+  });
+
   return NextResponse.json({ message: "Feedback created", status: 200 });
 }
