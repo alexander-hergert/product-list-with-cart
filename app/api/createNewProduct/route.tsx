@@ -18,13 +18,23 @@ export async function POST(request: Request) {
 
   //Check if user is admin
   const { userId } = auth();
-  const user = await prisma.users.findFirst({
-    where: {
-      id: userId || "",
-    },
-  });
-  if (!user || user.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const user = await prisma.users.findFirst({
+      where: {
+        id: userId || "",
+      },
+    });
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch user" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
   }
 
   //Validate the product
@@ -40,6 +50,8 @@ export async function POST(request: Request) {
       { error: "Failed to validate product" },
       { status: 400 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 
   //Create the product
@@ -60,7 +72,76 @@ export async function POST(request: Request) {
       { error: "Failed to create product" },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 
   return NextResponse.json({ status: 200, message: "Product created" });
+}
+
+export async function PUT(request: Request) {
+  const { id, name, description, price, img } = await request.json();
+
+  //Check if user is admin
+  const { userId } = auth();
+  try {
+    const user = await prisma.users.findFirst({
+      where: {
+        id: userId || "",
+      },
+    });
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch user" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  //Validate the product
+  try {
+    const productValidate = productSchema.parse({
+      name,
+      description,
+      price: parseInt(price),
+      img,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to validate product" },
+      { status: 400 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  //Edit product
+  try {
+    const editetProduct = await prisma.products.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name,
+        description,
+        price: parseInt(price),
+        image: img,
+      },
+    });
+  } catch (error) {
+    console.log("Error updating product:", error);
+    return NextResponse.json(
+      { error: "Failed to update product" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  return NextResponse.json({ status: 200, message: "Product updated" });
 }

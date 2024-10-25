@@ -6,7 +6,7 @@ const CreateNewProduct = dynamic(
   }
 );
 
-const NewProduct = () => {
+const NewProductPage = () => {
   return (
     <div>
       <h1>Create New Product</h1>
@@ -15,4 +15,4 @@ const NewProduct = () => {
   );
 };
 
-export default NewProduct;
+export default NewProductPage;

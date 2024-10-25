@@ -51,32 +51,37 @@ const ProductsPage = async () => {
       <br />
       <div className="grid grid-cols-2">
         {products.map((product) => (
-          <Link href={`/dashboard/products/${product.id}`} key={product.id}>
-            <div>
-              <Image
-                src={product.image}
-                alt={product.name}
-                width={200}
-                height={200}
-              />
-              <div className="flex gap-4 items-center">
-                <label>Name:</label>
-                <h2>{product.name}</h2>
+          <div>
+            <Link href={`/dashboard/products/${product.id}`} key={product.id}>
+              <div>
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  width={200}
+                  height={200}
+                />
+                <div className="flex gap-4 items-center">
+                  <label>Name:</label>
+                  <h2>{product.name}</h2>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <label>Description:</label>
+                  <p>{product.description}</p>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <label>Price:</label>
+                  <p>${product.price}</p>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <label>Rating:</label>
+                  <p>{product.rating}</p>
+                </div>
               </div>
-              <div className="flex gap-4 items-center">
-                <label>Description:</label>
-                <p>{product.description}</p>
-              </div>
-              <div className="flex gap-4 items-center">
-                <label>Price:</label>
-                <p>${product.price}</p>
-              </div>
-              <div className="flex gap-4 items-center">
-                <label>Rating:</label>
-                <p>{product.rating}</p>
-              </div>
-            </div>
-          </Link>
+            </Link>
+            <Link href={`/dashboard/products/${product.id}/edit_product`}>
+              Edit
+            </Link>
+          </div>
         ))}
       </div>
       <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
