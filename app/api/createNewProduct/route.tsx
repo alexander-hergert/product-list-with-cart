@@ -145,3 +145,47 @@ export async function PUT(request: Request) {
 
   return NextResponse.json({ status: 200, message: "Product updated" });
 }
+
+export async function DELETE(request: Request) {
+  const id = await request.json();
+  console.log("id", id);
+  //Check if user is admin
+  const { userId } = auth();
+  try {
+    const user = await prisma.users.findFirst({
+      where: {
+        id: userId || "",
+      },
+    });
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch user" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  //Delete product
+  try {
+    const deletedProduct = await prisma.products.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (error) {
+    console.log("Error deleting product:", error);
+    return NextResponse.json(
+      { error: "Failed to delete product" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  return NextResponse.json({ status: 200, message: "Product deleted" });
+}

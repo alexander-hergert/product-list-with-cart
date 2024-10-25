@@ -2,9 +2,17 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 const prisma = new PrismaClient();
 const { userId } = auth();
+
+const DeleteProduct = dynamic(
+  () => import("@/components/products/DeleteProduct"),
+  {
+    ssr: false,
+  }
+);
 
 const fetchProducts = async () => {
   //Check if user is admin
@@ -81,6 +89,7 @@ const ProductsPage = async () => {
             <Link href={`/dashboard/products/${product.id}/edit_product`}>
               Edit
             </Link>
+            <DeleteProduct id={product.id} />
           </div>
         ))}
       </div>
