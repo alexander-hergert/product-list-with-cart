@@ -44,7 +44,7 @@ enum OrderStatus {
 model orders {
   id                String   @id
   userId            String
-  user              users    @relation(fields: [userId], references: [id])
+  user              users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   productIds        String[]
   productIdsQuantity Int[]
   productIdsPrice   Float[]
@@ -57,11 +57,11 @@ model orders {
 model feedbacks {
   id        String   @id
   productId String
-  product   products @relation(fields: [productId], references: [id])
+  product   products @relation(fields: [productId], references: [id], onDelete: Cascade)
   userId    String
-  user      users    @relation(fields: [userId], references: [id])
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   orderId   String   
-  order     orders   @relation(fields: [orderId], references: [id])
+  order     orders   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   title     String
   comment   String
   rating    Float   @default(0)
