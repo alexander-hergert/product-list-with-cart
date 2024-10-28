@@ -18,9 +18,9 @@ const Filter = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="name">Filter:</label>
+      <label htmlFor="name">Name:</label>
       <input id="name" type="text" name="name" />
-      <label htmlFor="price">Price:</label>
+      <label htmlFor="price">Max. Price:</label>
       <input id="price" type="number" name="price" />
       <button type="submit">Submit</button>
     </form>
