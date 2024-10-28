@@ -14,7 +14,14 @@ const DeleteProduct = dynamic(
   }
 );
 
-const fetchProducts = async () => {
+const Filter = dynamic(() => import("@/components/products/Filter"), {
+  ssr: false,
+});
+
+const fetchProducts = async (
+  name: string | undefined,
+  price: string | undefined
+) => {
   //Check if user is admin
   try {
     const user = await prisma.users.findUnique({
@@ -32,6 +39,10 @@ const fetchProducts = async () => {
   //Fetch data
   try {
     const products = await prisma.products.findMany({
+      where: {
+        ...(name && { name: { contains: name, mode: "insensitive" } }),
+        ...(price && { price: Number(price) }),
+      },
       orderBy: {
         id: "asc",
       },
@@ -45,11 +56,23 @@ const fetchProducts = async () => {
   }
 };
 
-const ProductsPage = async () => {
-  const products = await fetchProducts();
+type SearchParams = {
+  name?: string;
+  price?: string;
+};
+
+const ProductsPage = async ({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) => {
+  const { name, price } = searchParams;
+  const products = await fetchProducts(name, price);
   return (
     <div>
       <h1>Products</h1>
+      <h2>Filter</h2>
+      <Filter />
       <Link
         className="text-blue-500 hover:text-blue-700"
         href="/dashboard/products/new_product"
