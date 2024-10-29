@@ -23,7 +23,7 @@ const Sort = dynamic(() => import("@/components/dashboard/Sort"), {
 });
 
 const fetchProducts = async (
-  name: string | undefined,
+  productname: string | undefined,
   price: string | undefined,
   order: string | undefined
 ) => {
@@ -45,12 +45,14 @@ const fetchProducts = async (
   try {
     const products = await prisma.products.findMany({
       where: {
-        ...(name && { name: { contains: name, mode: "insensitive" } }),
+        ...(productname && {
+          name: { contains: productname, mode: "insensitive" },
+        }),
         ...(price && { price: { lte: Number(price) } }),
       },
       orderBy: {
-        ...((order === "nameAsc" && { name: "asc" }) ||
-          (order === "nameDesc" && { name: "desc" })),
+        ...((order === "productnameAsc" && { name: "asc" }) ||
+          (order === "productnameDesc" && { name: "desc" })),
         ...((order === "priceAsc" && { price: "asc" }) ||
           (order === "priceDesc" && { price: "desc" })),
       },
@@ -65,7 +67,7 @@ const fetchProducts = async (
 };
 
 type SearchParams = {
-  name?: string;
+  productname?: string;
   price?: string;
   order?: string;
 };
@@ -75,8 +77,8 @@ const ProductsPage = async ({
 }: {
   searchParams: SearchParams;
 }) => {
-  const { name, price, order } = searchParams;
-  const products = await fetchProducts(name, price, order);
+  const { productname, price, order } = searchParams;
+  const products = await fetchProducts(productname, price, order);
   return (
     <div>
       <h1>Products</h1>

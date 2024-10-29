@@ -1,26 +1,49 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 const Sort = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const page = pathname.split("/")[2];
+  let query = "";
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     const target = e.target;
-    const name = searchParams.get("name") || "";
-    const price = searchParams.get("price") || "";
-    // // Access form values using names
-    const order = target.value;
-    // Build query and log
-    const query = `?name=${name}&price=${price}&order=${order}`;
+    if (page === "products") {
+      const productname = searchParams.get("productname") || "";
+      const price = searchParams.get("price") || "";
+      const order = target.value;
+      query = `?productname=${productname}&price=${price}&order=${order}`;
+    } else {
+      const username = searchParams.get("username") || "";
+      const email = searchParams.get("email") || "";
+      const address = searchParams.get("address") || "";
+      const order = target.value;
+      query = `?username=${username}&email=${email}&address=${address}&order=${order}`;
+    }
     router.push(query);
   };
   return (
     <select id="order" name="order" onChange={handleChange}>
-      <option value="nameAsc">Name ascending</option>
-      <option value="nameDesc">Name descending</option>
-      <option value="priceAsc">Price ascending</option>
-      <option value="priceDesc">Price descending</option>
+      {page === "products" && (
+        <>
+          <option value="productnameAsc">Productname ascending</option>
+          <option value="productnameDesc">Productname descending</option>
+          <option value="priceAsc">Price ascending</option>
+          <option value="priceDesc">Price descending</option>
+        </>
+      )}
+      {page === "customers" && (
+        <>
+          <option value="usernameAsc">Username ascending</option>
+          <option value="usernameDesc">Username descending</option>
+          <option value="emailAsc">Email ascending</option>
+          <option value="emailDesc">Email descending</option>
+          <option value="addressAsc">Address ascending</option>
+          <option value="addressDesc">Address descending</option>
+        </>
+      )}
     </select>
   );
 };

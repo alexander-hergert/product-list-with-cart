@@ -2,11 +2,25 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 const prisma = new PrismaClient();
 const { userId } = auth();
 
-const fetchCustomers = async () => {
+const Filter = dynamic(() => import("@/components/dashboard/Filter"), {
+  ssr: false,
+});
+
+const Sort = dynamic(() => import("@/components/dashboard/Sort"), {
+  ssr: false,
+});
+
+const fetchCustomers = async (
+  username: string | undefined,
+  email: string | undefined,
+  address: string | undefined,
+  order: string | undefined
+) => {
   //Check if user is admin
   try {
     const user = await prisma.users.findUnique({
@@ -26,9 +40,23 @@ const fetchCustomers = async () => {
     const customers = await prisma.users.findMany({
       where: {
         role: "USER",
+        ...(username && {
+          name: { contains: username, mode: "insensitive" },
+        }),
+        ...(email && {
+          email: { contains: email, mode: "insensitive" },
+        }),
+        ...(address && {
+          address: { contains: address, mode: "insensitive" },
+        }),
       },
       orderBy: {
-        name: "asc",
+        ...((order === "usernameAsc" && { name: "asc" }) ||
+          (order === "usernameDesc" && { name: "desc" })),
+        ...((order === "emailAsc" && { email: "asc" }) ||
+          (order === "emailDesc" && { email: "desc" })),
+        ...((order === "addressAsc" && { address: "asc" }) ||
+          (order === "addressDesc" && { address: "desc" })),
       },
     });
     return customers;
@@ -40,12 +68,27 @@ const fetchCustomers = async () => {
   }
 };
 
-const CustomersPage = async () => {
-  const customers = await fetchCustomers();
+type SearchParams = {
+  username?: string;
+  email?: string;
+  address?: string;
+  order?: string;
+};
+
+const CustomersPage = async ({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) => {
+  const { username, email, address, order } = searchParams;
+  const customers = await fetchCustomers(username, email, address, order);
   return (
     <div>
       <h1>Customers</h1>
-      <br />
+      <h2>Filter</h2>
+      <Filter />
+      <h2>Sort</h2>
+      <Sort />
       <div className="grid grid-cols-2">
         {customers.map((customer) => (
           <Link href={`/dashboard/customers/${customer.id}`} key={customer.id}>
