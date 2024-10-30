@@ -30,6 +30,11 @@ const Sort = () => {
       const order = target.value;
       query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}&order=${order}`;
       router.push(query);
+    } else if (page === "feedback") {
+      const minDate = searchParams.get("minDate") || "";
+      const maxDate = searchParams.get("maxDate") || "";
+      const order = target.value;
+      query = `?minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
     }
   };
   return (
@@ -58,6 +63,12 @@ const Sort = () => {
           <option value="dateDesc">Date descending</option>
           <option value="totalPriceAsc">Total price ascending</option>
           <option value="totalPriceDesc">Total price descending</option>
+        </>
+      )}
+      {page === "feedback" && (
+        <>
+          <option value="dateAsc">Date ascending</option>
+          <option value="dateDesc">Date descending</option>
         </>
       )}
     </select>

@@ -47,6 +47,13 @@ const Filter = () => {
         target.elements.namedItem("maxTotalPrice") as HTMLInputElement
       ).value;
       query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
+    } else if (page === "feedback") {
+      // Access form values for /dashboard/feedback page
+      const minDate = (target.elements.namedItem("minDate") as HTMLInputElement)
+        .value;
+      const maxDate = (target.elements.namedItem("maxDate") as HTMLInputElement)
+        .value;
+      query = `?minDate=${minDate}&maxDate=${maxDate}`;
     }
     router.push(query);
   };
@@ -93,6 +100,15 @@ const Filter = () => {
           <input id="minTotalPrice" type="number" name="minTotalPrice" />
           <label htmlFor="maxTotalPrice">Max. Total Price:</label>
           <input id="maxTotalPrice" type="number" name="maxTotalPrice" />
+        </>
+      )}
+      {/** Show form fields for /dashboard/feedback */}
+      {page === "feedback" && (
+        <>
+          <label htmlFor="mindate">Min. Date:</label>
+          <input id="minDate" type="date" name="minDate" />
+          <label htmlFor="maxDate">Max. Date:</label>
+          <input id="maxDate" type="date" name="maxDate" />
         </>
       )}
       <button type="submit">Submit</button>

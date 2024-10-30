@@ -1,11 +1,25 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
+import dynamic from "next/dynamic";
+import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
 
 const prisma = new PrismaClient();
 const { userId } = auth();
 
-const fetchFeedbacks = async () => {
+const Filter = dynamic(() => import("@/components/dashboard/Filter"), {
+  ssr: false,
+});
+
+const Sort = dynamic(() => import("@/components/dashboard/Sort"), {
+  ssr: false,
+});
+
+const fetchFeedbacks = async (
+  minDate: string | undefined,
+  maxDate: string | undefined,
+  order: string | undefined
+) => {
   //Check if user is admin
   try {
     const user = await prisma.users.findUnique({
@@ -23,8 +37,15 @@ const fetchFeedbacks = async () => {
   //Fetch data
   try {
     const feedbacks = await prisma.feedbacks.findMany({
+      where: {
+        createdAt: {
+          ...(minDate && { gte: truncateToUTCDateStart(minDate) }),
+          ...(maxDate && { lte: truncateToUTCDateEnd(maxDate) }),
+        },
+      },
       orderBy: {
-        createdAt: "desc",
+        ...((order === "dateAsc" && { createdAt: "asc" }) ||
+          (order === "dateDesc" && { createdAt: "desc" })),
       },
     });
     return feedbacks;
@@ -35,12 +56,27 @@ const fetchFeedbacks = async () => {
     await prisma.$disconnect();
   }
 };
-const FeedbackPage = async () => {
-  const feedbacks = await fetchFeedbacks();
+
+type SearchParams = {
+  minDate?: string;
+  maxDate?: string;
+  order?: string;
+};
+
+const FeedbackPage = async ({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) => {
+  const { minDate, maxDate, order } = searchParams;
+  const feedbacks = await fetchFeedbacks(minDate, maxDate, order);
   return (
     <div>
       <h1>Feedback</h1>
-      <br />
+      <h2>Filter</h2>
+      <Filter />
+      <h2>Sort</h2>
+      <Sort />
       <div className="grid grid-cols-2">
         {feedbacks.map((feedback) => (
           <Link
