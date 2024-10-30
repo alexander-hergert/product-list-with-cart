@@ -1,11 +1,29 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
+import dynamic from "next/dynamic";
+import { OrderStatus } from "@/lib/types";
+import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
 
 const prisma = new PrismaClient();
 const { userId } = auth();
 
-const fetchOrders = async () => {
+const Filter = dynamic(() => import("@/components/dashboard/Filter"), {
+  ssr: false,
+});
+
+const Sort = dynamic(() => import("@/components/dashboard/Sort"), {
+  ssr: false,
+});
+
+const fetchOrders = async (
+  status: OrderStatus | undefined,
+  minDate: string | undefined,
+  maxDate: string | undefined,
+  minTotalPrice: string | undefined,
+  maxTotalPrice: string | undefined,
+  order: string | undefined
+) => {
   //Check if user is admin
   try {
     const user = await prisma.users.findUnique({
@@ -23,8 +41,22 @@ const fetchOrders = async () => {
   //Fetch data
   try {
     const orders = await prisma.orders.findMany({
+      where: {
+        ...(status && { status }),
+        totalPrice: {
+          ...(minTotalPrice && { gte: Number(minTotalPrice) }),
+          ...(maxTotalPrice && { lte: Number(maxTotalPrice) }),
+        },
+        createdAt: {
+          ...(minDate && { gte: truncateToUTCDateStart(minDate) }),
+          ...(maxDate && { lte: truncateToUTCDateEnd(maxDate) }),
+        },
+      },
       orderBy: {
-        createdAt: "desc",
+        ...((order === "dateAsc" && { createdAt: "asc" }) ||
+          (order === "dateDesc" && { createdAt: "desc" })),
+        ...((order === "totalPriceAsc" && { totalPrice: "asc" }) ||
+          (order === "totalPriceDesc" && { totalPrice: "desc" })),
       },
     });
     return orders;
@@ -36,12 +68,33 @@ const fetchOrders = async () => {
   }
 };
 
-const OrdersPage = async () => {
-  const orders = await fetchOrders();
+type SearchParams = {
+  status?: OrderStatus;
+  minDate?: string;
+  maxDate?: string;
+  minTotalPrice?: string;
+  maxTotalPrice?: string;
+  order?: string;
+};
+
+const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
+  const { status, minDate, maxDate, minTotalPrice, maxTotalPrice, order } =
+    searchParams;
+  const orders = await fetchOrders(
+    status,
+    minDate,
+    maxDate,
+    minTotalPrice,
+    maxTotalPrice,
+    order
+  );
   return (
     <div>
       <h1>Orders</h1>
-      <br />
+      <h2>Filter</h2>
+      <Filter />
+      <h2>Sort</h2>
+      <Sort />
       <div className="grid grid-cols-2">
         {orders.map((order) => (
           <Link

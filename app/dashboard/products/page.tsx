@@ -24,7 +24,8 @@ const Sort = dynamic(() => import("@/components/dashboard/Sort"), {
 
 const fetchProducts = async (
   productname: string | undefined,
-  price: string | undefined,
+  minPrice: string | undefined,
+  maxPrice: string | undefined,
   order: string | undefined
 ) => {
   //Check if user is admin
@@ -48,7 +49,10 @@ const fetchProducts = async (
         ...(productname && {
           name: { contains: productname, mode: "insensitive" },
         }),
-        ...(price && { price: { lte: Number(price) } }),
+        price: {
+          ...(minPrice && { gte: Number(minPrice) }),
+          ...(maxPrice && { lte: Number(maxPrice) }),
+        },
       },
       orderBy: {
         ...((order === "productnameAsc" && { name: "asc" }) ||
@@ -68,7 +72,8 @@ const fetchProducts = async (
 
 type SearchParams = {
   productname?: string;
-  price?: string;
+  minPrice?: string;
+  maxPrice?: string;
   order?: string;
 };
 
@@ -77,8 +82,8 @@ const ProductsPage = async ({
 }: {
   searchParams: SearchParams;
 }) => {
-  const { productname, price, order } = searchParams;
-  const products = await fetchProducts(productname, price, order);
+  const { productname, minPrice, maxPrice, order } = searchParams;
+  const products = await fetchProducts(productname, minPrice, maxPrice, order);
   return (
     <div>
       <h1>Products</h1>

@@ -16,7 +16,7 @@ export type Product = {
   rating: number;
 };
 
-enum OrderStatus {
+export enum OrderStatus {
   Pending = "Pending",
   Shipped = "Shipped",
   Delivered = "Delivered",

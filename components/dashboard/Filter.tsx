@@ -15,10 +15,14 @@ const Filter = () => {
       const productname = (
         target.elements.namedItem("productname") as HTMLInputElement
       ).value;
-      const price = (target.elements.namedItem("price") as HTMLInputElement)
-        .value;
-      query = `?productname=${productname}&price=${price}`;
-    } else {
+      const minPrice = (
+        target.elements.namedItem("minPrice") as HTMLInputElement
+      ).value;
+      const maxPrice = (
+        target.elements.namedItem("maxPrice") as HTMLInputElement
+      ).value;
+      query = `?productname=${productname}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    } else if (page === "customers") {
       // Access form values for /dashboard/customers page
       const username = (
         target.elements.namedItem("username") as HTMLInputElement
@@ -28,6 +32,21 @@ const Filter = () => {
       const address = (target.elements.namedItem("address") as HTMLInputElement)
         .value;
       query = `?username=${username}&email=${email}&address=${address}`;
+    } else if (page === "orders") {
+      // Access form values for /dashboard/orders page
+      const status = (target.elements.namedItem("status") as HTMLSelectElement)
+        .value;
+      const minDate = (target.elements.namedItem("minDate") as HTMLInputElement)
+        .value;
+      const maxDate = (target.elements.namedItem("maxDate") as HTMLInputElement)
+        .value;
+      const minTotalPrice = (
+        target.elements.namedItem("minTotalPrice") as HTMLInputElement
+      ).value;
+      const maxTotalPrice = (
+        target.elements.namedItem("maxTotalPrice") as HTMLInputElement
+      ).value;
+      query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
     }
     router.push(query);
   };
@@ -39,8 +58,10 @@ const Filter = () => {
         <>
           <label htmlFor="productname">Product Name:</label>
           <input id="productname" type="text" name="productname" />
-          <label htmlFor="price">Max. Price:</label>
-          <input id="price" type="number" name="price" />
+          <label htmlFor="minPrice">Min. Price:</label>
+          <input id="minPrice" type="number" name="minPrice" />
+          <label htmlFor="maxPrice">Max. Price:</label>
+          <input id="maxPrice" type="number" name="maxPrice" />
         </>
       )}
       {/** Show form fields for /dashboard/customers */}
@@ -52,6 +73,26 @@ const Filter = () => {
           <input id="email" type="email" name="email" />
           <label htmlFor="address">Address:</label>
           <input id="address" type="text" name="address" />
+        </>
+      )}
+      {/** Show form fields for /dashboard/orders */}
+      {page === "orders" && (
+        <>
+          <label htmlFor="status">Status:</label>
+          <select id="status" name="status">
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+          <label htmlFor="mindate">Min. Date:</label>
+          <input id="minDate" type="date" name="minDate" />
+          <label htmlFor="maxDate">Max. Date:</label>
+          <input id="maxDate" type="date" name="maxDate" />
+          <label htmlFor="minTotalPrice">Min. Total Price:</label>
+          <input id="minTotalPrice" type="number" name="minTotalPrice" />
+          <label htmlFor="maxTotalPrice">Max. Total Price:</label>
+          <input id="maxTotalPrice" type="number" name="maxTotalPrice" />
         </>
       )}
       <button type="submit">Submit</button>

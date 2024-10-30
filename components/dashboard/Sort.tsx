@@ -15,14 +15,22 @@ const Sort = () => {
       const price = searchParams.get("price") || "";
       const order = target.value;
       query = `?productname=${productname}&price=${price}&order=${order}`;
-    } else {
+    } else if (page === "customers") {
       const username = searchParams.get("username") || "";
       const email = searchParams.get("email") || "";
       const address = searchParams.get("address") || "";
       const order = target.value;
       query = `?username=${username}&email=${email}&address=${address}&order=${order}`;
+    } else if (page === "orders") {
+      const status = searchParams.get("status") || "";
+      const minDate = searchParams.get("minDate") || "";
+      const maxDate = searchParams.get("maxDate") || "";
+      const minTotalPrice = searchParams.get("minTotalPrice") || "";
+      const maxTotalPrice = searchParams.get("maxTotalPrice") || "";
+      const order = target.value;
+      query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}&order=${order}`;
+      router.push(query);
     }
-    router.push(query);
   };
   return (
     <select id="order" name="order" onChange={handleChange}>
@@ -42,6 +50,14 @@ const Sort = () => {
           <option value="emailDesc">Email descending</option>
           <option value="addressAsc">Address ascending</option>
           <option value="addressDesc">Address descending</option>
+        </>
+      )}
+      {page === "orders" && (
+        <>
+          <option value="dateAsc">Date ascending</option>
+          <option value="dateDesc">Date descending</option>
+          <option value="totalPriceAsc">Total price ascending</option>
+          <option value="totalPriceDesc">Total price descending</option>
         </>
       )}
     </select>
