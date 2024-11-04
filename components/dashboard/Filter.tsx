@@ -5,6 +5,7 @@ const Filter = () => {
   const router = useRouter();
   const pathname = usePathname();
   const page = pathname.split("/")[2];
+  const pageProducts = pathname.split("/")[1];
   let query = "";
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,6 +55,21 @@ const Filter = () => {
       const maxDate = (target.elements.namedItem("maxDate") as HTMLInputElement)
         .value;
       query = `?minDate=${minDate}&maxDate=${maxDate}`;
+    } else if (pageProducts === "products") {
+      // Access form values for /products page
+      const productName = (
+        target.elements.namedItem("productName") as HTMLInputElement
+      ).value;
+      const productCategory = (
+        target.elements.namedItem("productCategory") as HTMLInputElement
+      ).value;
+      const minPrice = (
+        target.elements.namedItem("minPrice") as HTMLInputElement
+      ).value;
+      const maxPrice = (
+        target.elements.namedItem("maxPrice") as HTMLInputElement
+      ).value;
+      query = `?productName=${productName}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     }
     router.push(query);
   };
@@ -92,7 +108,7 @@ const Filter = () => {
             <option value="Delivered">Delivered</option>
             <option value="Cancelled">Cancelled</option>
           </select>
-          <label htmlFor="mindate">Min. Date:</label>
+          <label htmlFor="minDate">Min. Date:</label>
           <input id="minDate" type="date" name="minDate" />
           <label htmlFor="maxDate">Max. Date:</label>
           <input id="maxDate" type="date" name="maxDate" />
@@ -105,10 +121,23 @@ const Filter = () => {
       {/** Show form fields for /dashboard/feedback */}
       {page === "feedback" && (
         <>
-          <label htmlFor="mindate">Min. Date:</label>
+          <label htmlFor="minDate">Min. Date:</label>
           <input id="minDate" type="date" name="minDate" />
           <label htmlFor="maxDate">Max. Date:</label>
           <input id="maxDate" type="date" name="maxDate" />
+        </>
+      )}
+      {/** Show form fields for /products */}
+      {pageProducts === "products" && (
+        <>
+          <label htmlFor="productName">Product Name:</label>
+          <input id="productName" type="text" name="productName" />
+          <label htmlFor="productCategory">Product Category:</label>
+          <input id="productCategory" type="text" name="productCategory" />
+          <label htmlFor="minPrice">Min. Price:</label>
+          <input id="minPrice" type="number" name="minPrice" />
+          <label htmlFor="maxPrice">Max. Price:</label>
+          <input id="maxPrice" type="number" name="maxPrice" />
         </>
       )}
       <button type="submit">Submit</button>

@@ -5,6 +5,7 @@ const Sort = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const page = pathname.split("/")[2];
+  const pageProducts = pathname.split("/")[1];
   let query = "";
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -34,6 +35,13 @@ const Sort = () => {
       const maxDate = searchParams.get("maxDate") || "";
       const order = target.value;
       query = `?minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
+    } else if (pageProducts === "products") {
+      const productname = searchParams.get("productname") || "";
+      const productCategory = searchParams.get("productCategory") || "";
+      const minPrice = searchParams.get("minPrice") || "";
+      const maxPrice = searchParams.get("maxPrice") || "";
+      const order = target.value;
+      query = `?productname=${productname}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}&order=${order}`;
     }
     router.push(query);
   };
@@ -69,6 +77,18 @@ const Sort = () => {
         <>
           <option value="dateAsc">Date ascending</option>
           <option value="dateDesc">Date descending</option>
+        </>
+      )}
+      {pageProducts === "products" && (
+        <>
+          <option value="productnameAsc">Productname ascending</option>
+          <option value="productnameDesc">Productname descending</option>
+          <option value="productCategoryAsc">Product category ascending</option>
+          <option value="productCategoryDesc">
+            Product category descending
+          </option>
+          <option value="priceAsc">Price ascending</option>
+          <option value="priceDesc">Price descending</option>
         </>
       )}
     </select>
