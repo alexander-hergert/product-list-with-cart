@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 character"),
+  category: z.string().min(3, "Category must be at least 3 character"),
   description: z.string().min(3, "Description must be at least 3 character"),
   price: z.string().min(1, "Price must be at least 1"),
   img: z.string(), // Add url validation later
@@ -17,11 +18,13 @@ const CreateNewProduct = () => {
   const router = useRouter();
   const [input, setInput] = useState<{
     name: string;
+    category: string;
     description: string;
     price: number;
     img: string;
   }>({
     name: "",
+    category: "",
     description: "",
     price: 0,
     img: "/images/image-waffle-desktop.jpg",
@@ -29,7 +32,7 @@ const CreateNewProduct = () => {
 
   const mutation = useMutation({
     mutationFn: async (updatedData: typeof input) => {
-      return await fetch("/api/createNewProduct", {
+      return await fetch("/api/crudProduct", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,6 +55,7 @@ const CreateNewProduct = () => {
 
   const [errors, setErrors] = useState<{
     name?: string;
+    category?: string;
     description?: string;
     price?: number;
   }>({});
@@ -91,6 +95,11 @@ const CreateNewProduct = () => {
         <label>Name:</label>
         <input type="text" name="name" onChange={handleChange} />
         {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+      </div>
+      <div>
+        <label>Category:</label>
+        <input type="text" name="category" onChange={handleChange} />
+        {errors.category && <p style={{ color: "red" }}>{errors.category}</p>}
       </div>
       <div>
         <label>Description:</label>

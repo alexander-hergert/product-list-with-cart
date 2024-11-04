@@ -19,7 +19,7 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
 
   const { cart, changeCart } = cartContext;
 
-  const { id, name, description, price } = singleProduct;
+  const { id, name, category, price } = singleProduct;
 
   const handleUpClick = () => {
     const newQuantity = cart[id] ? cart[id].quantity + 1 : 1;
@@ -49,8 +49,8 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
           height={200}
           alt={singleProduct.name}
         />
+        <h2>{category}</h2>
         <h2>{name}</h2>
-        <p>{description}</p>
         <p>Price: ${price}</p>
       </Link>
       <div>

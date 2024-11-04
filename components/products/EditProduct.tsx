@@ -8,6 +8,7 @@ import { Product } from "@/lib/types";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 character"),
+  category: z.string().min(3, "Category must be at least 3 character"),
   description: z.string().min(3, "Description must be at least 3 character"),
   price: z.string().min(1, "Price must be at least 1"),
   img: z.string(), // Add url validation later
@@ -19,18 +20,20 @@ interface EditProductProps {
 }
 
 const EditProduct: FC<EditProductProps> = ({ product, id }) => {
-  const { name, description, price, image } = product || {};
+  const { name, category, description, price, image } = product || {};
   const queryClient = useQueryClient();
   const router = useRouter();
   const [input, setInput] = useState<{
     id: string;
     name: string;
+    category: string;
     description: string;
     price: number;
     img: string;
   }>({
     id: id,
     name: name || "",
+    category: category || "",
     description: description || "",
     price: price || 0,
     img: image || "/images/image-waffle-desktop.jpg",
@@ -38,7 +41,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
 
   const mutation = useMutation({
     mutationFn: async (updatedData: typeof input) => {
-      return await fetch("/api/createNewProduct", {
+      return await fetch("/api/crudProduct", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -61,6 +64,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
 
   const [errors, setErrors] = useState<{
     name?: string;
+    category?: string;
     description?: string;
     price?: number;
   }>({});
@@ -105,6 +109,16 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
           defaultValue={name}
         />
         {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+      </div>
+      <div>
+        <label>Category:</label>
+        <input
+          type="text"
+          name="category"
+          onChange={handleChange}
+          defaultValue={category}
+        />
+        {errors.category && <p style={{ color: "red" }}>{errors.category}</p>}
       </div>
       <div>
         <label>Description:</label>

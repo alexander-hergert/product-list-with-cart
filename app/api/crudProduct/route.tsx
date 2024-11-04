@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 character"),
+  category: z.string().min(3, "Category must be at least 3 character"),
   description: z.string().min(3, "Description must be at least 3 character"),
   price: z.number().int().min(1, "Price must be at least 1"),
   img: z.string(), // Add url validation later
@@ -14,7 +15,7 @@ const productSchema = z.object({
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
-  const { name, description, price, img } = await request.json();
+  const { name, category, description, price, img } = await request.json();
 
   //Check if user is admin
   const { userId } = auth();
@@ -41,6 +42,7 @@ export async function POST(request: Request) {
   try {
     const productValidate = productSchema.parse({
       name,
+      category,
       description,
       price: parseInt(price),
       img,
@@ -60,6 +62,7 @@ export async function POST(request: Request) {
       data: {
         id: uuidv4(),
         name,
+        category,
         description,
         price: parseInt(price),
         image: img,
@@ -80,7 +83,7 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const { id, name, description, price, img } = await request.json();
+  const { id, name, category, description, price, img } = await request.json();
 
   //Check if user is admin
   const { userId } = auth();
@@ -107,6 +110,7 @@ export async function PUT(request: Request) {
   try {
     const productValidate = productSchema.parse({
       name,
+      category,
       description,
       price: parseInt(price),
       img,
@@ -128,6 +132,7 @@ export async function PUT(request: Request) {
       },
       data: {
         name,
+        category,
         description,
         price: parseInt(price),
         image: img,
