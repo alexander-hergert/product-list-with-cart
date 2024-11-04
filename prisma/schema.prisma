@@ -27,6 +27,7 @@ model users {
 model products {
   id          String @id
   name        String
+  category    String @default("")
   price       Float
   description String
   image       String
