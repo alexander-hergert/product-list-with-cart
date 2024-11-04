@@ -3,6 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import Filter from "@/components/dashboard/Filter";
+import Sort from "@/components/dashboard/Sort";
 
 const prisma = new PrismaClient();
 const { userId } = auth();
@@ -13,14 +15,6 @@ const DeleteProduct = dynamic(
     ssr: false,
   }
 );
-
-const Filter = dynamic(() => import("@/components/dashboard/Filter"), {
-  ssr: false,
-});
-
-const Sort = dynamic(() => import("@/components/dashboard/Sort"), {
-  ssr: false,
-});
 
 const fetchProducts = async (
   productname: string | undefined,

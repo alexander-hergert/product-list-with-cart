@@ -1,20 +1,13 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
-import dynamic from "next/dynamic";
 import { OrderStatus } from "@/lib/types";
 import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
+import Filter from "@/components/dashboard/Filter";
+import Sort from "@/components/dashboard/Sort";
 
 const prisma = new PrismaClient();
 const { userId } = auth();
-
-const Filter = dynamic(() => import("@/components/dashboard/Filter"), {
-  ssr: false,
-});
-
-const Sort = dynamic(() => import("@/components/dashboard/Sort"), {
-  ssr: false,
-});
 
 const fetchOrders = async (
   status: OrderStatus | undefined,

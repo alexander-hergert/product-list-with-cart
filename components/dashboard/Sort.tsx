@@ -29,13 +29,13 @@ const Sort = () => {
       const maxTotalPrice = searchParams.get("maxTotalPrice") || "";
       const order = target.value;
       query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}&order=${order}`;
-      router.push(query);
     } else if (page === "feedback") {
       const minDate = searchParams.get("minDate") || "";
       const maxDate = searchParams.get("maxDate") || "";
       const order = target.value;
       query = `?minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
     }
+    router.push(query);
   };
   return (
     <select id="order" name="order" onChange={handleChange}>
