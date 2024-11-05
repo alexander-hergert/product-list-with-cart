@@ -4,28 +4,20 @@ import { PrismaClient } from "@prisma/client";
 import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
 import Filter from "@/components/dashboard/Filter";
 import Sort from "@/components/dashboard/Sort";
+import { checkIfAdmin } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
-const { userId } = auth();
 
 const fetchFeedbacks = async (
   minDate: string | undefined,
   maxDate: string | undefined,
   order: string | undefined
 ) => {
+  const { userId } = auth();
   //Check if user is admin
-  try {
-    const user = await prisma.users.findUnique({
-      where: {
-        id: userId ? userId : undefined,
-      },
-    });
-    if (user?.role !== "ADMIN") {
-      throw new Error("User is not an admin");
-    }
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return [];
+  if (!(await checkIfAdmin(userId))) {
+    redirect("/dashboard");
   }
   //Fetch data
   try {

@@ -2,24 +2,16 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
+import { checkIfAdmin } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
 
 const fetchCustomer = async (id: string) => {
   const { userId } = auth();
   //Check if user is admin
-  try {
-    const user = await prisma.users.findUnique({
-      where: {
-        id: userId ? userId : undefined,
-      },
-    });
-    if (user?.role !== "ADMIN") {
-      throw new Error("User is not an admin");
-    }
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return null;
+  if (!(await checkIfAdmin(userId))) {
+    redirect("/dashboard");
   }
   //Fetch data
   try {
@@ -36,6 +28,7 @@ const fetchCustomer = async (id: string) => {
     await prisma.$disconnect();
   }
 };
+
 interface Params {
   id: string;
 }

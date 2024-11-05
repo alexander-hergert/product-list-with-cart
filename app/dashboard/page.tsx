@@ -8,77 +8,76 @@ import { PrismaClient } from "@prisma/client";
 import { DashboardData } from "@/lib/types";
 
 const prisma = new PrismaClient();
-const { userId } = auth();
-
-const getDashboardData = async (): Promise<DashboardData> => {
-  //Check if user is admin
-  try {
-    const user = await prisma.users.findUnique({
-      where: {
-        id: userId ? userId : undefined,
-      },
-    });
-    if (user?.role !== "ADMIN") {
-      throw new Error("User is not an admin");
-    }
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return {
-      customers: [],
-      products: [],
-      orders: [],
-      feedbacks: [],
-    };
-  }
-  //Fetch data
-  try {
-    const customers = await prisma.users.findMany({
-      where: {
-        role: "USER",
-      },
-      orderBy: {
-        name: "asc",
-      },
-      take: 3,
-    });
-    const products = await prisma.products.findMany({
-      orderBy: {
-        id: "asc",
-      },
-      take: 3,
-    });
-    const orders = await prisma.orders.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 3,
-    });
-    const feedbacks = await prisma.feedbacks.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 3,
-    });
-    return {
-      customers,
-      products,
-      orders,
-      feedbacks,
-    };
-  } catch (error) {
-    console.error("Error fetching dashboard data:", error);
-    return {
-      customers: [],
-      products: [],
-      orders: [],
-      feedbacks: [],
-    };
-  } finally {
-    await prisma.$disconnect();
-  }
-};
 
 const DashboardPage = async () => {
+  const { userId } = auth();
+  const getDashboardData = async (): Promise<DashboardData> => {
+    //Check if user is admin
+    try {
+      const user = await prisma.users.findUnique({
+        where: {
+          id: userId ? userId : undefined,
+        },
+      });
+      if (user?.role !== "ADMIN") {
+        throw new Error("User is not an admin");
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return {
+        customers: [],
+        products: [],
+        orders: [],
+        feedbacks: [],
+      };
+    }
+    //Fetch data
+    try {
+      const customers = await prisma.users.findMany({
+        where: {
+          role: "USER",
+        },
+        orderBy: {
+          name: "asc",
+        },
+        take: 3,
+      });
+      const products = await prisma.products.findMany({
+        orderBy: {
+          id: "asc",
+        },
+        take: 3,
+      });
+      const orders = await prisma.orders.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 3,
+      });
+      const feedbacks = await prisma.feedbacks.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 3,
+      });
+      return {
+        customers,
+        products,
+        orders,
+        feedbacks,
+      };
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+      return {
+        customers: [],
+        products: [],
+        orders: [],
+        feedbacks: [],
+      };
+    } finally {
+      await prisma.$disconnect();
+    }
+  };
   const data = await getDashboardData();
   const { customers, products, orders, feedbacks } = data;
   return (
