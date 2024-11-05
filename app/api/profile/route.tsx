@@ -51,5 +51,4 @@ export async function POST(request: Request) {
   } finally {
     await prisma.$disconnect();
   }
-  return NextResponse.json({ message: "Profile updated successfully!" });
 }

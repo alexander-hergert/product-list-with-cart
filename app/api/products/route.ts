@@ -2,7 +2,6 @@
 
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { Product } from "@/lib/types";
 
 const prisma = new PrismaClient();
 

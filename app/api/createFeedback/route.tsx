@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
@@ -105,3 +105,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ message: "Feedback created", status: 200 });
 }
+
+//todo put and delete

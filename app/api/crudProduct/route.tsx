@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+import { checkIfAdmin } from "@/lib/auth";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 character"),
@@ -19,23 +20,8 @@ export async function POST(request: Request) {
 
   //Check if user is admin
   const { userId } = auth();
-  try {
-    const user = await prisma.users.findFirst({
-      where: {
-        id: userId || "",
-      },
-    });
-    if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch user" },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect();
+  if (!(await checkIfAdmin(userId))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   //Validate the product
@@ -87,23 +73,8 @@ export async function PUT(request: Request) {
 
   //Check if user is admin
   const { userId } = auth();
-  try {
-    const user = await prisma.users.findFirst({
-      where: {
-        id: userId || "",
-      },
-    });
-    if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch user" },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect();
+  if (!(await checkIfAdmin(userId))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   //Validate the product
@@ -153,26 +124,11 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   const id = await request.json();
-  console.log("id", id);
+
   //Check if user is admin
   const { userId } = auth();
-  try {
-    const user = await prisma.users.findFirst({
-      where: {
-        id: userId || "",
-      },
-    });
-    if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch user" },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect();
+  if (!(await checkIfAdmin(userId))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   //Delete product
