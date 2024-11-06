@@ -2,21 +2,19 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import { checkIfAdmin } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
 
 const fetchFeedback = async (id: string) => {
   const { userId } = auth();
   //Check if user is admin
-  if (!(await checkIfAdmin(userId))) {
-    redirect("/dashboard");
-  }
+  const isAdmin = await checkIfAdmin(userId);
   //Fetch data
   try {
     const feedback = await prisma.feedbacks.findUnique({
       where: {
         id,
+        userId: (!isAdmin && userId) || undefined,
       },
     });
     return feedback;

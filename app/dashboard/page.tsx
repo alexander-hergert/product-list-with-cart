@@ -6,60 +6,69 @@ import Products from "@/components/dashboard/Products";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import { DashboardData } from "@/lib/types";
+import { checkIfAdmin } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
 const DashboardPage = async () => {
   const { userId } = auth();
+  //Check if user is admin
+  const isAdmin = await checkIfAdmin(userId);
   const getDashboardData = async (): Promise<DashboardData> => {
-    //Check if user is admin
-    try {
-      const user = await prisma.users.findUnique({
-        where: {
-          id: userId ? userId : undefined,
-        },
-      });
-      if (user?.role !== "ADMIN") {
-        throw new Error("User is not an admin");
-      }
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      return {
-        customers: [],
-        products: [],
-        orders: [],
-        feedbacks: [],
-      };
-    }
     //Fetch data
     try {
-      const customers = await prisma.users.findMany({
-        where: {
-          role: "USER",
-        },
-        orderBy: {
-          name: "asc",
-        },
-        take: 3,
-      });
-      const products = await prisma.products.findMany({
-        orderBy: {
-          id: "asc",
-        },
-        take: 3,
-      });
-      const orders = await prisma.orders.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 3,
-      });
-      const feedbacks = await prisma.feedbacks.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 3,
-      });
+      const customers = isAdmin
+        ? await prisma.users.findMany({
+            where: {
+              role: "USER",
+            },
+            orderBy: {
+              name: "asc",
+            },
+            take: 3,
+          })
+        : [];
+      const products = isAdmin
+        ? await prisma.products.findMany({
+            orderBy: {
+              id: "asc",
+            },
+            take: 3,
+          })
+        : [];
+      const orders = isAdmin
+        ? await prisma.orders.findMany({
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 3,
+          })
+        : await prisma.orders.findMany({
+            where: {
+              userId: userId || "",
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 3,
+          });
+      const feedbacks = isAdmin
+        ? await prisma.feedbacks.findMany({
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 3,
+          })
+        : await prisma.feedbacks.findMany({
+            where: {
+              userId: userId || "",
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 3,
+          });
+
       return {
         customers,
         products,
@@ -84,8 +93,8 @@ const DashboardPage = async () => {
     <div>
       <h1>Dashboard</h1>
       <div className="grid grid-cols-2 gap-4">
-        <Customers customers={customers} />
-        <Products products={products} />
+        {isAdmin && <Customers customers={customers} />}
+        {isAdmin && <Products products={products} />}
         <Orders orders={orders} />
         <Feedback feedbacks={feedbacks} />
       </div>

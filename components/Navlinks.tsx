@@ -20,7 +20,7 @@ const Navlinks = async () => {
   return (
     <div className="flex gap-2">
       {links.map(({ href, label }, i) =>
-        isAdmin || (!isAdmin && i < 4) ? (
+        isAdmin || (!isAdmin && i < 6) ? (
           <Link
             className="text-blue-500 hover:text-blue-700"
             key={`${href}${label}`}

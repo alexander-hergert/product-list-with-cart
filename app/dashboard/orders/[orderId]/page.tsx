@@ -5,7 +5,6 @@ import { PrismaClient } from "@prisma/client";
 import OrderProducts from "@/components/orders/OrderProducts";
 import OrderCustomer from "@/components/orders/OrderCustomer";
 import { checkIfAdmin } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
 const OrderChangeStatus = dynamic(
   () => import("@/components/orders/OrderStatusChange"),
@@ -19,14 +18,13 @@ const prisma = new PrismaClient();
 const fetchOrder = async (id: string) => {
   const { userId } = auth();
   //Check if user is admin
-  if (!(await checkIfAdmin(userId))) {
-    redirect("/dashboard");
-  }
+  const isAdmin = await checkIfAdmin(userId);
   //Fetch data
   try {
     const order = await prisma.orders.findUnique({
       where: {
         id,
+        userId: (!isAdmin && userId) || undefined,
       },
     });
     return order;
@@ -83,7 +81,11 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
         ... Back to Orders
       </Link>
       <OrderChangeStatus id={orderId} status={order?.status} />
-      <OrderProducts orderId={orderId} productIds={order?.productIds} productIdsQuantity={order?.productIdsQuantity}/>
+      <OrderProducts
+        orderId={orderId}
+        productIds={order?.productIds}
+        productIdsQuantity={order?.productIdsQuantity}
+      />
       <OrderCustomer userId={order?.userId} />
     </div>
   );

@@ -6,7 +6,6 @@ import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
 import Filter from "@/components/dashboard/Filter";
 import Sort from "@/components/dashboard/Sort";
 import { checkIfAdmin } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
 
@@ -20,13 +19,13 @@ const fetchOrders = async (
 ) => {
   const { userId } = auth();
   //Check if user is admin
-  if (!(await checkIfAdmin(userId))) {
-    redirect("/dashboard");
-  }
+  const isAdmin = await checkIfAdmin(userId);
+
   //Fetch data
   try {
     const orders = await prisma.orders.findMany({
       where: {
+        userId: (!isAdmin && userId) || undefined,
         ...(status && { status }),
         totalPrice: {
           ...(minTotalPrice && { gte: Number(minTotalPrice) }),
