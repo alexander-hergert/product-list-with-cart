@@ -103,7 +103,75 @@ export async function POST(request: Request) {
     },
   });
 
+  prisma.$disconnect();
+
   return NextResponse.json({ message: "Feedback created", status: 200 });
 }
 
-//todo put and delete
+export async function PUT(request: Request) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id, title, rating, comment, productId, orderId } =
+    await request.json();
+
+  // Check if user is owner of the feedback
+  const feedback = await prisma.feedbacks.findFirst({
+    where: {
+      id,
+      userId,
+    },
+  });
+
+  if (!feedback) {
+    return NextResponse.json({ error: "Feedback not found" }, { status: 404 });
+  }
+
+  // Validate the feedback
+  try {
+    const feedbackValidate = feedbackSchema.parse({
+      productId,
+      orderId,
+      rating,
+      title,
+      comment,
+    });
+  } catch (error) {
+    console.error("Error validating feedback:", error);
+    return NextResponse.json(
+      { error: "Failed to validate feedback" },
+      { status: 400 }
+    );
+  }
+
+  //Calculate the average rating
+  const feedbacks = await prisma.feedbacks.findMany({
+    where: {
+      productId: feedback.productId,
+    },
+  });
+  const totalRating = feedbacks.reduce((acc, feedback) => {
+    return acc + feedback.rating;
+  }, 0);
+  const averageRating = totalRating / feedbacks.length;
+
+  // Update feedback
+  await prisma.feedbacks.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      comment,
+      updatedAt: new Date(),
+      rating: averageRating,
+    },
+  });
+
+  prisma.$disconnect();
+
+  return NextResponse.json({ message: "Feedback updated", status: 200 });
+}

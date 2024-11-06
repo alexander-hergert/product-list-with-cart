@@ -88,8 +88,8 @@ const ProductsPage = async ({
       <br />
       <div className="grid grid-cols-2">
         {products.map((product) => (
-          <div>
-            <Link href={`/dashboard/products/${product.id}`} key={product.id}>
+          <div key={product.id}>
+            <Link href={`/dashboard/products/${product.id}`}>
               <div>
                 <Image
                   src={product.image}

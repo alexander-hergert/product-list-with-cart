@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 const CreateFeedback = dynamic(
-  () => import("@/components/orders/CreateFeedback"),
+  () => import("@/components/feedback/CreateFeedback"),
   {
     ssr: false,
   }

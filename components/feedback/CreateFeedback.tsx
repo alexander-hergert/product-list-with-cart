@@ -38,7 +38,7 @@ const CreateFeedback: FC<CreateFeedbackProps> = ({ productId, orderId }) => {
 
   const mutation = useMutation({
     mutationFn: async (updatedData: typeof input) => {
-      return await fetch("/api/createFeedback", {
+      return await fetch("/api/crudFeedback", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

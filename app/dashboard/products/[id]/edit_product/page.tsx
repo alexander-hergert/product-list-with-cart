@@ -19,7 +19,7 @@ const fetchProduct = async (id: string) => {
   try {
     const product = await prisma.products.findUnique({
       where: {
-        id: id,
+        id,
       },
     });
     return product;
