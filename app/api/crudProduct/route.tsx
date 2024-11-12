@@ -26,25 +26,15 @@ export async function POST(request: Request) {
 
   //Validate the product
   try {
-    const productValidate = productSchema.parse({
+    productSchema.parse({
       name,
       category,
       description,
       price: parseInt(price),
       img,
     });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to validate product" },
-      { status: 400 }
-    );
-  } finally {
-    await prisma.$disconnect();
-  }
-
-  //Create the product
-  try {
-    const newProduct = await prisma.products.create({
+    //Create product
+    await prisma.products.create({
       data: {
         id: uuidv4(),
         name,
@@ -55,6 +45,7 @@ export async function POST(request: Request) {
         rating: 0,
       },
     });
+    return NextResponse.json({ status: 200, message: "Product created" });
   } catch (error) {
     console.log("Error creating product:", error);
     return NextResponse.json(
@@ -64,8 +55,6 @@ export async function POST(request: Request) {
   } finally {
     await prisma.$disconnect();
   }
-
-  return NextResponse.json({ status: 200, message: "Product created" });
 }
 
 export async function PUT(request: Request) {
@@ -79,25 +68,15 @@ export async function PUT(request: Request) {
 
   //Validate the product
   try {
-    const productValidate = productSchema.parse({
+    productSchema.parse({
       name,
       category,
       description,
       price: parseInt(price),
       img,
     });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to validate product" },
-      { status: 400 }
-    );
-  } finally {
-    await prisma.$disconnect();
-  }
-
-  //Edit product
-  try {
-    const editetProduct = await prisma.products.update({
+    //Edit product
+    await prisma.products.update({
       where: {
         id: id,
       },
@@ -109,6 +88,7 @@ export async function PUT(request: Request) {
         image: img,
       },
     });
+    return NextResponse.json({ status: 200, message: "Product updated" });
   } catch (error) {
     console.log("Error updating product:", error);
     return NextResponse.json(
@@ -118,8 +98,6 @@ export async function PUT(request: Request) {
   } finally {
     await prisma.$disconnect();
   }
-
-  return NextResponse.json({ status: 200, message: "Product updated" });
 }
 
 export async function DELETE(request: Request) {
@@ -133,7 +111,7 @@ export async function DELETE(request: Request) {
 
   //Delete product
   try {
-    const deletedProduct = await prisma.products.delete({
+    await prisma.products.delete({
       where: {
         id: id,
       },

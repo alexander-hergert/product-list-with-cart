@@ -23,89 +23,107 @@ export async function POST(request: Request) {
   const { productId, orderId, rating, title, comment } = await request.json();
 
   //Verify that the user is owner of the order
-  const order = await prisma.orders.findFirst({
-    where: {
-      id: orderId,
-      userId,
-    },
-  });
+  try {
+    const order = await prisma.orders.findFirst({
+      where: {
+        id: orderId,
+        userId,
+      },
+    });
 
-  if (!order) {
-    return NextResponse.json({ error: "Order not found" }, { status: 404 });
-  }
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
 
-  //Check if order already contains feedback for product
-  const feedbackExists = await prisma.feedbacks.findFirst({
-    where: {
-      productId,
-      orderId,
-    },
-  });
+    //Check if order already contains feedback for product
+    const feedbackExists = await prisma.feedbacks.findFirst({
+      where: {
+        productId,
+        orderId,
+      },
+    });
 
-  if (feedbackExists) {
+    if (feedbackExists) {
+      return NextResponse.json(
+        { error: "Feedback already exists for this product" },
+        { status: 400 }
+      );
+    }
+  } catch (error) {
+    console.error("Error finding order:", error);
     return NextResponse.json(
-      { error: "Feedback already exists for this product" },
-      { status: 400 }
+      { error: "Failed to find order" },
+      { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 
   // Validate the order
   try {
-    const feedbackValidate = feedbackSchema.parse({
+    feedbackSchema.parse({
       productId,
       orderId,
       rating,
       title,
       comment,
     });
+    // Create feedback
+    await prisma.feedbacks.create({
+      data: {
+        id: uuidv4(),
+        userId,
+        productId,
+        orderId,
+        rating,
+        title,
+        comment,
+        updatedAt: new Date(),
+      },
+    });
   } catch (error) {
-    console.error("Error validating order:", error);
+    console.log("Error creating feedback:", error);
     return NextResponse.json(
-      { error: "Failed to validate order" },
-      { status: 400 }
+      { error: "Failed to create feedback" },
+      { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
-
-  // Create feedback
-  const feedback = await prisma.feedbacks.create({
-    data: {
-      id: uuidv4(),
-      userId,
-      productId,
-      orderId,
-      rating,
-      title,
-      comment,
-      updatedAt: new Date(),
-    },
-  });
 
   // Update product rating
   // Get all feedbacks for the product
-  const feedbacks = await prisma.feedbacks.findMany({
-    where: {
-      productId,
-    },
-  });
-  // Calculate the average rating
-  const totalRating = feedbacks.reduce((acc, feedback) => {
-    return acc + feedback.rating;
-  }, 0);
-  const averageRating = totalRating / feedbacks.length;
+  try {
+    const feedbacks = await prisma.feedbacks.findMany({
+      where: {
+        productId,
+      },
+    });
+    // Calculate the average rating
+    const totalRating = feedbacks.reduce((acc, feedback) => {
+      return acc + feedback.rating;
+    }, 0);
+    const averageRating = totalRating / feedbacks.length;
 
-  // Update the product rating
-  await prisma.products.update({
-    where: {
-      id: productId,
-    },
-    data: {
-      rating: averageRating,
-    },
-  });
-
-  prisma.$disconnect();
-
-  return NextResponse.json({ message: "Feedback created", status: 200 });
+    // Update the product rating
+    await prisma.products.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        rating: averageRating,
+      },
+    });
+    return NextResponse.json({ status: 200, message: "Feedback created" });
+  } catch (error) {
+    console.error("Error updating product rating:", error);
+    return NextResponse.json(
+      { error: "Failed to update product rating" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 export async function PUT(request: Request) {
@@ -119,71 +137,147 @@ export async function PUT(request: Request) {
     await request.json();
 
   // Check if user is owner of the feedback
-  const feedback = await prisma.feedbacks.findFirst({
-    where: {
-      id,
-      userId,
-    },
-  });
+  try {
+    const feedback = await prisma.feedbacks.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
 
-  if (!feedback) {
-    return NextResponse.json({ error: "Feedback not found" }, { status: 404 });
+    if (!feedback) {
+      return NextResponse.json(
+        { error: "Feedback not found" },
+        { status: 404 }
+      );
+    }
+  } catch (error) {
+    console.error("Error finding feedback:", error);
+    return NextResponse.json(
+      { error: "Failed to find feedback" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
   }
 
   // Validate the feedback
   try {
-    const feedbackValidate = feedbackSchema.parse({
+    feedbackSchema.parse({
       productId,
       orderId,
       rating,
       title,
       comment,
     });
-  } catch (error) {
-    console.error("Error validating feedback:", error);
-    return NextResponse.json(
-      { error: "Failed to validate feedback" },
-      { status: 400 }
-    );
-  }
 
-  // Update feedback
-  await prisma.feedbacks.update({
-    where: {
-      id,
-    },
-    data: {
-      title,
-      comment,
-      updatedAt: new Date(),
-      rating: rating,
-    },
-  });
+    // Update feedback
+    await prisma.feedbacks.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        comment,
+        updatedAt: new Date(),
+        rating: rating,
+      },
+    });
+  } catch (error) {
+    console.log("Error updating feedback:", error);
+    return NextResponse.json(
+      { error: "Failed to update feedback" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
 
   // Update product rating
   // Get all feedbacks for the product
-  const feedbacks = await prisma.feedbacks.findMany({
-    where: {
-      productId,
-    },
-  });
-  // Calculate the average rating
-  const totalRating = feedbacks.reduce((acc, feedback) => {
-    return acc + feedback.rating;
-  }, 0);
-  const averageRating = totalRating / feedbacks.length;
+  try {
+    const feedbacks = await prisma.feedbacks.findMany({
+      where: {
+        productId,
+      },
+    });
+    // Calculate the average rating
+    const totalRating = feedbacks.reduce((acc, feedback) => {
+      return acc + feedback.rating;
+    }, 0);
+    const averageRating = totalRating / feedbacks.length;
 
-  // Update the product rating
-  await prisma.products.update({
-    where: {
-      id: productId,
-    },
-    data: {
-      rating: averageRating,
-    },
-  });
+    // Update the product rating
+    await prisma.products.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        rating: averageRating,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating product rating:", error);
+    return NextResponse.json(
+      { error: "Failed to update product rating" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
 
-  prisma.$disconnect();
+  return NextResponse.json({ status: 200, message: "Feedback updated" });
+}
 
-  return NextResponse.json({ message: "Feedback updated", status: 200 });
+export async function DELETE(request: Request) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const id = await request.json();
+
+  // Check if user is owner of the feedback
+  try {
+    const feedback = await prisma.feedbacks.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+    if (!feedback) {
+      return NextResponse.json(
+        { error: "Feedback not found" },
+        { status: 404 }
+      );
+    }
+  } catch (error) {
+    console.error("Error finding feedback:", error);
+    return NextResponse.json(
+      { error: "Failed to find feedback" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  //Delete product
+  try {
+    await prisma.feedbacks.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (error) {
+    console.log("Error deleting product:", error);
+    return NextResponse.json(
+      { error: "Failed to delete product" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  return NextResponse.json({ status: 200, message: "Feedback deleted" });
 }

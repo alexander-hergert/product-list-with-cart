@@ -13,7 +13,7 @@ const DeleteProduct: FC<DeleteProductProps> = ({ id }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (updatedData: typeof id) => {
-      return await fetch("/api/createNewProduct", {
+      return await fetch("/api/crudProduct", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
