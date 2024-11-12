@@ -147,17 +147,6 @@ export async function PUT(request: Request) {
     );
   }
 
-  //Calculate the average rating
-  const feedbacks = await prisma.feedbacks.findMany({
-    where: {
-      productId: feedback.productId,
-    },
-  });
-  const totalRating = feedbacks.reduce((acc, feedback) => {
-    return acc + feedback.rating;
-  }, 0);
-  const averageRating = totalRating / feedbacks.length;
-
   // Update feedback
   await prisma.feedbacks.update({
     where: {
@@ -167,6 +156,29 @@ export async function PUT(request: Request) {
       title,
       comment,
       updatedAt: new Date(),
+      rating: rating,
+    },
+  });
+
+  // Update product rating
+  // Get all feedbacks for the product
+  const feedbacks = await prisma.feedbacks.findMany({
+    where: {
+      productId,
+    },
+  });
+  // Calculate the average rating
+  const totalRating = feedbacks.reduce((acc, feedback) => {
+    return acc + feedback.rating;
+  }, 0);
+  const averageRating = totalRating / feedbacks.length;
+
+  // Update the product rating
+  await prisma.products.update({
+    where: {
+      id: productId,
+    },
+    data: {
       rating: averageRating,
     },
   });
