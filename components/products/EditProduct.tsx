@@ -2,16 +2,18 @@
 
 import { FC, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
+import { string, z } from "zod";
 import { useRouter } from "next/navigation";
 import { Product } from "@/lib/types";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 character"),
   category: z.string().min(3, "Category must be at least 3 character"),
   description: z.string().min(3, "Description must be at least 3 character"),
   price: z.string().min(1, "Price must be at least 1"),
-  img: z.string(), // Add url validation later
+  img: z.string().url("Invalid URL"),
 });
 
 interface EditProductProps {
@@ -36,7 +38,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
     category: category || "",
     description: description || "",
     price: price || 0,
-    img: image || "/images/image-waffle-desktop.jpg",
+    img: image || "",
   });
 
   const mutation = useMutation({
@@ -67,6 +69,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
     category?: string;
     description?: string;
     price?: number;
+    img?: string;
   }>({});
 
   const handleChange = (
@@ -143,7 +146,39 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
       </div>
       <div>
         <label>Image:</label>
-        <input type="file" name="image" />
+        <CldUploadWidget
+          signatureEndpoint="/api/sign-cloudinary-params"
+          onSuccess={(result) => {
+            if (typeof result.info !== "string") {
+              setInput({ ...input, img: result?.info?.secure_url || "" });
+            } else {
+              console.error(
+                "Unexpected type: result.info is a string, not an object."
+              );
+            }
+          }}
+        >
+          {({ open }) => {
+            return (
+              <button
+                name="img"
+                onClick={(e) => {
+                  e.preventDefault;
+                  open();
+                }}
+              >
+                Upload an Image
+              </button>
+            );
+          }}
+        </CldUploadWidget>
+        {input.img && (
+          <div>
+            <label>Preview:</label>
+            <Image src={input.img} alt="Product" width={100} height={100} />
+          </div>
+        )}
+        {errors.img && <p style={{ color: "red" }}>{errors.img}</p>}
       </div>
       <button type="submit">Edit Product</button>
     </form>

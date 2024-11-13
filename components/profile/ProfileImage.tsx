@@ -14,7 +14,10 @@ const ProfileImage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ image: result?.info?.secure_url }),
+          body: JSON.stringify({
+            image:
+              typeof result?.info !== "string" ? result?.info?.secure_url : "",
+          }),
         });
         router.refresh();
       }}
