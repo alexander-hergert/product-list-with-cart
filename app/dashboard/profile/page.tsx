@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
+import ProfileImage from "@/components/profile/ProfileImage";
 
 const ProfileForm = dynamic(() => import("@/components/profile/ProfileForm"), {
   ssr: false,
@@ -34,6 +35,7 @@ export default async function ProfilePage() {
       <h1>Profile</h1>
       <Image src={img} alt="Profile Image" width={200} height={200} />
       <ProfileForm {...userData} />
+      <ProfileImage />
       <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
         To Dashboard
       </Link>

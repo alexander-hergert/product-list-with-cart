@@ -1,7 +1,29 @@
 "use client";
+import { CldUploadWidget } from "next-cloudinary";
+import { useRouter } from "next/navigation";
 
 const ProfileImage = () => {
-  return <div>ProfileImage</div>;
+  const router = useRouter();
+  return (
+    <CldUploadWidget
+      signatureEndpoint="/api/sign-cloudinary-params"
+      onSuccess={async (result) => {
+        //PUT request to /api/profileImage
+        await fetch("/api/profileImage", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ image: result?.info?.secure_url }),
+        });
+        router.refresh();
+      }}
+    >
+      {({ open }) => {
+        return <button onClick={() => open()}>Upload an Image</button>;
+      }}
+    </CldUploadWidget>
+  );
 };
 
 export default ProfileImage;
