@@ -33,6 +33,7 @@ export async function POST(request: Request) {
   try {
     const clerkUser = userId ? await clerkClient().users.getUser(userId) : null;
     const cart = await request.json();
+
     const id = uuidv4();
     const productIds = Object.keys(cart);
     const productIdsQuantity = Object.keys(cart).map((id) => cart[id].quantity);

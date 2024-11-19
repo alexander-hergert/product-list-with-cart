@@ -2,10 +2,12 @@
 import { useContext } from "react";
 import { ModalContext } from "@/lib/modalContext";
 import { CartContext } from "@/lib/cartContext";
+import { useRouter } from "next/navigation";
 
 const Modal = () => {
   const cartContext = useContext(CartContext);
   const modalContext = useContext(ModalContext);
+  const router = useRouter();
 
   if (!cartContext) {
     return <div>Error: ModalContext is not available.</div>;
@@ -20,8 +22,9 @@ const Modal = () => {
 
   const handleModal = () => {
     setIsModal(false);
-    setCart({});
-    localStorage.setItem("cart", JSON.stringify({}));
+    // setCart({});
+    // localStorage.setItem("cart", JSON.stringify({}));
+    router.push("/payment");
   };
 
   return (
@@ -37,7 +40,7 @@ const Modal = () => {
                 onClick={handleModal}
                 className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
               >
-                Go Home
+                Go to Checkout
               </button>
             </div>
           </div>
