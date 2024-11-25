@@ -3,6 +3,7 @@
 import { useContext } from "react";
 import { CartContext } from "@/lib/cartContext";
 import { ModalContext } from "@/lib/modalContext";
+import Image from "next/image";
 
 const Cart = () => {
   const cartContext = useContext(CartContext);
@@ -42,25 +43,85 @@ const Cart = () => {
     }
   };
 
+  const items = Object.keys(cart).reduce((acc, id) => {
+    return acc + cart[id].quantity;
+  }, 0);
+
+  const itemTypes = Object.keys(cart).reduce((acc, id) => {
+    return acc + (cart[id].quantity > 0 ? 1 : 0);
+  }, 0);
+
   return (
-    <div className="min-w-[150px] border w-[384px]">
-      <h2>Your Cart</h2>
+    <div
+      className="min-w-[150px] border rounded-xl w-[384px] p-4 min-h-[300px]"
+      style={{ height: `${itemTypes * 80 + 300}px` }}
+    >
+      <h2 className="text-orange-800 text-2xl">Your Cart ({items})</h2>
+      {itemTypes === 0 && (
+        <div className="grid place-items-center">
+          <Image
+            src="/images/illustration-empty-cart.svg"
+            alt="empty-cart-icon"
+            width={200}
+            height={200}
+          />
+          <p className="text-amber-900">You added items will appear here</p>
+        </div>
+      )}
       {Object.keys(cart).map(
         (id) =>
           cart[id].quantity > 0 && (
-            <div key={id} className="my-4 flex items-center gap-4">
+            <div
+              key={id}
+              className="my-4 flex justify-between items-center gap-4 border-b pb-4"
+            >
               <div>
-                <h3>{cart[id].name}</h3>
-                <p>Price: @${cart[id].price}</p>
-                <p>Price: ${cart[id].price * cart[id].quantity}</p>
-                <p>Quantity: {cart[id].quantity}</p>
+                <h3 className="font-bold">{cart[id].name}</h3>
+                <div className="flex gap-2">
+                  <p className="text-red-800">{cart[id].quantity}x</p>
+                  <p className="text-gray-500">@${cart[id].price}</p>
+                  <p>${cart[id].price * cart[id].quantity}</p>
+                </div>
               </div>
-              <button onClick={() => removeProduct(id)}>REMOVE</button>
+              <div className="grid place-items-center p-1 border-2 rounded-[50%]">
+                <button onClick={() => removeProduct(id)}>
+                  <Image
+                    src="/images/icon-remove-item.svg"
+                    alt="remove-icon"
+                    width={10}
+                    height={10}
+                  />
+                </button>
+              </div>
             </div>
           )
       )}
-      <div>Total Price: ${totalPrice}</div>
-      <button onClick={sendOrder}>Confirm Order</button>
+      {itemTypes > 0 && (
+        <>
+          <div className="flex justify-between item-center mb-4">
+            <p>Order Total</p>
+            <p className="text-2xl font-bold">${totalPrice.toFixed(2)}</p>
+          </div>
+          <div className="flex items-center justify-center bg-slate-100 gap-4 text-xs rounded-xl p-4 mb-4 h-[52px]">
+            <Image
+              src="/images/icon-carbon-neutral.svg"
+              alt="carbon-neutral-icon"
+              width={20}
+              height={20}
+            />
+            <p>
+              This is a <span className="font-bold">carbon-neutral</span>{" "}
+              delivery
+            </p>
+          </div>
+          <button
+            className="p-4 bg-orange-700 text-white rounded-[25px] w-full h-[53px]"
+            onClick={sendOrder}
+          >
+            Confirm Order
+          </button>
+        </>
+      )}
     </div>
   );
 };

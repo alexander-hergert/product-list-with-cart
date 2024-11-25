@@ -41,7 +41,7 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
   }, []);
 
   return (
-    <div className="w-[250px] h-[347px]">
+    <div className="w-[250px] h-[347px] justify-self-center">
       <Link href={`/products/${id}`}>
         <div className="flex flex-col justify-between gap-8">
           <Image
