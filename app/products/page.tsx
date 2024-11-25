@@ -29,7 +29,7 @@ export default function ProductsPage({
         <Filter />
         <h2>Sort</h2>
         <Sort />
-        <div className="flex justify-between gap-8 min-w-[800px]">
+        <div className="flex justify-center gap-8 min-w-[800px]">
           <ProductsList searchParams={searchParams} />
           <Cart />
         </div>

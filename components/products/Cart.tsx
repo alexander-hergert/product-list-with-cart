@@ -43,8 +43,8 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-w-[150px] mr-8">
-      <h2>Cart</h2>
+    <div className="min-w-[150px] border w-[384px]">
+      <h2>Your Cart</h2>
       {Object.keys(cart).map(
         (id) =>
           cart[id].quantity > 0 && (
