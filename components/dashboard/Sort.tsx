@@ -46,52 +46,59 @@ const Sort = () => {
     router.push(query);
   };
   return (
-    <select id="order" name="order" onChange={handleChange}>
-      {page === "products" && (
-        <>
-          <option value="productnameAsc">Productname ascending</option>
-          <option value="productnameDesc">Productname descending</option>
-          <option value="priceAsc">Price ascending</option>
-          <option value="priceDesc">Price descending</option>
-        </>
-      )}
-      {page === "customers" && (
-        <>
-          <option value="usernameAsc">Username ascending</option>
-          <option value="usernameDesc">Username descending</option>
-          <option value="emailAsc">Email ascending</option>
-          <option value="emailDesc">Email descending</option>
-          <option value="addressAsc">Address ascending</option>
-          <option value="addressDesc">Address descending</option>
-        </>
-      )}
-      {page === "orders" && (
-        <>
-          <option value="dateAsc">Date ascending</option>
-          <option value="dateDesc">Date descending</option>
-          <option value="totalPriceAsc">Total price ascending</option>
-          <option value="totalPriceDesc">Total price descending</option>
-        </>
-      )}
-      {page === "feedback" && (
-        <>
-          <option value="dateAsc">Date ascending</option>
-          <option value="dateDesc">Date descending</option>
-        </>
-      )}
-      {pageProducts === "products" && (
-        <>
-          <option value="productnameAsc">Productname ascending</option>
-          <option value="productnameDesc">Productname descending</option>
-          <option value="productCategoryAsc">Product category ascending</option>
-          <option value="productCategoryDesc">
-            Product category descending
-          </option>
-          <option value="priceAsc">Price ascending</option>
-          <option value="priceDesc">Price descending</option>
-        </>
-      )}
-    </select>
+    <form
+      action=""
+      className="rounded-xl w-[300px] m-auto p-4 bg-amber-900 h-[80px] grid place-content-center max-md:w-[327px]"
+    >
+      <select id="order" name="order" onChange={handleChange}>
+        {page === "products" && (
+          <>
+            <option value="productnameAsc">Productname ascending</option>
+            <option value="productnameDesc">Productname descending</option>
+            <option value="priceAsc">Price ascending</option>
+            <option value="priceDesc">Price descending</option>
+          </>
+        )}
+        {page === "customers" && (
+          <>
+            <option value="usernameAsc">Username ascending</option>
+            <option value="usernameDesc">Username descending</option>
+            <option value="emailAsc">Email ascending</option>
+            <option value="emailDesc">Email descending</option>
+            <option value="addressAsc">Address ascending</option>
+            <option value="addressDesc">Address descending</option>
+          </>
+        )}
+        {page === "orders" && (
+          <>
+            <option value="dateAsc">Date ascending</option>
+            <option value="dateDesc">Date descending</option>
+            <option value="totalPriceAsc">Total price ascending</option>
+            <option value="totalPriceDesc">Total price descending</option>
+          </>
+        )}
+        {page === "feedback" && (
+          <>
+            <option value="dateAsc">Date ascending</option>
+            <option value="dateDesc">Date descending</option>
+          </>
+        )}
+        {pageProducts === "products" && (
+          <>
+            <option value="productnameAsc">Productname ascending</option>
+            <option value="productnameDesc">Productname descending</option>
+            <option value="productCategoryAsc">
+              Product category ascending
+            </option>
+            <option value="productCategoryDesc">
+              Product category descending
+            </option>
+            <option value="priceAsc">Price ascending</option>
+            <option value="priceDesc">Price descending</option>
+          </>
+        )}
+      </select>
+    </form>
   );
 };
 

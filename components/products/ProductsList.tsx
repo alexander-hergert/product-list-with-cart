@@ -65,10 +65,15 @@ const ProductsList = async ({
     order
   );
   return (
-    <div className="grid grid-cols-3 gap-4 w-[800px]">
-      {products.map((singleProduct: Product) => (
-        <SingleProduct key={singleProduct.id} singleProduct={singleProduct} />
-      ))}
+    <div>
+      <h1 className="text-2xl font-bold max-md:text-4xl max-md:my-4">
+        Desserts
+      </h1>
+      <div className="grid grid-cols-3 gap-4 w-[800px] max-lg:w-[688px] max-md:w-[327px] max-md:grid-cols-1">
+        {products.map((singleProduct: Product) => (
+          <SingleProduct key={singleProduct.id} singleProduct={singleProduct} />
+        ))}
+      </div>
     </div>
   );
 };

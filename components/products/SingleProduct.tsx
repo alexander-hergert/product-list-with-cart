@@ -41,18 +41,20 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
   }, []);
 
   return (
-    <div className="w-[250px] h-[347px] justify-self-center">
+    <div className="max-md:mb-4 w-[250px] h-[347px] justify-self-start max-lg:w-[213px] max-md:w-[327px] max-md:h-[400px]">
       <Link href={`/products/${id}`}>
         <div className="flex flex-col justify-between gap-8">
-          <Image
-            className={`cursor-pointer rounded-lg w-full ${
-              cart[id]?.quantity ? "border-2 border-red-800" : ""
-            }`}
-            src={singleProduct.image}
-            width={200}
-            height={200}
-            alt={singleProduct.name}
-          />
+          <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px]">
+            <Image
+              className={`cursor-pointer rounded-lg w-full ${
+                cart[id]?.quantity ? "border-2 border-red-800" : ""
+              }`}
+              src={singleProduct.image}
+              width={200}
+              height={200}
+              alt={singleProduct.name}
+            />
+          </div>
           <div>
             <h2 className="text-gray-500">{category}</h2>
             <h2 className="font-bold">{name}</h2>

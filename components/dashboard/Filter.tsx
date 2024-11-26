@@ -75,15 +75,21 @@ const Filter = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-xl w-[900px] m-auto p-4 bg-amber-900 text-white flex gap-4 h-[80px] 
+      max-lg:flex-col max-lg:h-[240px] max-lg:w-[688px] max-md:h-[400px] max-md:w-[327px]"
+    >
       {/* Show form fields for /dashboard/products page */}
       {page === "products" && (
         <>
-          <label htmlFor="productname">Product Name:</label>
-          <input id="productname" type="text" name="productname" />
-          <label htmlFor="minPrice">Min. Price:</label>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="productname">Product Name</label>
+            <input id="productname" type="text" name="productname" />
+          </div>
+          <label htmlFor="minPrice">Min. Price</label>
           <input id="minPrice" type="number" name="minPrice" />
-          <label htmlFor="maxPrice">Max. Price:</label>
+          <label htmlFor="maxPrice">Max. Price</label>
           <input id="maxPrice" type="number" name="maxPrice" />
         </>
       )}
@@ -129,18 +135,34 @@ const Filter = () => {
       )}
       {/** Show form fields for /products */}
       {pageProducts === "products" && (
-        <>
-          <label htmlFor="productName">Product Name:</label>
-          <input id="productName" type="text" name="productName" />
-          <label htmlFor="productCategory">Product Category:</label>
-          <input id="productCategory" type="text" name="productCategory" />
-          <label htmlFor="minPrice">Min. Price:</label>
-          <input id="minPrice" type="number" name="minPrice" />
-          <label htmlFor="maxPrice">Max. Price:</label>
-          <input id="maxPrice" type="number" name="maxPrice" />
-        </>
+        <div
+          className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-2
+        max-md:grid-rows-4 max-md:grid-cols-1"
+        >
+          <div className="flex flex-col gap-2">
+            <label htmlFor="productName">Product Name</label>
+            <input id="productName" type="text" name="productName" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="productCategory">Product Category</label>
+            <input id="productCategory" type="text" name="productCategory" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="minPrice">Min. Price</label>
+            <input id="minPrice" type="number" name="minPrice" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="maxPrice">Max. Price</label>
+            <input id="maxPrice" type="number" name="maxPrice" />
+          </div>
+        </div>
       )}
-      <button type="submit">Submit</button>
+      <button
+        className="p-4 bg-orange-700 text-white rounded-[25px] w-[100px] h-[53px] m-auto"
+        type="submit"
+      >
+        Filter
+      </button>
     </form>
   );
 };

@@ -24,12 +24,20 @@ export default function ProductsPage({
     <>
       <Modal />
       <div>
-        <h1>Products</h1>
-        <h2>Filter</h2>
-        <Filter />
-        <h2>Sort</h2>
-        <Sort />
-        <div className="flex justify-center gap-8 min-w-[800px]">
+        <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+          <div>
+            <h2 className="text-2xl text-center">Filter</h2>
+            <Filter />
+          </div>
+          <div>
+            <h2 className="text-2xl text-center">Sort</h2>
+            <Sort />
+          </div>
+        </div>
+        <div
+          className="flex justify-center gap-8 w-[1216px] mt-4 max-lg:flex-col max-lg:w-[688px] max-lg:items-center
+        max-md:w-[327px] max-md:block max-md:m-auto"
+        >
           <ProductsList searchParams={searchParams} />
           <Cart />
         </div>

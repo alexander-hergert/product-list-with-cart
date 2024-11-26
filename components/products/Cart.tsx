@@ -53,7 +53,7 @@ const Cart = () => {
 
   return (
     <div
-      className="min-w-[150px] border rounded-xl w-[384px] p-4 min-h-[300px]"
+      className="min-w-[150px] border rounded-xl w-[384px] p-4 min-h-[300px] max-lg:w-[688px] justify-self-center max-md:w-[327px]"
       style={{ height: `${itemTypes * 80 + 300}px` }}
     >
       <h2 className="text-orange-800 text-2xl">Your Cart ({items})</h2>
