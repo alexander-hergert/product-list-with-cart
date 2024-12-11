@@ -49,6 +49,7 @@ export type Feedback = {
 
 export type Cart = {
   [productId: string]: {
+    image: string;
     name: string;
     price: number;
     quantity: number;

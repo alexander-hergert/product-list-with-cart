@@ -19,17 +19,17 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
 
   const { cart, changeCart } = cartContext;
 
-  const { id, name, category, price } = singleProduct;
+  const { id, image, name, category, price } = singleProduct;
 
   const handleUpClick = () => {
     const newQuantity = cart[id] ? cart[id].quantity + 1 : 1;
-    changeCart(id, name, price, newQuantity);
+    changeCart(id, image, name, price, newQuantity);
   };
 
   const handleDownClick = () => {
     const newQuantity = cart[id] ? cart[id].quantity - 1 : 0;
     if (newQuantity < 0) return;
-    changeCart(id, name, price, newQuantity);
+    changeCart(id, image, name, price, newQuantity);
   };
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
         <div className="flex flex-col justify-between gap-8">
           <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px]">
             <Image
-              className={`cursor-pointer rounded-lg w-full ${
+              className={`cursor-pointer rounded-lg w-full object-cover ${
                 cart[id]?.quantity ? "border-2 border-red-800" : ""
               }`}
               src={singleProduct.image}

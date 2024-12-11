@@ -35,7 +35,7 @@ export default function ProductsPage({
           </div>
         </div>
         <div
-          className="flex justify-center gap-8 w-[1216px] mt-4 max-lg:flex-col max-lg:w-[688px] max-lg:items-center
+          className="flex m-auto gap-8 w-[1216px] mt-4 max-lg:flex-col max-lg:w-[688px] max-lg:items-center
         max-md:w-[327px] max-md:block max-md:m-auto"
         >
           <ProductsList searchParams={searchParams} />

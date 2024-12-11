@@ -77,7 +77,7 @@ const Filter = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-xl w-[900px] m-auto p-4 bg-amber-900 text-white flex gap-4 h-[80px] 
+      className="rounded-xl w-[900px] m-auto p-3 bg-amber-900 text-white flex gap-4 h-[80px] 
       max-lg:flex-col max-lg:h-[240px] max-lg:w-[688px] max-md:h-[400px] max-md:w-[327px]"
     >
       {/* Show form fields for /dashboard/products page */}

@@ -9,6 +9,7 @@ interface CartContextType {
   setCart: React.Dispatch<React.SetStateAction<Cart>>;
   changeCart: (
     id: string,
+    image: string,
     name: string,
     price: number,
     newQuantity: number
@@ -32,6 +33,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const changeCart = (
     id: string,
+    image: string,
     name: string,
     price: number,
     newQuantity: number
@@ -39,6 +41,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const updatedCart = {
       ...cart,
       [id]: {
+        image,
         name,
         price,
         quantity: newQuantity,
