@@ -7,20 +7,23 @@ interface CustomersProps {
 
 const Customers: React.FC<CustomersProps> = ({ customers }) => {
   return (
-    <div className="border">
-      <h2>Customers</h2>
+    <Link
+      href="/dashboard/customers"
+      className="border rounded-xl p-4 shadow-md"
+    >
+      <h2 className="text-xl mb-4">Customers</h2>
       <ul>
         {customers.map((customer) => (
           <li key={customer.id}>{customer.name}</li>
         ))}
       </ul>
-      <Link
+      <a
         className="text-blue-500 hover:text-blue-700"
         href="/dashboard/customers"
       >
         ... see more
-      </Link>
-    </div>
+      </a>
+    </Link>
   );
 };
 

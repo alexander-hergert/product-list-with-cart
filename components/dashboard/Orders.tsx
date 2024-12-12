@@ -7,8 +7,8 @@ interface OrdersProps {
 
 const Orders: React.FC<OrdersProps> = ({ orders }) => {
   return (
-    <div className="border">
-      <h2>Orders</h2>
+    <div className="border rounded-xl p-4 shadow-md">
+      <h2 className="text-xl mb-4">Orders</h2>
       <ul>
         {orders.map((order) => (
           <li key={order.id}>{order.totalPrice}</li>

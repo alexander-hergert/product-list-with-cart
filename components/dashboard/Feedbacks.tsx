@@ -7,8 +7,8 @@ interface FeedbacksProps {
 
 const Feedbacks: React.FC<FeedbacksProps> = ({ feedbacks }) => {
   return (
-    <div className="border">
-      <h2>Feedback</h2>
+    <div className="border rounded-xl p-4 shadow-md">
+      <h2 className="text-xl mb-4">Feedback</h2>
       <ul>
         {feedbacks.map((feedback) => (
           <li key={feedback.id}>{feedback.title}</li>

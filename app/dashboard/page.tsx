@@ -90,15 +90,15 @@ const DashboardPage = async () => {
   const data = await getDashboardData();
   const { customers, products, orders, feedbacks } = data;
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <div className="grid grid-cols-2 gap-4">
+    <div className="grid place-content-center">
+      <h1 className="text-2xl my-4 font-bold">Dashboard</h1>
+      <div className="grid grid-cols-2 gap-4 lg:w-[800px] max-lg:min-w-[360px] max-lg:grid-cols-1">
         {isAdmin && <Customers customers={customers} />}
         {isAdmin && <Products products={products} />}
         <Orders orders={orders} />
         <Feedback feedbacks={feedbacks} />
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 mt-4">
         <Link
           className="text-blue-500 hover:text-blue-700"
           href="/dashboard/profile"

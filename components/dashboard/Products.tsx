@@ -7,8 +7,8 @@ interface ProductsProps {
 
 const Products: React.FC<ProductsProps> = ({ products }) => {
   return (
-    <div className="border">
-      <h2>Products</h2>
+    <div className="border rounded-xl p-4 shadow-md">
+      <h2 className="text-xl mb-4">Products</h2>
       <ul>
         {products.map((product) => (
           <li key={product.id}>{product.name}</li>
