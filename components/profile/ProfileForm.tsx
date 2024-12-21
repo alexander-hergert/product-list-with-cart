@@ -83,9 +83,13 @@ const ProfileForm: FC<ProfileInput> = ({ name, email, address }) => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
+      <h2 className="text-xl font-bold mb-2">Change your data...</h2>
       <div className="flex gap-4 items-center">
-        <label htmlFor="name">Name:</label>
+        <label className="w-[75px]" htmlFor="name">
+          Name:
+        </label>
         <input
+          className="border rounded w-[300px] p-1"
           type="text"
           id="name"
           defaultValue={name || data?.name}
@@ -94,8 +98,11 @@ const ProfileForm: FC<ProfileInput> = ({ name, email, address }) => {
         {errors.name && <p className="text-red-500">{errors.name}</p>}
       </div>
       <div className="flex gap-4 items-center">
-        <label htmlFor="email">Email:</label>
+        <label className="w-[75px] my-2" htmlFor="email">
+          Email:
+        </label>
         <input
+          className="border rounded w-[300px] p-1"
           id="email"
           defaultValue={email || data?.email}
           onChange={(e) => handleChange(e)}
@@ -103,8 +110,11 @@ const ProfileForm: FC<ProfileInput> = ({ name, email, address }) => {
         {errors.email && <p className="text-red-500">{errors.email}</p>}
       </div>
       <div className="flex gap-4 items-center">
-        <label htmlFor="address">Address:</label>
+        <label className="w-[75px]" htmlFor="address">
+          Address:
+        </label>
         <input
+          className="border rounded w-[300px] p-1"
           type="text"
           id="address"
           defaultValue={address || data?.address}
@@ -116,7 +126,10 @@ const ProfileForm: FC<ProfileInput> = ({ name, email, address }) => {
       <p>Name: {data?.name}</p>
       <p>Email: {data?.email}</p>
       <p>Address: {data?.address}</p>
-      <button className="border" type="submit">
+      <button
+        className="border rounded p-2 my-2 hover:bg-black hover:text-white"
+        type="submit"
+      >
         Change Data
       </button>
     </form>

@@ -31,14 +31,21 @@ export default async function ProfilePage() {
   const img = user?.image || "/default.png";
 
   return (
-    <div>
-      <h1>Profile</h1>
-      <Image src={img} alt="Profile Image" width={200} height={200} />
-      <ProfileForm {...userData} />
-      <ProfileImage />
-      <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
-        To Dashboard
-      </Link>
-    </div>
+    <main className="grid place-content-center">
+      <h1 className="text-2xl font-bold my-4">Profile</h1>
+      <section className="w-[800px] border rounded-xl flex justify-between max-md:flex-col max-md:w-[100%]">
+        <Image
+          className="rounded-xl w-[100%]"
+          src={img}
+          alt="Profile Image"
+          width={350}
+          height={350}
+        />
+        <div className="p-4">
+          <ProfileForm {...userData} />
+          <ProfileImage />
+        </div>
+      </section>
+    </main>
   );
 }

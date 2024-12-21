@@ -23,7 +23,14 @@ const ProfileImage = () => {
       }}
     >
       {({ open }) => {
-        return <button onClick={() => open()}>Upload an Image</button>;
+        return (
+          <button
+            className="border rounded p-2 my-2 hover:bg-black hover:text-white"
+            onClick={() => open()}
+          >
+            Upload an Image
+          </button>
+        );
       }}
     </CldUploadWidget>
   );
