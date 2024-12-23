@@ -36,27 +36,36 @@ const OrderProducts: FC<OrderProductsProps> = async ({
   return (
     <div>
       {products.map((product) => (
-        <div>
-          <Link key={product.id} href={`/dashboard/products/${product.id}`}>
-            <div key={product.id} className="border">
-              <h3>{product.name}</h3>
+        <div key={product.id}>
+          <Link href={`/dashboard/products/${product.id}`}>
+            <div
+              key={product.id}
+              className="border rounded-xl flex items-center justify-between 
+              max-md:flex-col max-md:m-auto max-md:w-[327px] shadow-lg"
+            >
               <Image
+                className="md:rounded-l-xl max-md:w-full max-md:rounded-t-xl"
                 src={product.image}
                 alt={product.name}
-                width={100}
-                height={100}
+                width={250}
+                height={250}
               />
-              {productIds && (
-                <p>
-                  Quantity:{" "}
-                  {productIdsQuantity?.[productIds.indexOf(product.id)]}
-                </p>
-              )}
-              <p>Price: ${product.price.toFixed(2)}</p>
+              <div className="mr-[20%] max-md:m-0 max-md:my-4">
+                <h2 className="text-xl">{product.name}</h2>
+                {productIds && (
+                  <p>
+                    Quantity:{" "}
+                    {productIdsQuantity?.[productIds.indexOf(product.id)]}
+                  </p>
+                )}
+                <p>Price: ${product.price.toFixed(2)}</p>
+              </div>
             </div>
           </Link>
           <Link href={`/dashboard/orders/${orderId}/${product.id}`}>
-            <button className="border">Leave Feedback...</button>
+            <button className="border rounded p-2 my-8 hover:bg-black hover:text-white block m-auto">
+              Leave Feedback...
+            </button>
           </Link>
         </div>
       ))}

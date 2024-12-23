@@ -6,7 +6,7 @@ import OrderProducts from "@/components/orders/OrderProducts";
 import OrderCustomer from "@/components/orders/OrderCustomer";
 import { checkIfAdmin } from "@/lib/auth";
 
-const OrderChangeStatus = dynamic(
+const OrderStatusChange = dynamic(
   () => import("@/components/orders/OrderStatusChange"),
   {
     ssr: false,
@@ -45,9 +45,8 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
   const order = await fetchOrder(orderId);
 
   return (
-    <div>
-      <h1>Order Details</h1>
-      <br />
+    <div className="m-auto max-w-[600px] max:md:max-w-[327px]">
+      <h1 className="text-2xl text-center">Order Details</h1>
       <div>
         <div className="flex gap-4 items-center">
           <label>Order ID:</label>
@@ -80,7 +79,7 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
       >
         ... Back to Orders
       </Link>
-      <OrderChangeStatus id={orderId} status={order?.status} />
+      <OrderStatusChange id={orderId} status={order?.status} />
       <OrderProducts
         orderId={orderId}
         productIds={order?.productIds}

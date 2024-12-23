@@ -25,14 +25,26 @@ const OrderCustomer: FC<OrderCustomerProps> = async ({ userId }) => {
   }
   return (
     <div>
-      <Link href={`/dashboard/customers/${userId}`}>
-        <h2>Customer Details</h2>
+      <Link
+        href={`/dashboard/customers/${userId}`}
+        className="border rounded-xl flex items-center justify-between 
+              max-md:flex-col max-md:m-auto max-md:w-[327px] shadow-lg"
+      >
         {user && (
-          <Image src={user?.image} alt={user?.name} width={100} height={100} />
+          <Image
+            className="md:rounded-l-xl max-md:w-full max-md:rounded-t-xl"
+            src={user?.image}
+            alt={user?.name}
+            width={250}
+            height={250}
+          />
         )}
-        <p>Name: {user?.name}</p>
-        <p>Email: {user?.email}</p>
-        <p>Address: {user?.address}</p>
+        <div className="mr-[15%] max-md:m-0 max-md:my-4">
+          <h2 className="text-xl">Customer Details</h2>
+          <p>Name: {user?.name}</p>
+          <p>Email: {user?.email}</p>
+          <p>Address: {user?.address}</p>
+        </div>
       </Link>
     </div>
   );

@@ -35,7 +35,7 @@ export default async function ProfilePage() {
       <h1 className="text-2xl font-bold my-4">Profile</h1>
       <section className="w-[800px] border rounded-xl flex justify-between max-md:flex-col max-md:w-[100%]">
         <Image
-          className="rounded-xl w-[100%]"
+          className="rounded-l-xl w-[100%]"
           src={img}
           alt="Profile Image"
           width={350}

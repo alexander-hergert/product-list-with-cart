@@ -47,8 +47,8 @@ const OrderStatusChange: FC<ProfileFormProps> = ({ id, status }) => {
   };
 
   return (
-    <div>
-      <h1>Order Status Change</h1>
+    <div className="my-4">
+      <h2 className="text-xl">Change order status...</h2>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div>
           <label>Status:</label>
@@ -62,7 +62,12 @@ const OrderStatusChange: FC<ProfileFormProps> = ({ id, status }) => {
             <option value="Cancelled">Cancelled</option>
           </select>
         </div>
-        <button className="border" type="submit">Change Status</button>
+        <button
+          className="border rounded p-2 my-2 hover:bg-black hover:text-white"
+          type="submit"
+        >
+          Change Status
+        </button>
       </form>
     </div>
   );
