@@ -74,17 +74,25 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   );
   return (
     <div>
-      <h1>Orders</h1>
-      <h2>Filter</h2>
-      <Filter />
-      <h2>Sort</h2>
-      <Sort />
-      <div className="grid grid-cols-2">
+      <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+        <div>
+          <h2 className="text-2xl text-center">Filter</h2>
+          <Filter />
+        </div>
+        <div>
+          <h2 className="text-2xl text-center">Sort</h2>
+          <Sort />
+        </div>
+      </div>
+      <div
+        className="m-auto w-[1200px] mt-4 grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 
+      max-lg:w-[800px] max-md:w-[400px] gap-4"
+      >
         {orders.map((order) => (
           <Link
             href={`/dashboard/orders/${order.id}`}
             key={order.id}
-            className="border"
+            className="border p-2 rounded-xl"
           >
             <div className="flex gap-4 items-center">
               <label>Order ID:</label>

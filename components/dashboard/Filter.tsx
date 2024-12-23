@@ -78,15 +78,14 @@ const Filter = () => {
     <form
       onSubmit={handleSubmit}
       className="rounded-xl w-[900px] m-auto p-3 bg-amber-900 text-white flex gap-4 h-[80px] 
-      max-lg:flex-col max-lg:h-[240px] max-lg:w-[688px] max-md:h-[400px] max-md:w-[327px]"
+      max-lg:flex-col max-lg:h-[300px] max-lg:w-[688px] max-md:h-[450px] max-md:w-[327px] [&_input]:text-black [&_input]:rounded
+       [&_select]:text-black [&_select]:rounded"
     >
       {/* Show form fields for /dashboard/products page */}
       {page === "products" && (
         <>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="productname">Product Name</label>
-            <input id="productname" type="text" name="productname" />
-          </div>
+          <label htmlFor="productname">Product Name</label>
+          <input id="productname" type="text" name="productname" />
           <label htmlFor="minPrice">Min. Price</label>
           <input id="minPrice" type="number" name="minPrice" />
           <label htmlFor="maxPrice">Max. Price</label>
@@ -106,23 +105,36 @@ const Filter = () => {
       )}
       {/** Show form fields for /dashboard/orders */}
       {page === "orders" && (
-        <>
-          <label htmlFor="status">Status:</label>
-          <select id="status" name="status">
-            <option value="Pending">Pending</option>
-            <option value="Shipped">Shipped</option>
-            <option value="Delivered">Delivered</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
-          <label htmlFor="minDate">Min. Date:</label>
-          <input id="minDate" type="date" name="minDate" />
-          <label htmlFor="maxDate">Max. Date:</label>
-          <input id="maxDate" type="date" name="maxDate" />
-          <label htmlFor="minTotalPrice">Min. Total Price:</label>
-          <input id="minTotalPrice" type="number" name="minTotalPrice" />
-          <label htmlFor="maxTotalPrice">Max. Total Price:</label>
-          <input id="maxTotalPrice" type="number" name="maxTotalPrice" />
-        </>
+        <div
+          className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-2
+        max-md:grid-rows-4 max-md:grid-cols-1"
+        >
+          <div className="flex flex-col gap-2">
+            <label htmlFor="status">Status:</label>
+            <select id="status" name="status">
+              <option value="Pending">Pending</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="minDate">Min. Date:</label>
+            <input id="minDate" type="date" name="minDate" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="maxDate">Max. Date:</label>
+            <input id="maxDate" type="date" name="maxDate" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="minTotalPrice">Min. Total Price:</label>
+            <input id="minTotalPrice" type="number" name="minTotalPrice" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="maxTotalPrice">Max. Total Price:</label>
+            <input id="maxTotalPrice" type="number" name="maxTotalPrice" />
+          </div>
+        </div>
       )}
       {/** Show form fields for /dashboard/feedback */}
       {page === "feedback" && (

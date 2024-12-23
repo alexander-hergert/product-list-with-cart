@@ -48,7 +48,7 @@ const Sort = () => {
   return (
     <form
       action=""
-      className="rounded-xl w-[300px] m-auto p-4 bg-amber-900 h-[80px] grid place-content-center max-md:w-[327px]"
+      className="rounded-xl w-[300px] m-auto p-4 bg-amber-900 h-[80px] grid place-content-center max-md:w-[327px] [&_select]:rounded"
     >
       <select id="order" name="order" onChange={handleChange}>
         {page === "products" && (
