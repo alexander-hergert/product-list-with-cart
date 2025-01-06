@@ -57,32 +57,43 @@ const FeedbackPage = async ({
   const feedbacks = await fetchFeedbacks(minDate, maxDate, order);
   return (
     <div>
-      <h1>Feedback</h1>
-      <h2>Filter</h2>
-      <Filter />
-      <h2>Sort</h2>
-      <Sort />
-      <div className="grid grid-cols-2">
+      <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+        <div>
+          <h2 className="text-2xl text-center">Filter</h2>
+          <Filter />
+        </div>
+        <div>
+          <h2 className="text-2xl text-center">Sort</h2>
+          <Sort />
+        </div>
+      </div>
+      <div
+        className="m-auto w-[1200px] mt-4 grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 
+      max-lg:w-[800px] max-md:w-[400px] gap-4"
+      >
         {feedbacks.map((feedback) => (
-          <div key={feedback.id}>
-            <Link
-              href={`/dashboard/feedback/${feedback.id}`}
-              className="border"
-            >
+          <div
+            key={feedback.id}
+            className="border p-2 rounded-xl flex flex-col"
+          >
+            <Link href={`/dashboard/feedback/${feedback.id}`}>
               <div className="flex gap-4 items-center">
                 <label>Title:</label>
-                <h2>{feedback?.title}</h2>
+                <h2 className="truncate-text">{feedback?.title}</h2>
               </div>
               <div className="flex gap-4 items-center">
                 <label>Comment:</label>
-                <p>{feedback?.comment}</p>
+                <p className="truncate-text">{feedback?.comment}</p>
               </div>
               <div className="flex gap-4 items-center">
                 <label>Date:</label>
                 <p>{feedback?.createdAt.toDateString()}</p>
               </div>
             </Link>
-            <Link href={`/dashboard/feedback/${feedback.id}/edit_feedback`}>
+            <Link
+              href={`/dashboard/feedback/${feedback.id}/edit_feedback`}
+              className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-full text-center"
+            >
               Edit
             </Link>
             <DeleteFeedback id={feedback.id} />

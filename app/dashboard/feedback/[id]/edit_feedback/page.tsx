@@ -46,7 +46,7 @@ const EditFeedbackPage = async ({ params }: EditFeedbackPageProps) => {
   const feedback = await fetchFeedback(id);
   return (
     <div>
-      <h1>Edit Feedback</h1>
+      <h1 className="text-2xl mb-4 text-center">Edit Feedback</h1>
       <EditFeedback feedback={feedback} id={id} />
     </div>
   );

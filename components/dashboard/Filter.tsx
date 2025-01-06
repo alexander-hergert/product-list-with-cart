@@ -138,12 +138,19 @@ const Filter = () => {
       )}
       {/** Show form fields for /dashboard/feedback */}
       {page === "feedback" && (
-        <>
-          <label htmlFor="minDate">Min. Date:</label>
-          <input id="minDate" type="date" name="minDate" />
-          <label htmlFor="maxDate">Max. Date:</label>
-          <input id="maxDate" type="date" name="maxDate" />
-        </>
+        <div
+          className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-2
+        max-md:grid-rows-4 max-md:grid-cols-1"
+        >
+          <div className="flex flex-col gap-2">
+            <label htmlFor="minDate">Min. Date:</label>
+            <input id="minDate" type="date" name="minDate" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="maxDate">Max. Date:</label>
+            <input id="maxDate" type="date" name="maxDate" />
+          </div>
+        </div>
       )}
       {/** Show form fields for /products */}
       {pageProducts === "products" && (

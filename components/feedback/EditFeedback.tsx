@@ -110,32 +110,59 @@ const EditFeedback: FC<EditFeedbackProps> = ({ feedback, id }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="title">Title</label>
-      <input
-        id="title"
-        name="title"
-        type="text"
-        value={input.title}
-        onChange={handleInputChange}
-      />
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/2 m-auto max-md:w-[80%]"
+    >
+      <div
+        className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between
+      "
+      >
+        <label className="text-xl w-[200px] max-md:text-center" htmlFor="title">
+          Title:
+        </label>
+        <input
+          className="w-[300px] max-md:text-center"
+          id="title"
+          name="title"
+          type="text"
+          value={input.title}
+          onChange={handleInputChange}
+        />
+      </div>
       {errors.title && <p>{errors.title}</p>}
-      <Rating
-        name="rating"
-        value={input.rating}
-        onChange={handleRatingChange}
-      />
+      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between my-4">
+        <label className="text-xl w-[200px] max-md:text-center" htmlFor="title">
+          Rating:
+        </label>
+        <div className="w-[300px] max-md:text-center">
+          <Rating
+            name="rating"
+            value={input.rating}
+            onChange={handleRatingChange}
+          />
+        </div>
+      </div>
       {errors.rating && <p style={{ color: "red" }}>{errors.rating}</p>}
-      <label htmlFor="comment">Comment</label>
-      <textarea
-        id="comment"
-        name="comment"
-        value={input.comment}
-        onChange={handleInputChange}
-      />
+      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between">
+        <label className="text-xl w-[200px] max-md:text-center" htmlFor="comment">
+          Comment:
+        </label>
+        <textarea
+          className="border rounded w-[300px]"
+          id="comment"
+          name="comment"
+          value={input.comment}
+          onChange={handleInputChange}
+        />
+      </div>
       {errors.comment && <p>{errors.comment}</p>}
-
-      <button type="submit">Edit Product</button>
+      <button
+        type="submit"
+        className="className= border rounded p-2 my-2 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] mt-4"
+      >
+        Edit Feedback
+      </button>
     </form>
   );
 };
