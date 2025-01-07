@@ -106,34 +106,62 @@ const CreateFeedback: FC<CreateFeedbackProps> = ({ productId, orderId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Create Feedback</h1>
-      <div>
-        <label>Title:</label>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/2 m-auto max-md:w-[80%]"
+    >
+      <div
+        className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between
+      "
+      >
+        <label className="text-xl w-[200px] max-md:text-center" htmlFor="title">
+          Title:
+        </label>
         <input
+          className="w-[300px] max-md:text-center"
+          id="title"
           type="text"
           name="title"
           value={input.title}
           onChange={handleInputChange}
         />
-        {errors.title && <p style={{ color: "red" }}>{errors.title}</p>}
-        <Rating
-          name="rating"
-          value={input.rating}
-          onChange={handleRatingChange}
-        />
-        {errors.rating && <p style={{ color: "red" }}>{errors.rating}</p>}
       </div>
-      <div>
-        <label>Comment:</label>
+      {errors.title && <p style={{ color: "red" }}>{errors.title}</p>}
+      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between my-4">
+        <label className="text-xl w-[200px] max-md:text-center" htmlFor="title">
+          Rating:
+        </label>
+        <div className="w-[300px] max-md:text-center">
+          <Rating
+            name="rating"
+            value={input.rating}
+            onChange={handleRatingChange}
+          />
+        </div>
+      </div>
+      {errors.rating && <p style={{ color: "red" }}>{errors.rating}</p>}
+      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between">
+        <label
+          className="text-xl w-[200px] max-md:text-center md:self-start"
+          htmlFor="comment"
+        >
+          Comment:
+        </label>
         <textarea
+          className="border rounded w-[300px] min-h-[200px]"
+          id="comment"
           name="comment"
           value={input.comment}
           onChange={handleInputChange}
         />
         {errors.comment && <p style={{ color: "red" }}>{errors.comment}</p>}
       </div>
-      <button type="submit">Submit</button>
+      <button
+        className="className= border rounded p-2 my-2 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] mt-4"
+        type="submit"
+      >
+        Submit
+      </button>
     </form>
   );
 };

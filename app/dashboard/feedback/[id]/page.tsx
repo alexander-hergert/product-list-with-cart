@@ -52,24 +52,29 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
   const userName = await fetchUserName(feedback?.userId || "");
   return (
     <div>
-      <h1>Feedback Details</h1>
-      <br />
-      <div>
-        <div className="flex gap-4 items-center">
-          <label>Title:</label>
-          <h2>{feedback?.title}</h2>
+      <h1 className="text-2xl mb-4 text-center">Feedback Details</h1>
+      <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/2 m-auto max-md:w-[80%]">
+        <div className="flex gap-4 items-center max-md:flex-col text-center">
+          <label className="text-xl w-[200px] max-md:text-center">Title:</label>
+          <h2 className="w-[300px] max-md:text-center">{feedback?.title}</h2>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Username:</label>
-          <p>{userName}</p>
+        <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+          <label className="text-xl w-[200px] max-md:text-center">
+            Username:
+          </label>
+          <p className="w-[300px] max-md:text-center">{userName}</p>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Comment:</label>
-          <p>{feedback?.comment}</p>
+        <div className="flex gap-4 items-center max-md:flex-col text-center">
+          <label className="text-xl w-[200px] max-md:text-center">
+            Comment:
+          </label>
+          <p className="w-[300px] max-md:text-center">{feedback?.comment}</p>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Date:</label>
-          <p>{feedback?.createdAt.toDateString()}</p>
+        <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+          <label className="text-xl w-[200px] max-md:text-center">Date:</label>
+          <p className="w-[300px] max-md:text-center">
+            {feedback?.createdAt.toDateString()}
+          </p>
         </div>
       </div>
       <Link

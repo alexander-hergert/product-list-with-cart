@@ -145,11 +145,14 @@ const EditFeedback: FC<EditFeedbackProps> = ({ feedback, id }) => {
       </div>
       {errors.rating && <p style={{ color: "red" }}>{errors.rating}</p>}
       <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between">
-        <label className="text-xl w-[200px] max-md:text-center" htmlFor="comment">
+        <label
+          className="text-xl w-[200px] max-md:text-center md:self-start"
+          htmlFor="comment"
+        >
           Comment:
         </label>
         <textarea
-          className="border rounded w-[300px]"
+          className="border rounded w-[300px] min-h-[200px]"
           id="comment"
           name="comment"
           value={input.comment}
