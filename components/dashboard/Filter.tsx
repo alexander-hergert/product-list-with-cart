@@ -84,23 +84,35 @@ const Filter = () => {
       {/* Show form fields for /dashboard/products page */}
       {page === "products" && (
         <>
-          <label htmlFor="productname">Product Name</label>
-          <input id="productname" type="text" name="productname" />
-          <label htmlFor="minPrice">Min. Price</label>
-          <input id="minPrice" type="number" name="minPrice" />
-          <label htmlFor="maxPrice">Max. Price</label>
-          <input id="maxPrice" type="number" name="maxPrice" />
+          <div className="flex flex-col gap-2">
+            <label htmlFor="productname">Product Name</label>
+            <input id="productname" type="text" name="productname" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="minPrice">Min. Price</label>
+            <input id="minPrice" type="number" name="minPrice" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="maxPrice">Max. Price</label>
+            <input id="maxPrice" type="number" name="maxPrice" />
+          </div>
         </>
       )}
       {/** Show form fields for /dashboard/customers */}
       {page === "customers" && (
         <>
-          <label htmlFor="username">Username:</label>
-          <input id="username" type="text" name="username" />
-          <label htmlFor="email">Email:</label>
-          <input id="email" type="email" name="email" />
-          <label htmlFor="address">Address:</label>
-          <input id="address" type="text" name="address" />
+          <div className="flex flex-col gap-2">
+            <label htmlFor="username">Username:</label>
+            <input id="username" type="text" name="username" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email">Email:</label>
+            <input id="email" type="email" name="email" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="address">Address:</label>
+            <input id="address" type="text" name="address" />
+          </div>
         </>
       )}
       {/** Show form fields for /dashboard/orders */}

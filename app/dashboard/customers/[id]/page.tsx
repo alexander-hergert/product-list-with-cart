@@ -38,34 +38,36 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
   const customer = await fetchCustomer(id);
   return (
     <div>
-      <h1>Customer Details</h1>
-      <br />
-      <div>
-        <Image
-          src={customer ? customer.image : ""}
-          alt={customer ? customer.name : ""}
-          width={200}
-          height={200}
-        />
-        <div className="flex gap-4 items-center">
-          <label>Username:</label>
-          <h2>{customer?.name}</h2>
+      <h1 className="text-2xl mb-4 text-center">Customer Details</h1>
+      <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[600px] md:w-1/4 m-auto max-md:w-[80%]">
+        <div>
+          <Image
+            className="rounded-xl"
+            src={customer ? customer.image : ""}
+            alt={customer ? customer.name : ""}
+            width={300}
+            height={300}
+          />
+          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+            <label>Username:</label>
+            <h2>{customer?.name}</h2>
+          </div>
+          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+            <label>Email:</label>
+            <h2>{customer?.email}</h2>
+          </div>
+          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+            <label>Address:</label>
+            <h2>{customer?.address}</h2>
+          </div>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Email:</label>
-          <h2>{customer?.email}</h2>
-        </div>
-        <div className="flex gap-4 items-center">
-          <label>Address:</label>
-          <h2>{customer?.address}</h2>
-        </div>
+        <Link
+          className="text-blue-500 hover:text-blue-700"
+          href="/dashboard/customers"
+        >
+          ... Back to Customers
+        </Link>
       </div>
-      <Link
-        className="text-blue-500 hover:text-blue-700"
-        href="/dashboard/customers"
-      >
-        ... Back to Customers
-      </Link>
     </div>
   );
 };

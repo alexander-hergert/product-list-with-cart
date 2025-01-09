@@ -69,36 +69,52 @@ const CustomersPage = async ({
   const customers = await fetchCustomers(username, email, address, order);
   return (
     <div>
-      <h1>Customers</h1>
-      <h2>Filter</h2>
-      <Filter />
-      <h2>Sort</h2>
-      <Sort />
-      <div className="grid grid-cols-2">
+      <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+        <div>
+          <h2 className="text-2xl text-center">Filter</h2>
+          <Filter />
+        </div>
+        <div>
+          <h2 className="text-2xl text-center">Sort</h2>
+          <Sort />
+        </div>
+      </div>
+      <div
+        className="grid grid-cols-2 place-items-center m-auto w-[1200px] mt-4 max-lg:grid-cols-2 max-md:grid-cols-1 
+      max-lg:w-[800px] max-md:w-[400px] gap-4"
+      >
         {customers.map((customer) => (
-          <Link href={`/dashboard/customers/${customer.id}`} key={customer.id}>
-            <Image
-              src={customer.image}
-              alt={customer.name}
-              width={200}
-              height={200}
-            />
-            <div className="flex gap-4 items-center">
-              <label>Username:</label>
-              <h2>{customer?.name}</h2>
+          <Link
+            href={`/dashboard/customers/${customer.id}`}
+            key={customer.id}
+            className="border rounded-xl shadow-md"
+          >
+            <div className="w-[300px]">
+              <Image
+                className="w-full rounded-t-xl"
+                src={customer.image}
+                alt={customer.name}
+                width={300}
+                height={300}
+              />
             </div>
-            <div className="flex gap-4 items-center">
-              <label>Email:</label>
-              <h2>{customer?.email}</h2>
-            </div>
-            <div className="flex gap-4 items-center">
-              <label>Address:</label>
-              <h2>{customer?.address}</h2>
+            <div className="p-2">
+              <div className="flex gap-4 items-center max-w-[250px]">
+                <label>Username:</label>
+                <h2 className="truncate">{customer?.name}</h2>
+              </div>
+              <div className="flex gap-4 items-center max-w-[250px]">
+                <label>Email:</label>
+                <h2 className="truncate">{customer?.email}</h2>
+              </div>
+              <div className="flex gap-4 items-center max-w-[250px]">
+                <label>Address:</label>
+                <h2 className="truncate">{customer?.address}</h2>
+              </div>
             </div>
           </Link>
         ))}
       </div>
-      <br />
       <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
         To Dashboard
       </Link>

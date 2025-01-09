@@ -102,50 +102,77 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Name:</label>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/2 m-auto max-md:w-[80%]"
+    >
+      <div
+        className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between
+      "
+      >
+        <label className="text-xl w-[200px] max-md:text-center" htmlFor="name">
+          Name:
+        </label>
         <input
           type="text"
+          id="name"
           name="name"
           onChange={handleChange}
           defaultValue={name}
+          className="w-[300px] max-md:text-center border rounded px-2"
         />
         {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
       </div>
-      <div>
-        <label>Category:</label>
+      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between my-4">
+        <label
+          className="text-xl w-[200px] max-md:text-center"
+          htmlFor="category"
+        >
+          Category:
+        </label>
         <input
+          id="category"
           type="text"
           name="category"
           onChange={handleChange}
           defaultValue={category}
+          className="w-[300px] max-md:text-center border rounded px-2"
         />
         {errors.category && <p style={{ color: "red" }}>{errors.category}</p>}
       </div>
-      <div>
-        <label>Description:</label>
+      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between">
+        <label
+          className="text-xl w-[200px] max-md:text-center md:self-start"
+          htmlFor="description"
+        >
+          Description:
+        </label>
         <textarea
+          id="description"
           name="description"
           onChange={handleChange}
           defaultValue={description}
+          className="border rounded w-[300px] min-h-[200px] px-2"
         />
         {errors.description && (
           <p style={{ color: "red" }}>{errors.description}</p>
         )}
       </div>
-      <div>
-        <label>Price:</label>
+      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between my-4">
+        <label className="text-xl w-[200px] max-md:text-center" htmlFor="price">
+          Price:
+        </label>
         <input
           type="number"
+          id="price"
           name="price"
           onChange={handleChange}
           defaultValue={price}
+          className="w-[300px] max-md:text-center border rounded px-2"
         />
         {errors.price && <p style={{ color: "red" }}>{errors.price}</p>}
       </div>
       <div>
-        <label>Image:</label>
         <CldUploadWidget
           signatureEndpoint="/api/sign-cloudinary-params"
           onSuccess={(result) => {
@@ -161,6 +188,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
           {({ open }) => {
             return (
               <button
+                className="className= border rounded p-2 my-2 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] mt-4"
                 name="img"
                 onClick={(e) => {
                   e.preventDefault;
@@ -173,14 +201,27 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
           }}
         </CldUploadWidget>
         {input.img && (
-          <div>
-            <label>Preview:</label>
-            <Image src={input.img} alt="Product" width={100} height={100} />
+          <div className="flex max-md:flex-col gap-2 items-center md:w-[600px] max-md:w-[300px] justify-between my-4">
+            <label className="text-xl w-[200px] max-md:text-center">
+              Preview:
+            </label>
+            <Image
+              className="rounded-xl"
+              src={input.img}
+              alt="Product"
+              width={200}
+              height={200}
+            />
           </div>
         )}
         {errors.img && <p style={{ color: "red" }}>{errors.img}</p>}
       </div>
-      <button type="submit">Edit Product</button>
+      <button
+        type="submit"
+        className="className= border rounded p-2 my-2 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] mt-4"
+      >
+        Edit Product
+      </button>
     </form>
   );
 };

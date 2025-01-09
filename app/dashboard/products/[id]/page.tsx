@@ -38,38 +38,40 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
   const product = await fetchProduct(id);
   return (
     <div>
-      <h1>Product Details</h1>
-      <br />
-      <div>
-        <Image
-          src={product ? product.image : ""}
-          alt={product ? product.name : ""}
-          width={200}
-          height={200}
-        />
-        <div className="flex gap-4 items-center">
-          <label>Name:</label>
-          <h2>{product?.name}</h2>
+      <h1 className="text-2xl mb-4 text-center">Product Details</h1>
+      <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/3 m-auto max-md:w-[80%]">
+        <div>
+          <Image
+            className="rounded-xl"
+            src={product ? product.image : ""}
+            alt={product ? product.name : ""}
+            width={300}
+            height={300}
+          />
+          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+            <label>Name:</label>
+            <h2>{product?.name}</h2>
+          </div>
+          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+            <label>Description:</label>
+            <p>{product?.description}</p>
+          </div>
+          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+            <label>Price:</label>
+            <p>${product?.price}</p>
+          </div>
+          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+            <label>Rating:</label>
+            <p>{product?.rating}</p>
+          </div>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Description:</label>
-          <p>{product?.description}</p>
-        </div>
-        <div className="flex gap-4 items-center">
-          <label>Price:</label>
-          <p>${product?.price}</p>
-        </div>
-        <div className="flex gap-4 items-center">
-          <label>Rating:</label>
-          <p>{product?.rating}</p>
-        </div>
+        <Link
+          className="text-blue-500 hover:text-blue-700"
+          href="/dashboard/products"
+        >
+          ... Back to Products
+        </Link>
       </div>
-      <Link
-        className="text-blue-500 hover:text-blue-700"
-        href="/dashboard/products"
-      >
-        ... Back to Products
-      </Link>
     </div>
   );
 };

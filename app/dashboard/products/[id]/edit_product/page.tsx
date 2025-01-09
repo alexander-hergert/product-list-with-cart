@@ -42,7 +42,7 @@ const EditProductPage = async ({ params }: EditProductPageProps) => {
   const product = await fetchProduct(id);
   return (
     <div>
-      <h1>Edit Product</h1>
+      <h1 className="text-2xl mb-4 text-center">Edit Product</h1>
       <EditProduct product={product} id={id} />
     </div>
   );

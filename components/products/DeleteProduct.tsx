@@ -43,8 +43,10 @@ const DeleteProduct: FC<DeleteProductProps> = ({ id }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <button>Delete</button>
+    <form onSubmit={handleSubmit} className="self-center w-full text-center">
+      <button className="border rounded p-2 my-2 hover:bg-red-600 hover:text-white w-[95%]">
+        Delete
+      </button>
     </form>
   );
 };

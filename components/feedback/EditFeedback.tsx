@@ -122,7 +122,7 @@ const EditFeedback: FC<EditFeedbackProps> = ({ feedback, id }) => {
           Title:
         </label>
         <input
-          className="w-[300px] max-md:text-center"
+          className="w-[300px] max-md:text-center border rounded px-2"
           id="title"
           name="title"
           type="text"
@@ -152,7 +152,7 @@ const EditFeedback: FC<EditFeedbackProps> = ({ feedback, id }) => {
           Comment:
         </label>
         <textarea
-          className="border rounded w-[300px] min-h-[200px]"
+          className="border rounded w-[300px] min-h-[200px] px-2"
           id="comment"
           name="comment"
           value={input.comment}
