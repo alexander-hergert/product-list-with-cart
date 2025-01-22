@@ -1,8 +1,14 @@
+"use server";
+import sgMail from "@sendgrid/mail";
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 const orderSchema = z.object({
   id: z.string(),
@@ -35,6 +41,7 @@ export async function POST(request: Request) {
     const cart = await request.json();
 
     const id = uuidv4();
+    const productNames = Object.keys(cart).map((id) => cart[id].name);
     const productIds = Object.keys(cart);
     const productIdsQuantity = Object.keys(cart).map((id) => cart[id].quantity);
     const productIdsPrice = Object.keys(cart).map((id) => cart[id].price);
@@ -71,6 +78,33 @@ export async function POST(request: Request) {
         totalPrice,
       },
     });
+
+    // Send an email to the user
+    const orderHtml = `
+      <body>
+        <h1>Your order is on the way!</h1>
+        <p><strong>Order ID:</strong> ${order.id}</p>
+        <p><strong>Productnames: ${productNames}</p>
+        <p><strong>Product Quantity:</strong> ${order.productIdsQuantity}</p>
+        <p><strong>Product Pricing:</strong> ${order.productIdsPrice}</p>
+        <p><strong>Total Price:</strong> ${order.totalPrice} USD</p>
+        <p>Thank you for shopping with us!</p>
+      </body>
+  `;
+    const msg = {
+      to: "alexander.hergert1989@yahoo.com",
+      from: "alexander.hergert1989@gmail.com",
+      subject: "Order Confirmation",
+      html: orderHtml,
+    };
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   } catch (error) {
     console.error("Error getting user:", error);
     return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
