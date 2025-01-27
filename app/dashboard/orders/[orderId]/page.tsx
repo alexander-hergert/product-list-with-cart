@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { PrismaClient } from "@prisma/client";
 import OrderProducts from "@/components/orders/OrderProducts";
 import OrderCustomer from "@/components/orders/OrderCustomer";
+import OrderFinish from "@/components/orders/OrderFinish";
 import { checkIfAdmin } from "@/lib/auth";
 
 const OrderStatusChange = dynamic(
@@ -79,6 +80,10 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
       >
         ... Back to Orders
       </Link>
+      <br />
+      {order?.status === "Pending" && (
+        <OrderFinish id={orderId} status={order?.status} />
+      )}
       <OrderStatusChange id={orderId} status={order?.status} />
       <OrderProducts
         orderId={orderId}

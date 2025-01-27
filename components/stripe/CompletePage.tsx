@@ -1,5 +1,6 @@
 import React from "react";
 import { useStripe } from "@stripe/react-stripe-js";
+import { svgIconClasses } from "@mui/material";
 
 const SuccessIcon = (
   <svg
@@ -115,8 +116,12 @@ export default function CompletePage() {
   }, [stripe]);
 
   return (
-    <div id="payment-status">
+    <div
+      className="grid place-items-center border rounded-xl max-md:w-[375px] w-[500px] m-auto p-4"
+      id="payment-status"
+    >
       <div
+        className="w-12 h-12 flex items-center justify-center rounded-full"
         id="status-icon"
         style={{ backgroundColor: STATUS_CONTENT_MAP[status].iconColor }}
       >
@@ -124,17 +129,17 @@ export default function CompletePage() {
       </div>
       <h2 id="status-text">{STATUS_CONTENT_MAP[status].text}</h2>
       {intentId && (
-        <div id="details-table">
+        <div className="mt-4" id="details-table">
           <table>
             <tbody>
-              <tr>
-                <td className="TableLabel">id</td>
+              <tr className="max-md:flex max-md:flex-col">
+                <td className="TableLabel font-bold">Payment-Id:</td>
                 <td id="intent-id" className="TableContent">
                   {intentId}
                 </td>
               </tr>
-              <tr>
-                <td className="TableLabel">status</td>
+              <tr className="max-md:flex max-md:flex-col max-md:mt-4">
+                <td className="TableLabel font-bold">Status:</td>
                 <td id="intent-status" className="TableContent">
                   {status}
                 </td>
@@ -144,12 +149,15 @@ export default function CompletePage() {
         </div>
       )}
       {intentId && (
-        <a
-          href={`https://dashboard.stripe.com/payments/${intentId}`}
-          id="view-details"
-          target="_blank"
-        >
-          View details
+        <div className="flex gap-4 items-center mt-4">
+          <a
+            className="text-blue-500"
+            href={`https://dashboard.stripe.com/payments/${intentId}`}
+            id="view-details"
+            target="_blank"
+          >
+            View details
+          </a>
           <svg
             width="15"
             height="14"
@@ -169,10 +177,10 @@ export default function CompletePage() {
               fill="#0055DE"
             />
           </svg>
-        </a>
+        </div>
       )}
-      <a id="retry-button" href="/">
-        Test another
+      <a className="text-blue-500" id="retry-button" href="/products">
+        Back to products
       </a>
     </div>
   );

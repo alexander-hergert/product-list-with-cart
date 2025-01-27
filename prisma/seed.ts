@@ -159,6 +159,7 @@ async function main() {
       prisma.orders.create({
         data: {
           id: `${i}`,
+          paymentId: `${i}`,
           userId: `${Math.floor(Math.random() * 3) + 1}`,
           productIds: ["1", "2", "3"],
           productIdsQuantity: [1, 2, 3],

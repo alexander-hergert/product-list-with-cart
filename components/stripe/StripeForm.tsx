@@ -3,10 +3,11 @@ import React, { useContext } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { CartContext } from "@/lib/cartContext";
+import { OrderIdContext } from "@/lib/orderIdContext";
+import { useSearchParams } from "next/navigation";
 
 import CheckoutForm from "@/components/stripe/CheckoutForm";
 import CompletePage from "@/components/stripe/CompletePage";
-import { set } from "zod";
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -20,6 +21,7 @@ export default function StripeForm() {
   const [dpmCheckerLink, setDpmCheckerLink] = React.useState("");
   const [confirmed, setConfirmed] = React.useState(false);
   const { cart, setCart } = useContext(CartContext);
+  const { orderId } = useContext(OrderIdContext);
 
   React.useEffect(() => {
     setConfirmed(
@@ -37,17 +39,17 @@ export default function StripeForm() {
   });
 
   React.useEffect(() => {
-    if (Object.keys(cart).length === 0) {
-      // Don't proceed if the cart is empty
-      console.log("Cart is empty. No PaymentIntent created.");
-      return;
-    }
+    // if (Object.keys(cart).length === 0) {
+    //   // Don't proceed if the cart is empty
+    //   console.log("Cart is empty. No PaymentIntent created.");
+    //   return;
+    // }
 
     // Create PaymentIntent when cart is not empty
     fetch("/api/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart }),
+      body: JSON.stringify({ cart, orderId }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -58,7 +60,7 @@ export default function StripeForm() {
         setDpmCheckerLink(data.dpmCheckerLink);
       })
       .catch((err) => console.error("Error creating PaymentIntent:", err));
-  }, [cart]);
+  }, []);
 
   const appearance = {
     theme: "stripe",
@@ -69,7 +71,7 @@ export default function StripeForm() {
   };
 
   return (
-    <div className="App">
+    <main className="App m-4">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           {confirmed ? (
@@ -79,6 +81,6 @@ export default function StripeForm() {
           )}
         </Elements>
       )}
-    </div>
+    </main>
   );
 }

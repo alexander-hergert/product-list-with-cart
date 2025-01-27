@@ -7,7 +7,9 @@ const StripeForm = dynamic(() => import("@/components/stripe/StripeForm"), {
 export default function PaymentPage() {
   return (
     <>
-      <h1>Payment</h1>
+      <h1 className="text-center my-4 text-2xl font-bold">
+        Payment
+      </h1>
       <StripeForm />
     </>
   );

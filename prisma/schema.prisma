@@ -37,6 +37,7 @@ model products {
 
 enum OrderStatus {
   Pending
+  Paid
   Shipped
   Delivered
   Cancelled
@@ -45,6 +46,7 @@ enum OrderStatus {
 model orders {
   id                String   @id
   userId            String
+  paymentId         String @default("")
   user              users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   productIds        String[]
   productIdsQuantity Int[]

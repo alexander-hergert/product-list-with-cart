@@ -19,6 +19,7 @@ export type Product = {
 
 export enum OrderStatus {
   Pending = "Pending",
+  Paid = "Paid",
   Shipped = "Shipped",
   Delivered = "Delivered",
   Cancelled = "Cancelled",
@@ -27,6 +28,7 @@ export enum OrderStatus {
 export type Order = {
   id: string;
   userId: string;
+  paymentId: string;
   productIds: string[];
   productIdsQuantity: number[];
   productIdsPrice: number[];

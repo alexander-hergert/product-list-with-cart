@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { OrderIdContext } from "@/lib/orderIdContext";
 import {
   PaymentElement,
   useStripe,
@@ -11,6 +12,7 @@ export default function CheckoutForm({ dpmCheckerLink }) {
 
   const [message, setMessage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const { orderId } = useContext(OrderIdContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +25,19 @@ export default function CheckoutForm({ dpmCheckerLink }) {
 
     setIsLoading(true);
 
+    //set order status to paid
+    console.log("changing order status to paid");
+    const res = fetch("/api/orderStatus", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: orderId,
+        status: "Paid",
+      }),
+    });
+
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -30,6 +45,21 @@ export default function CheckoutForm({ dpmCheckerLink }) {
         return_url: "http://localhost:3000/payment",
       },
     });
+
+    //set order status to pending if there is an error
+    if (error) {
+      console.log("changing order status to pending");
+      const res = fetch("/api/orderStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: orderId,
+          status: "Pending",
+        }),
+      });
+    }
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
@@ -53,7 +83,11 @@ export default function CheckoutForm({ dpmCheckerLink }) {
     <>
       <form id="payment-form" onSubmit={handleSubmit}>
         <PaymentElement id="payment-element" options={paymentElementOptions} />
-        <button disabled={isLoading || !stripe || !elements} id="submit">
+        <button
+          className="className= text-white block m-auto border rounded p-2 my-4 bg-blue-700 hover:bg-blue-500 md:w-[600px] max-md:w-full mt-4"
+          disabled={isLoading || !stripe || !elements}
+          id="submit"
+        >
           <span id="button-text">
             {isLoading ? (
               <div className="spinner" id="spinner"></div>
@@ -67,7 +101,7 @@ export default function CheckoutForm({ dpmCheckerLink }) {
       </form>
       {/* [DEV]: For demo purposes only, display dynamic payment methods annotation and integration checker */}
       <div id="dpm-annotation">
-        <p>
+        <p className="text-center">
           Payment methods are dynamically displayed based on customer location,
           order amount, and currency.&nbsp;
           <a

@@ -3,11 +3,14 @@
 import { useContext } from "react";
 import { CartContext } from "@/lib/cartContext";
 import { ModalContext } from "@/lib/modalContext";
+import { OrderIdContext } from "@/lib/orderIdContext";
 import Image from "next/image";
+import { set } from "zod";
 
 const Cart = () => {
   const cartContext = useContext(CartContext);
   const modalContext = useContext(ModalContext);
+  const orderIdContext = useContext(OrderIdContext);
 
   if (!cartContext) {
     return <div>Error: CartContext is not available.</div>;
@@ -19,6 +22,7 @@ const Cart = () => {
 
   const { cart, removeProduct } = cartContext;
   const { setIsModal } = modalContext;
+  const { setOrderId } = orderIdContext;
 
   const totalPrice = Object.keys(cart).reduce((acc, id) => {
     return acc + cart[id].price * cart[id].quantity;
@@ -35,7 +39,7 @@ const Cart = () => {
         body: JSON.stringify(cart),
       });
       const res = await response.json();
-      console.log(res.message || res.error);
+      setOrderId(res?.order?.id);
       setIsModal(true);
     } catch (error) {
       //client error

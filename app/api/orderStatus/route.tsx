@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   if (!(await checkIfAdmin(userId))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
+  console.log("changing order status");
   try {
     //read request data
     const { id, status } = await request.json();
