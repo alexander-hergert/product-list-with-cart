@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { CartContext } from "@/lib/cartContext";
 import { OrderIdContext } from "@/lib/orderIdContext";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import CheckoutForm from "@/components/stripe/CheckoutForm";
 import CompletePage from "@/components/stripe/CompletePage";
@@ -22,6 +22,7 @@ export default function StripeForm() {
   const [confirmed, setConfirmed] = React.useState(false);
   const { cart, setCart } = useContext(CartContext);
   const { orderId } = useContext(OrderIdContext);
+  const router = useRouter();
 
   React.useEffect(() => {
     setConfirmed(
@@ -39,11 +40,11 @@ export default function StripeForm() {
   });
 
   React.useEffect(() => {
-    // if (Object.keys(cart).length === 0) {
-    //   // Don't proceed if the cart is empty
-    //   console.log("Cart is empty. No PaymentIntent created.");
-    //   return;
-    // }
+    if (!orderId) {
+      // Don't proceed if no active order
+      //router.push("/");
+      return;
+    }
 
     // Create PaymentIntent when cart is not empty
     fetch("/api/create-payment-intent", {
@@ -71,7 +72,7 @@ export default function StripeForm() {
   };
 
   return (
-    <main className="App m-4">
+    <section className="App m-4">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           {confirmed ? (
@@ -81,6 +82,6 @@ export default function StripeForm() {
           )}
         </Elements>
       )}
-    </main>
+    </section>
   );
 }

@@ -80,31 +80,37 @@ export async function POST(request: Request) {
     });
 
     // Send an email to the user
-    //   const orderHtml = `
-    //     <body>
-    //       <h1>Your order is on the way!</h1>
-    //       <p><strong>Order ID:</strong> ${order.id}</p>
-    //       <p><strong>Productnames: ${productNames}</p>
-    //       <p><strong>Product Quantity:</strong> ${order.productIdsQuantity}</p>
-    //       <p><strong>Product Pricing:</strong> ${order.productIdsPrice}</p>
-    //       <p><strong>Total Price:</strong> ${order.totalPrice} USD</p>
-    //       <p>Thank you for shopping with us!</p>
-    //     </body>
-    // `;
-    //   const msg = {
-    //     to: "alexander.hergert1989@yahoo.com",
-    //     from: "alexander.hergert1989@gmail.com",
-    //     subject: "Order Confirmation",
-    //     html: orderHtml,
-    //   };
-    //   sgMail
-    //     .send(msg)
-    //     .then(() => {
-    //       console.log("Email sent");
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
+    const orderHtml = `
+        <body>
+          <h1>Order Confirmation</h1>
+          <p>We are proudly confirm your order.</p>
+          <p><strong>Order ID:</strong> ${order.id}</p>
+          <p><strong>Productnames: ${productNames}</p>
+          <p><strong>Product Quantity:</strong> ${order.productIdsQuantity}</p>
+          <p><strong>Product Pricing:</strong> ${order.productIdsPrice}</p>
+          <p><strong>Total Price:</strong> ${order.totalPrice} USD</p>
+          <p>Thank you for shopping with us! Please make sure to pay the order.</p>
+          <a href="http://localhost:3000/dashboard/orders/${order.id}">Pay now</a>
+        </body>
+    `;
+    const msg = {
+      to: "alexander.hergert1989@yahoo.com",
+      from: "alexander.hergert1989@gmail.com",
+      subject: "Order Confirmation",
+      html: orderHtml,
+    };
+    // Send the email if the order has an ID (was created successfully)
+    if (order.id) {
+      console.log("sending email order confirmation");
+      sgMail
+        .send(msg)
+        .then(() => {
+          console.log("Email sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
     return NextResponse.json({ order });
   } catch (error) {
     console.error("Error getting user:", error);
@@ -112,9 +118,4 @@ export async function POST(request: Request) {
   } finally {
     await prisma.$disconnect();
   }
-
-  return NextResponse.json(
-    { message: "Order sent successfully" },
-    { status: 200 }
-  );
 }

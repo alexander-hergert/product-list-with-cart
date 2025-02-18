@@ -56,7 +56,7 @@ const OrderStatusChange: FC<ProfileFormProps> = ({ id, status }) => {
             onChange={(e) => handleChange(e)}
             defaultValue={input?.status}
           >
-            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
             <option value="Shipped">Shipped</option>
             <option value="Delivered">Delivered</option>
             <option value="Cancelled">Cancelled</option>

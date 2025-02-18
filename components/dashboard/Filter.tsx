@@ -125,6 +125,7 @@ const Filter = () => {
             <label htmlFor="status">Status:</label>
             <select id="status" name="status">
               <option value="Pending">Pending</option>
+              <option value="Paid">Paid</option>
               <option value="Shipped">Shipped</option>
               <option value="Delivered">Delivered</option>
               <option value="Cancelled">Cancelled</option>
