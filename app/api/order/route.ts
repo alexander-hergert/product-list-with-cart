@@ -79,6 +79,13 @@ export async function POST(request: Request) {
       },
     });
 
+    //Find users emailadress
+    const user = await prisma.users.findUnique({
+      where: {
+        id: order.userId,
+      },
+    });
+
     // Send an email to the user
     const orderHtml = `
         <body>
@@ -94,7 +101,7 @@ export async function POST(request: Request) {
         </body>
     `;
     const msg = {
-      to: "alexander.hergert1989@yahoo.com",
+      to: user?.email,
       from: "alexander.hergert1989@gmail.com",
       subject: "Order Confirmation",
       html: orderHtml,

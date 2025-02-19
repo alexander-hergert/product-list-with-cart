@@ -11,15 +11,22 @@ if (process.env.SENDGRID_API_KEY) {
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
-  //Check if user is admin
+  //Check if user is admin or customer owns this order
   const { userId } = auth();
-  if (!(await checkIfAdmin(userId))) {
+  const { id, status } = await request.json();
+  //Check for users order
+  const order = await prisma.orders.findUnique({
+    where: {
+      id,
+    },
+  });
+  //Return if not admin or order owner
+  if (!(await checkIfAdmin(userId)) && order?.userId !== userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
   console.log("changing order status");
   try {
-    //read request data
-    const { id, status } = await request.json();
     //update order status
     const order = await prisma.orders.update({
       where: {
@@ -27,6 +34,13 @@ export async function POST(request: Request) {
       },
       data: {
         status,
+      },
+    });
+
+    //Find users emailadress
+    const user = await prisma.users.findUnique({
+      where: {
+        id: order.userId,
       },
     });
 
@@ -92,7 +106,7 @@ export async function POST(request: Request) {
 
     //recipient must be dynamic in future
     const msg = {
-      to: "alexander.hergert1989@yahoo.com",
+      to: user?.email,
       from: "alexander.hergert1989@gmail.com",
       subject: `Orderstatus Confirmation - ${status as OrderStatus}`,
       html: orderHtml[status as OrderStatus],

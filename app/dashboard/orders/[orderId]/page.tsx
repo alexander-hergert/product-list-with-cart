@@ -44,6 +44,9 @@ interface Params {
 const OrderDetailsPage = async ({ params }: { params: Params }) => {
   const { orderId } = params;
   const order = await fetchOrder(orderId);
+  const { userId } = auth();
+  //Check if user is admin
+  const isAdmin = await checkIfAdmin(userId);
 
   return (
     <div className="m-auto max-w-[600px] max:md:max-w-[327px]">
@@ -84,7 +87,7 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
       {order?.status === "Pending" && (
         <OrderFinish id={orderId} status={order?.status} />
       )}
-      <OrderStatusChange id={orderId} status={order?.status} />
+      {isAdmin && <OrderStatusChange id={orderId} status={order?.status} />}
       <OrderProducts
         orderId={orderId}
         productIds={order?.productIds}
