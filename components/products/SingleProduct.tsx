@@ -44,9 +44,9 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
     <div className="max-md:mb-4 w-[250px] h-[347px] justify-self-start max-lg:w-[213px] max-md:w-[327px] max-md:h-[400px]">
       <Link href={`/products/${id}`}>
         <div className="flex flex-col justify-between gap-8">
-          <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px]">
+          <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px] overflow-hidden">
             <Image
-              className={`cursor-pointer rounded-lg w-full object-cover ${
+              className={`cursor-pointer rounded-lg w-full object-cover aspect-square ${
                 cart[id]?.quantity ? "border-2 border-red-800" : ""
               }`}
               src={singleProduct.image}
@@ -55,10 +55,10 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
               alt={singleProduct.name}
             />
           </div>
-          <div>
-            <h2 className="text-gray-500">{category}</h2>
-            <h2 className="font-bold">{name}</h2>
-            <p className="text-red-800">${price.toFixed(2)}</p>
+          <div className="w-full max-w-xs truncate">
+            <h2 className="text-gray-500 truncate">{category}</h2>
+            <h2 className="font-bold truncate">{name}</h2>
+            <p className="text-red-800 truncate">${price.toFixed(2)}</p>
           </div>
         </div>
       </Link>

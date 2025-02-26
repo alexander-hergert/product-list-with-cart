@@ -35,6 +35,7 @@ export default async function Home() {
           </Link>
         </aside>
         <Image
+          className="rounded-lg"
           src="/images/image-cake-mobile.jpg"
           width={500}
           height={500}
