@@ -18,7 +18,7 @@ const getProducts = async (
           name: { contains: productName, mode: "insensitive" },
         }),
         ...(productCategory && {
-          category: { contains: productCategory, mode: "insensitive" },
+          sub_category: { contains: productCategory, mode: "insensitive" },
         }),
         price: {
           ...(minPrice && { gte: Number(minPrice) }),
