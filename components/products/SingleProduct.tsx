@@ -44,7 +44,7 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
     <div className="max-md:mb-4 w-[250px] h-[347px] justify-self-start max-lg:w-[213px] max-md:w-[327px] max-md:h-[400px]">
       <Link href={`/products/${id}`}>
         <div className="flex flex-col justify-between gap-8">
-          <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px] overflow-hidden">
+          <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px] overflow-hidden shadow-lg">
             <Image
               className={`cursor-pointer rounded-lg w-full object-cover aspect-square ${
                 cart[id]?.quantity ? "border-2 border-red-800" : ""

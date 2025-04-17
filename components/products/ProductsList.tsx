@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 const getProducts = async (
   productName: string | undefined,
+  mainCategory: string,
   productCategory: string | undefined,
   minPrice: string | undefined,
   maxPrice: string | undefined,
@@ -16,6 +17,9 @@ const getProducts = async (
       where: {
         ...(productName && {
           name: { contains: productName, mode: "insensitive" },
+        }),
+        ...(mainCategory && {
+          main_category: { contains: mainCategory, mode: "insensitive" },
         }),
         ...(productCategory && {
           sub_category: { contains: productCategory, mode: "insensitive" },
@@ -51,14 +55,19 @@ type SearchParams = {
 
 const ProductsList = async ({
   searchParams,
+  params,
 }: {
   searchParams: SearchParams;
+  params: { category: string };
 }) => {
   const { productName, productCategory, minPrice, maxPrice, order } =
     searchParams;
+  const { category } = params;
+  const mainCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
   const products = await getProducts(
     productName,
+    mainCategory,
     productCategory,
     minPrice,
     maxPrice,
@@ -67,7 +76,7 @@ const ProductsList = async ({
   return (
     <div>
       <h1 className="text-2xl font-bold max-md:text-4xl max-md:my-4">
-        Desserts
+        {mainCategory}
       </h1>
       <div className="grid grid-cols-3 gap-4 w-[800px] max-lg:w-[688px] max-md:w-[327px] max-md:grid-cols-1">
         {products.map((singleProduct: Product) => (
