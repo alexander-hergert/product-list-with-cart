@@ -10,6 +10,7 @@ export const checkIfAdmin = async (userId: string | null): Promise<boolean> => {
     const user = await prisma.users.findUnique({
       where: { id: userId || undefined },
     });
+    console.log(user?.role === "ADMIN");
     return user?.role === "ADMIN";
   } catch (error) {
     console.error("Error fetching user:", error);
