@@ -2,10 +2,18 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { checkIfAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
+
+const DeleteProduct = dynamic(
+  () => import("@/components/products/DeleteProduct"),
+  {
+    ssr: false,
+  }
+);
 
 const fetchProduct = async (id: string) => {
   const { userId } = auth();
@@ -42,17 +50,17 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
       <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/3 m-auto max-md:w-[80%]">
         <div>
           <Image
-            className="rounded-xl"
+            className="rounded-xl m-auto"
             src={product ? product.image : ""}
             alt={product ? product.name : ""}
             width={300}
             height={300}
           />
-          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+          <div className="flex gap-4 font-bold items-center max-md:flex-col text-center my-4">
             <label>Name:</label>
             <h2>{product?.name}</h2>
           </div>
-          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+          <div className="flex gap-4 max-md:flex-col text-center my-4">
             <label>Description:</label>
             <p>{product?.description}</p>
           </div>
@@ -71,6 +79,13 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
         >
           ... Back to Products
         </Link>
+        <Link
+          href={`/dashboard/products/${id}/edit_product`}
+          className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-[95%] text-center"
+        >
+          Edit
+        </Link>
+        <DeleteProduct id={id} />
       </div>
     </div>
   );

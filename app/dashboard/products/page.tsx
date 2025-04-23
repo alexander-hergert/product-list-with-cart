@@ -43,8 +43,8 @@ const fetchProducts = async (
       orderBy: {
         ...((order === "productnameAsc" && { name: "asc" }) ||
           (order === "productnameDesc" && { name: "desc" })),
-        ...((order === "productCategoryAsc" && { category: "asc" }) ||
-          (order === "productCategoryDesc" && { category: "desc" })),
+        ...((order === "productCategoryAsc" && { sub_category: "asc" }) ||
+          (order === "productCategoryDesc" && { sub_category: "desc" })),
         ...((order === "priceAsc" && { price: "asc" }) ||
           (order === "priceDesc" && { price: "desc" })),
       },
