@@ -8,9 +8,13 @@ import Link from "next/link";
 
 interface SingleProductProps {
   singleProduct: Product;
+  mainCategory?: string;
 }
 
-const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
+const SingleProduct: React.FC<SingleProductProps> = ({
+  singleProduct,
+  mainCategory,
+}) => {
   const cartContext = useContext(CartContext);
 
   if (!cartContext) {
@@ -42,7 +46,7 @@ const SingleProduct: React.FC<SingleProductProps> = ({ singleProduct }) => {
 
   return (
     <div className="max-md:mb-4 w-[250px] h-[347px] justify-self-start max-lg:w-[213px] max-md:w-[327px] max-md:h-[400px]">
-      <Link href={`/products/${id}`}>
+      <Link href={`/products/${mainCategory?.toLocaleLowerCase()}/${id}`}>
         <div className="flex flex-col justify-between gap-8">
           <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px] overflow-hidden shadow-lg">
             <Image
