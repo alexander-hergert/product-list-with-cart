@@ -75,9 +75,14 @@ const ProductsList = async ({
   );
   return (
     <div>
-      <h1 className="text-2xl font-bold max-md:text-4xl max-md:my-4">
-        {mainCategory}
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold max-md:text-4xl max-md:my-4">
+          {mainCategory}
+        </h1>
+        <h2 className="text-xl max-md:text-4xl max-md:my-4">
+          {products.length} items<span className="max-md:hidden"> found</span>
+        </h2>
+      </div>
       <div className="grid grid-cols-3 gap-4 w-[800px] max-lg:w-[688px] max-md:w-[327px] max-md:grid-cols-1">
         {products.map((singleProduct: Product) => (
           <SingleProduct key={singleProduct.id} singleProduct={singleProduct} />
