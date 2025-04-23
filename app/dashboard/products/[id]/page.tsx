@@ -5,6 +5,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { checkIfAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import Rating from "@mui/material/Rating";
 
 const prisma = new PrismaClient();
 
@@ -68,9 +69,9 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
             <label>Price:</label>
             <p>${product?.price}</p>
           </div>
-          <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
-            <label>Rating:</label>
-            <p>{product?.rating}</p>
+          <div className="flex gap-2">
+            <label htmlFor="rating">Rating</label>
+            <Rating name="rating" value={product?.rating} readOnly />
           </div>
         </div>
         <Link
