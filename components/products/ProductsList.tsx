@@ -1,6 +1,12 @@
 import SingleProduct from "@/components/products/SingleProduct";
 import { Product } from "@/lib/types";
 import { PrismaClient } from "@prisma/client";
+import dynamic from "next/dynamic";
+
+const BasicPagination = dynamic(
+  () => import("@/components/products/BasicPagination"),
+  { ssr: false }
+);
 
 const prisma = new PrismaClient();
 
@@ -10,6 +16,7 @@ const getProducts = async (
   productCategory: string | undefined,
   minPrice: string | undefined,
   maxPrice: string | undefined,
+  page: number | undefined,
   order: string | undefined
 ): Promise<Product[]> => {
   try {
@@ -35,6 +42,8 @@ const getProducts = async (
         ...((order === "priceAsc" && { price: "asc" }) ||
           (order === "priceDesc" && { price: "desc" })),
       },
+      skip: ((page || 1) - 1) * 9, //optional depending on page number,
+      take: 9, //fix value pagesize
     });
     return products;
   } catch (error) {
@@ -45,11 +54,46 @@ const getProducts = async (
   }
 };
 
+const countProducts = async (
+  productName: string | undefined,
+  mainCategory: string,
+  productCategory: string | undefined,
+  minPrice: string | undefined,
+  maxPrice: string | undefined
+): Promise<number> => {
+  try {
+    const total = await prisma.products.count({
+      where: {
+        ...(productName && {
+          name: { contains: productName, mode: "insensitive" },
+        }),
+        ...(mainCategory && {
+          main_category: { contains: mainCategory, mode: "insensitive" },
+        }),
+        ...(productCategory && {
+          sub_category: { contains: productCategory, mode: "insensitive" },
+        }),
+        price: {
+          ...(minPrice && { gte: Number(minPrice) }),
+          ...(maxPrice && { lte: Number(maxPrice) }),
+        },
+      },
+    });
+    return total;
+  } catch (error) {
+    console.error("Error counting products:", error);
+    return 0;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 type SearchParams = {
   productName?: string;
   productCategory?: string;
   minPrice?: string;
   maxPrice?: string;
+  page?: number;
   order?: string;
 };
 
@@ -60,8 +104,9 @@ const ProductsList = async ({
   searchParams: SearchParams;
   params: { category: string };
 }) => {
-  const { productName, productCategory, minPrice, maxPrice, order } =
+  const { productName, productCategory, minPrice, maxPrice, page, order } =
     searchParams;
+
   const { category } = params;
   const mainCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
@@ -71,8 +116,18 @@ const ProductsList = async ({
     productCategory,
     minPrice,
     maxPrice,
+    page,
     order
   );
+  //count total value to display and for pagination
+  const total = await countProducts(
+    productName,
+    mainCategory,
+    productCategory,
+    minPrice,
+    maxPrice
+  );
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -80,9 +135,17 @@ const ProductsList = async ({
           {mainCategory}
         </h1>
         <h2 className="text-xl max-md:text-4xl max-md:my-4">
-          {products.length} items<span className="max-md:hidden"> found</span>
+          {total} items<span className="max-md:hidden"> found</span>
         </h2>
       </div>
+      <BasicPagination
+        searchParams={searchParams}
+        total={total}
+        productName={productName}
+        productCategory={productCategory}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+      />
       <div className="grid grid-cols-3 gap-4 w-[800px] max-lg:w-[688px] max-md:w-[327px] max-md:grid-cols-1">
         {products.map((singleProduct: Product) => (
           <SingleProduct

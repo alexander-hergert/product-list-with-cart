@@ -3,8 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import { OrderStatus } from "@/lib/types";
 import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
-import Filter from "@/components/dashboard/Filter";
-import Sort from "@/components/dashboard/Sort";
+import Filter from "@/components/Filter";
+import Sort from "@/components/Sort";
 import { checkIfAdmin } from "@/lib/auth";
 
 const prisma = new PrismaClient();

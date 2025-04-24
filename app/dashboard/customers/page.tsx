@@ -2,8 +2,8 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
-import Filter from "@/components/dashboard/Filter";
-import Sort from "@/components/dashboard/Sort";
+import Filter from "@/components/Filter";
+import Sort from "@/components/Sort";
 import { checkIfAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 

@@ -1,7 +1,7 @@
 import Cart from "@/components/products/Cart";
 import ProductsList from "@/components/products/ProductsList";
-import Filter from "@/components/dashboard/Filter";
-import Sort from "@/components/dashboard/Sort";
+import Filter from "@/components/Filter";
+import Sort from "@/components/Sort";
 import dynamic from "next/dynamic";
 const Modal = dynamic(() => import("@/components/products/Modal"), {
   ssr: false,
