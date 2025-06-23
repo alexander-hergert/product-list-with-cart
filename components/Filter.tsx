@@ -69,7 +69,7 @@ const Filter = () => {
       const maxPrice = (
         target.elements.namedItem("maxPrice") as HTMLInputElement
       ).value;
-      query = `?productName=${productName}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=1`;
+      query = `?productName=${productName}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     }
     router.push(query);
   };

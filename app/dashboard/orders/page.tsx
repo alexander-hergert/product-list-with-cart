@@ -84,6 +84,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
           <Sort />
         </div>
       </div>
+      <h1 className="text-2xl text-center mt-4">Orders</h1>
       <div
         className="m-auto w-[1200px] mt-4 grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 
       max-lg:w-[800px] max-md:w-[400px] gap-4"
@@ -92,41 +93,56 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
           <Link
             href={`/dashboard/orders/${order.id}`}
             key={order.id}
-            className="border p-2 rounded-xl"
+            className="border p-2 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200"
           >
-            <div className="flex gap-4 items-center">
-              <label>Order ID:</label>
-              <h2>{order.id}</h2>
+            <div className="flex gap-4 items-start">
+              <label className="w-[6rem]">Order ID:</label>
+              <h2 className="w-[18rem]">{order.id}</h2>
             </div>
-            <div className="flex gap-4 items-center">
-              <label>Products IDs:</label>
-              <p>{order.productIds.join("/")}</p>
+            <div className="flex gap-4 items-start my-4">
+              <label className="w-[6rem]">Products IDs:</label>
+              <ul className="w-[18rem] list-disc">
+                {order.productIds.map((productId, index) => (
+                  <li key={index}>{productId}</li>
+                ))}
+              </ul>
             </div>
-            <div className="flex gap-4 items-center">
-              <label>Price:</label>
-              <p>${order.productIdsPrice.join("/$")}</p>
+            <div className="flex gap-4 items-start">
+              <label className="w-[6rem]">Price:</label>
+              <ul className="w-[18rem] list-disc">
+                {order.productIdsPrice.map((productIdPrice, index) => (
+                  <li key={index}>${productIdPrice}</li>
+                ))}
+              </ul>
             </div>
-            <div className="flex gap-4 items-center">
-              <label>Quantity:</label>
-              <p>{order.productIdsQuantity.join("/")}</p>
+            <div className="flex gap-4 items-start my-4">
+              <label className="w-[6rem]">Quantity:</label>
+              <ul className="w-[18rem] list-disc">
+                {order.productIdsQuantity.map((productIdQuantity, index) => (
+                  <li key={index}>{productIdQuantity}</li>
+                ))}
+              </ul>
             </div>
-            <div className="flex gap-4 items-center">
-              <label>Total Price:</label>
-              <p>${order.totalPrice}</p>
+            <div className="flex gap-4 items-start">
+              <label className="w-[6rem]">Total Price:</label>
+              <p className="w-[18rem]">${order.totalPrice}</p>
             </div>
-            <div className="flex gap-4 items-center">
-              <label>Date:</label>
-              <p>{order.createdAt.toDateString()}</p>
+            <div className="flex gap-4 items-start">
+              <label className="w-[6rem]">Date:</label>
+              <p className="w-[18rem]">{order.createdAt.toDateString()}</p>
             </div>
-            <div className="flex gap-4 items-center">
-              <label>Status:</label>
-              <p>{order.status}</p>
+            <div className="flex gap-4 items-start">
+              <label className="w-[6rem]">Status:</label>
+              <p className="w-[18rem]">{order.status}</p>
             </div>
           </Link>
         ))}
       </div>
-      <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
-        To Dashboard
+      <Link
+        className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
+        href="/dashboard"
+      >
+        ... Back to Dashboard
       </Link>
     </div>
   );
