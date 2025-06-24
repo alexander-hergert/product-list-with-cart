@@ -28,7 +28,7 @@ const OrderCustomer: FC<OrderCustomerProps> = async ({ userId }) => {
       <Link
         href={`/dashboard/customers/${userId}`}
         className="border rounded-xl flex items-center justify-between 
-              max-md:flex-col max-md:m-auto max-md:w-[327px] shadow-lg"
+              max-md:flex-col max-md:m-auto max-md:w-[327px] shadow-md hover:shadow-lg transition-shadow duration-200"
       >
         {user && (
           <Image
@@ -39,7 +39,7 @@ const OrderCustomer: FC<OrderCustomerProps> = async ({ userId }) => {
             height={250}
           />
         )}
-        <div className="mr-[15%] max-md:m-0 max-md:my-4">
+        <div className="m-auto max-md:m-0 max-md:my-4">
           <h2 className="text-xl">Customer Details</h2>
           <p>Name: {user?.name}</p>
           <p>Email: {user?.email}</p>

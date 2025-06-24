@@ -18,6 +18,11 @@ const OrderFinish: FC<ProfileFormProps> = ({ id, status }) => {
   });
   const router = useRouter();
   const orderIdContext = useContext(OrderIdContext);
+  if (!orderIdContext) {
+    throw new Error(
+      "OrderIdContext is undefined. Make sure you are using OrderFinish inside OrderIdProvider."
+    );
+  }
   const { setOrderId } = orderIdContext;
 
   const mutation = useMutation({
@@ -61,7 +66,9 @@ const OrderFinish: FC<ProfileFormProps> = ({ id, status }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setOrderId(id);
+    if (id) {
+      setOrderId(id);
+    }
     router.push("/payment");
     mutation.mutate(input);
   };

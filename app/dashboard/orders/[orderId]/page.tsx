@@ -49,36 +49,48 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
   const isAdmin = await checkIfAdmin(userId);
 
   return (
-    <div className="m-auto max-w-[600px] max:md:max-w-[327px]">
-      <h1 className="text-2xl text-center">Order Details</h1>
-      <div>
-        <div className="flex gap-4 items-center">
-          <label>Order ID:</label>
-          <h2>{order?.id}</h2>
+    <div className="m-auto max-w-[600px] max:md:max-w-[327px] pb-4">
+      <h1 className="text-2xl text-center my-4">Order Details</h1>
+      <div className="border p-2 rounded-xl">
+        <div className="flex gap-4 items-start">
+          <label className="w-[6rem]">Order ID:</label>
+          <h2 className="w-[32rem]">{order?.id}</h2>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Products IDs:</label>
-          <p>{order?.productIds.join("/")}</p>
+        <div className="flex gap-4 items-start my-4">
+          <label className="w-[6rem]">Products IDs:</label>
+          <ul className="w-[32rem] list-disc">
+            {order?.productIds.map((productId, index) => (
+              <li key={index}>{productId}</li>
+            ))}
+          </ul>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Price:</label>
-          <p>${order?.productIdsPrice.join("/$")}</p>
+        <div className="flex gap-4 items-start">
+          <label className="w-[6rem]">Price:</label>
+          <ul className="w-[32rem] list-disc">
+            {order?.productIdsPrice.map((productIdPrice, index) => (
+              <li key={index}>${productIdPrice}</li>
+            ))}
+          </ul>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Quantity:</label>
-          <p>{order?.productIdsQuantity.join("/")}</p>
+        <div className="flex gap-4 items-start my-4">
+          <label className="w-[6rem]">Quantity:</label>
+          <ul className="w-[32rem] list-disc">
+            {order?.productIdsQuantity.map((productIdQuantity, index) => (
+              <li key={index}>{productIdQuantity}</li>
+            ))}
+          </ul>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Total Price:</label>
-          <p>${order?.totalPrice}</p>
+        <div className="flex gap-4 items-start">
+          <label className="w-[6rem]">Total Price:</label>
+          <p className="w-[32rem]">${order?.totalPrice}</p>
         </div>
-        <div className="flex gap-4 items-center">
-          <label>Date:</label>
-          <p>{order?.createdAt.toDateString()}</p>
+        <div className="flex gap-4 items-start">
+          <label className="w-[6rem]">Date:</label>
+          <p className="w-[32rem]">{order?.createdAt.toDateString()}</p>
         </div>
       </div>
       <Link
-        className="text-blue-500 hover:text-blue-700"
+        className="border block w-[100%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
         href="/dashboard/orders"
       >
         ... Back to Orders

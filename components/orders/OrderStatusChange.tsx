@@ -47,7 +47,7 @@ const OrderStatusChange: FC<ProfileFormProps> = ({ id, status }) => {
   };
 
   return (
-    <div className="my-4">
+    <div className="my-4 text-center">
       <h2 className="text-xl">Change order status...</h2>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div>

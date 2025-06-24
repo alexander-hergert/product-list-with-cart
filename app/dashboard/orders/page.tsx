@@ -102,7 +102,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
             <div className="flex gap-4 items-start my-4">
               <label className="w-[6rem]">Products IDs:</label>
               <ul className="w-[18rem] list-disc">
-                {order.productIds.map((productId, index) => (
+                {order?.productIds.map((productId, index) => (
                   <li key={index}>{productId}</li>
                 ))}
               </ul>
@@ -110,7 +110,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
             <div className="flex gap-4 items-start">
               <label className="w-[6rem]">Price:</label>
               <ul className="w-[18rem] list-disc">
-                {order.productIdsPrice.map((productIdPrice, index) => (
+                {order?.productIdsPrice.map((productIdPrice, index) => (
                   <li key={index}>${productIdPrice}</li>
                 ))}
               </ul>
@@ -118,7 +118,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
             <div className="flex gap-4 items-start my-4">
               <label className="w-[6rem]">Quantity:</label>
               <ul className="w-[18rem] list-disc">
-                {order.productIdsQuantity.map((productIdQuantity, index) => (
+                {order?.productIdsQuantity.map((productIdQuantity, index) => (
                   <li key={index}>{productIdQuantity}</li>
                 ))}
               </ul>

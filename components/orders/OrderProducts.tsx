@@ -41,7 +41,7 @@ const OrderProducts: FC<OrderProductsProps> = async ({
             <div
               key={product.id}
               className="border rounded-xl flex items-center justify-between 
-              max-md:flex-col max-md:m-auto max-md:w-[327px] shadow-lg"
+              max-md:flex-col max-md:m-auto max-md:w-[327px] shadow-md hover:shadow-lg transition-shadow duration-200"
             >
               <Image
                 className="md:rounded-l-xl max-md:w-full max-md:rounded-t-xl"
@@ -50,7 +50,7 @@ const OrderProducts: FC<OrderProductsProps> = async ({
                 width={250}
                 height={250}
               />
-              <div className="mr-[20%] max-md:m-0 max-md:my-4">
+              <div className="m-auto max-md:m-0 max-md:my-4">
                 <h2 className="text-xl">{product.name}</h2>
                 {productIds && (
                   <p>
