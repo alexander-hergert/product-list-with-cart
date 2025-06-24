@@ -34,7 +34,7 @@ const category = [
   },
 ];
 
-export default function ProductsPage({}: {}) {
+export default function ProductsPage() {
   return (
     <>
       <Modal />
@@ -48,24 +48,24 @@ export default function ProductsPage({}: {}) {
               Welcome, please select your topic.
             </h1>
             {category.map((singleCathegory) => (
-              <Link
-                key={singleCathegory.name}
-                href={singleCathegory.src}
-                className="text-blue-500 hover:text-blue-700"
-              >
-                <div className="w-[250px] max-lg:w-[213px] max-md:w-[327px] overflow-hidden shadow-lg">
-                  <Image
-                    className="cursor-pointer rounded-lg w-full object-cover aspect-square"
-                    src={singleCathegory.image || "/path/to/fallback/image.jpg"} //optional fallback image
-                    width={200}
-                    height={200}
-                    alt={singleCathegory.name || "Fallback Image"}
-                  />
-                </div>
-                <h2 className="mt-2 text-center text-black font-bold">
+              <div>
+                <Link key={singleCathegory.name} href={singleCathegory.src}>
+                  <div className="bg-white group w-[250px] max-lg:w-[213px] max-md:w-[327px] overflow-hidden shadow-lg transition-transform duration-300 hover:shadow-xl hover:scale-105 rounded-lg cursor-pointer">
+                    <Image
+                      className="w-full object-cover aspect-square rounded-t-lg"
+                      src={
+                        singleCathegory.image || "/path/to/fallback/image.jpg"
+                      }
+                      width={200}
+                      height={200}
+                      alt={singleCathegory.name || "Fallback Image"}
+                    />
+                  </div>
+                </Link>
+                <h2 className="mt-4 text-center text-black font-bold">
                   {singleCathegory.name}
                 </h2>
-              </Link>
+              </div>
             ))}
           </div>
           <Cart />
