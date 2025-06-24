@@ -77,9 +77,25 @@ const Filter = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-xl w-[900px] m-auto p-3 bg-amber-900 text-white flex gap-4 h-[80px] 
-      max-lg:flex-col max-lg:h-[300px] max-lg:w-[688px] max-md:h-[450px] max-md:w-[327px] [&_input]:text-black [&_input]:rounded
-       [&_select]:text-black [&_select]:rounded"
+      className={`rounded-xl m-auto p-3 bg-amber-900 text-white flex gap-4 h-[80px]
+        max-lg:flex-col max-lg:h-[300px] max-lg:w-[688px] max-md:h-[450px] max-md:w-[327px]
+        [&_input]:text-black [&_input]:rounded [&_select]:text-black [&_select]:rounded
+        ${
+          page === "feedback"
+            ? "w-[500px] max-md:h-[250px] max-lg:h-[150px]"
+            : "w-[900px]"
+        }
+        ${
+          page === "customers" || page === "products"
+            ? "w-[500px] max-md:h-[300px] max-lg:h-[300px]"
+            : "w-[900px]"
+        }
+        ${
+          pageProducts === "products"
+            ? "w-[500px] max-md:h-[375px] max-lg:h-[250px]"
+            : "w-[900px]"
+        }
+        `}
     >
       {/* Show form fields for /dashboard/products page */}
       {page === "products" && (
@@ -152,8 +168,8 @@ const Filter = () => {
       {/** Show form fields for /dashboard/feedback */}
       {page === "feedback" && (
         <div
-          className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-2
-        max-md:grid-rows-4 max-md:grid-cols-1"
+          className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-1
+        max-md:grid-rows-2 max-md:grid-cols-1"
         >
           <div className="flex flex-col gap-2">
             <label htmlFor="minDate">Min. Date:</label>
