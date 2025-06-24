@@ -118,7 +118,7 @@ const CreateFeedback: FC<CreateFeedbackProps> = ({ productId, orderId }) => {
           Title:
         </label>
         <input
-          className="w-[300px] max-md:text-center"
+          className="w-[300px] max-md:text-center border rounded px-2"
           id="title"
           type="text"
           name="title"
@@ -148,7 +148,7 @@ const CreateFeedback: FC<CreateFeedbackProps> = ({ productId, orderId }) => {
           Comment:
         </label>
         <textarea
-          className="border rounded w-[300px] min-h-[200px]"
+          className="border rounded w-[300px] min-h-[200px] px-2"
           id="comment"
           name="comment"
           value={input.comment}

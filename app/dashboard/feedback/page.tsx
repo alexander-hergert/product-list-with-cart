@@ -74,7 +74,7 @@ const FeedbackPage = async ({
         {feedbacks.map((feedback) => (
           <div
             key={feedback.id}
-            className="border p-2 rounded-xl flex flex-col"
+            className="border p-2 rounded-xl flex flex-col shadow-md hover:shadow-lg transition-shadow duration-300"
           >
             <Link href={`/dashboard/feedback/${feedback.id}`}>
               <div className="flex gap-4 items-center">
