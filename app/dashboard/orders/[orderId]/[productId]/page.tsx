@@ -12,12 +12,30 @@ const CreateFeedback = dynamic(
     ssr: false,
   }
 );
-const fetchProduct = async (id: string) => {
+
+const checkOwnership = async (orderId: string) => {
   const { userId } = auth();
   //Check if user is admin
-  if (!(await checkIfAdmin(userId))) {
-    redirect("/dashboard");
+  const isAdmin = await checkIfAdmin(userId);
+  //Fetch data
+  try {
+    const order = await prisma.orders.findUnique({
+      where: {
+        id: orderId,
+        userId: (!isAdmin && userId) || undefined,
+      },
+    });
+    return !!order;
+  } catch (error) {
+    console.error("Error checking ownership:", error);
+    return false;
+  } finally {
+    await prisma.$disconnect();
   }
+};
+
+const fetchProduct = async (id: string) => {
+  const { userId } = auth();
   //Fetch data
   try {
     const product = await prisma.products.findUnique({
@@ -41,6 +59,10 @@ interface Params {
 
 const ProductFeedback = async ({ params }: { params: Params }) => {
   const { orderId, productId } = params;
+  const isOwner = await checkOwnership(orderId);
+  if (!isOwner) {
+    redirect("/dashboard/orders");
+  }
   const product = await fetchProduct(productId);
   return (
     <div>

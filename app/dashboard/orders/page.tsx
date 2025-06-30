@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
-import { OrderStatus } from "@/lib/types";
+import type { OrderStatus } from "@prisma/client";
 import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
 import Filter from "@/components/Filter";
 import Sort from "@/components/Sort";

@@ -91,12 +91,12 @@ const FeedbackPage = async ({
               </div>
             </Link>
             <Link
-              href={`/dashboard/feedback/${feedback.id}/edit_feedback`}
+              href={`/dashboard/feedback/${feedback?.id}/edit_feedback`}
               className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-full text-center"
             >
               Edit
             </Link>
-            <DeleteFeedback id={feedback.id} />
+            <DeleteFeedback id={feedback?.id} />
           </div>
         ))}
       </div>

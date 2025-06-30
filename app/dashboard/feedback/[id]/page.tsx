@@ -2,6 +2,9 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import { checkIfAdmin } from "@/lib/auth";
+import Image from "next/image";
+import DeleteFeedback from "@/components/feedback/DeleteFeedback";
+import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
 
@@ -46,14 +49,14 @@ const fetchUserName = async (id: string) => {
   }
 };
 
-const fetchProductName = async (id: string) => {
+const fetchProduct = async (id: string) => {
   try {
     const product = await prisma.products.findUnique({
       where: {
         id,
       },
     });
-    return product?.name;
+    return product;
   } catch (error) {
     console.error("Error fetching product:", error);
     return "";
@@ -62,11 +65,41 @@ const fetchProductName = async (id: string) => {
   }
 };
 
+//Check if userId owns the feedbackId or if user is admin
+const checkOwnership = async (feedbackId: string) => {
+  const { userId } = auth();
+  if (!userId) return false;
+
+  const isAdmin = await checkIfAdmin(userId);
+  if (isAdmin) return true;
+
+  try {
+    const feedback = await prisma.feedbacks.findUnique({
+      where: {
+        id: feedbackId,
+        userId,
+      },
+    });
+    return !!feedback;
+  } catch (error) {
+    console.error("Error checking ownership:", error);
+    return false;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
+  const isAdmin = await checkIfAdmin(auth().userId || "");
+  //redirect if user is not admin and does not own the feedback
+  const isOwner = await checkOwnership(params.id);
+  if (!isOwner && !isAdmin) {
+    redirect("/dashboard/feedback");
+  }
   const { id } = params;
   const feedback = await fetchFeedback(id);
   const userName = await fetchUserName(feedback?.userId || "");
-  const productName = await fetchProductName(feedback?.productId || "");
+  const product = await fetchProduct(feedback?.productId || "");
 
   return (
     <div>
@@ -82,18 +115,64 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
           </label>
           <p className="w-[300px] max-md:text-center">{userName}</p>
         </div>
-        <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+        <Link
+          href={
+            isAdmin
+              ? `/dashboard/products/${feedback?.productId}`
+              : typeof product === "object" &&
+                product !== null &&
+                "main_category" in product
+              ? `/products/${product?.main_category.toLocaleLowerCase()}/${
+                  feedback?.productId
+                }`
+              : ""
+          }
+          className="flex gap-4 items-center max-md:flex-col text-center my-4"
+        >
           <label className="text-xl w-[200px] max-md:text-center">
             Product Id:
           </label>
-          <p className="w-[300px] max-md:text-center">{feedback?.productId}</p>
-        </div>
+          <p className="text-blue-500 w-[300px] max-md:text-center">
+            {feedback?.productId}
+          </p>
+        </Link>
         <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
           <label className="text-xl w-[200px] max-md:text-center">
             Product Name:
           </label>
-          <p className="w-[300px] max-md:text-center">{productName}</p>
+          <p className="w-[300px] max-md:text-center">
+            {/* Type Guards */}
+            {typeof product === "object" &&
+              product !== null &&
+              "name" in product &&
+              product?.name}
+            {typeof product === "object" &&
+              product !== null &&
+              "main_category" in product &&
+              ` (${product?.main_category})`}
+          </p>
         </div>
+        <Image
+          className="rounded-xl w-[150px] h-[150px] object-cover my-4"
+          src={
+            typeof product === "object" &&
+            product !== null &&
+            "name" in product &&
+            product?.image
+              ? product.image
+              : "/placeholder.png"
+          }
+          alt={
+            typeof product === "object" &&
+            product !== null &&
+            "name" in product &&
+            product?.name
+              ? product.name
+              : "Product Image"
+          }
+          width={150}
+          height={150}
+        />
         <div className="flex gap-4 items-center max-md:flex-col text-center">
           <label className="text-xl w-[200px] max-md:text-center">
             Comment:
@@ -106,6 +185,13 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
             {feedback?.createdAt.toDateString()}
           </p>
         </div>
+        <Link
+          href={`/dashboard/feedback/${feedback?.id}/edit_feedback`}
+          className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-full text-center"
+        >
+          Edit
+        </Link>
+        <DeleteFeedback id={feedback?.id || ""} />
       </div>
       <Link
         className="text-blue-500 hover:text-blue-700 block m-auto text-center mt-4"
