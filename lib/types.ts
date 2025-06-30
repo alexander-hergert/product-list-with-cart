@@ -1,3 +1,5 @@
+import type { OrderStatus } from "@prisma/client";
+
 export type User = {
   id: string;
   role: string;
@@ -17,14 +19,6 @@ export type Product = {
   image: string;
   rating: number;
 };
-
-export enum OrderStatus {
-  Pending = "Pending",
-  Paid = "Paid",
-  Shipped = "Shipped",
-  Delivered = "Delivered",
-  Cancelled = "Cancelled",
-}
 
 export type Order = {
   id: string;
