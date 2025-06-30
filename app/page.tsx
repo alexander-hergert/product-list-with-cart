@@ -17,21 +17,21 @@ const SignUpHandler = dynamic(() => import("@/components/SignUpHandler"), {
 
 export default async function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center">
+    <main className="flex min-h-screen flex-col items-center justify-center">
       <section className="flex justify-between gap-12 max-lg:flex-col-reverse max-lg:gap-8 max-lg:items-center">
-        <aside className="flex flex-col gap-4 items-center">
-          <h1 className="pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl">
-            Product-List-With-Cart
+        <aside className="flex flex-col gap-4 items-center max-w-[600px] max-lg:text-center">
+          <h1 className="drop-shadow-lg pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl">
+            Your Daily Cravings, Delivered
           </h1>
           <h2 className="text-center text-lg font-medium text-gray-400">
-            A shop to order your favorite food. Click on the cart icon to add
-            items.
+            From indulgent cakes and refreshing juices to hearty breakfasts and
+            sweet treats — discover delicious food for every moment of your day.
           </h2>
           <Link
             href="/products"
-            className="block mt-4 text-center text-lg font-medium text-white bg-blue-500 w-[150px] rounded-lg p-4"
+            className="block mt-4 text-center text-lg font-medium text-white bg-blue-500 w-[200px] rounded-lg p-4"
           >
-            Get Started
+            Explore the Shop
           </Link>
         </aside>
         <Image
