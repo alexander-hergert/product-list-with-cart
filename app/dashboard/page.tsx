@@ -25,7 +25,7 @@ const DashboardPage = async () => {
             orderBy: {
               name: "asc",
             },
-            take: 3,
+            take: 7,
           })
         : [];
       const products = isAdmin
@@ -33,7 +33,7 @@ const DashboardPage = async () => {
             orderBy: {
               id: "asc",
             },
-            take: 3,
+            take: 7,
           })
         : [];
       const orders = isAdmin
@@ -41,7 +41,7 @@ const DashboardPage = async () => {
             orderBy: {
               createdAt: "desc",
             },
-            take: 3,
+            take: 4,
           })
         : await prisma.orders.findMany({
             where: {
@@ -50,14 +50,14 @@ const DashboardPage = async () => {
             orderBy: {
               createdAt: "desc",
             },
-            take: 3,
+            take: 4,
           });
       const feedbacks = isAdmin
         ? await prisma.feedbacks.findMany({
             orderBy: {
               createdAt: "desc",
             },
-            take: 3,
+            take: 7,
           })
         : await prisma.feedbacks.findMany({
             where: {
@@ -66,7 +66,7 @@ const DashboardPage = async () => {
             orderBy: {
               createdAt: "desc",
             },
-            take: 3,
+            take: 7,
           });
 
       return {
@@ -91,24 +91,19 @@ const DashboardPage = async () => {
   const { customers, products, orders, feedbacks } = data;
   return (
     <div className="grid place-content-center">
-      <h1 className="text-2xl my-4 font-bold">Dashboard</h1>
+      <h1 className="text-2xl my-4 font-bold text-center">Dashboard</h1>
       <div className="grid grid-cols-2 gap-4 lg:w-[800px] max-lg:min-w-[360px] max-lg:grid-cols-1">
         {isAdmin && <Customers customers={customers} />}
         {isAdmin && <Products products={products} />}
         <Orders orders={orders} />
         <Feedback feedbacks={feedbacks} />
       </div>
-      <div className="flex gap-4 mt-4">
-        <Link
-          className="text-blue-500 hover:text-blue-700"
-          href="/dashboard/profile"
-        >
-          To Profile
-        </Link>
-        <Link className="text-blue-500 hover:text-blue-700" href="/">
-          To Home
-        </Link>
-      </div>
+      <Link
+        className="text-blue-500 hover:text-blue-700 mt-4 text-center"
+        href="/"
+      >
+        To Home
+      </Link>
     </div>
   );
 };

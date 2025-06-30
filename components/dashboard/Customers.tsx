@@ -9,20 +9,16 @@ const Customers: React.FC<CustomersProps> = ({ customers }) => {
   return (
     <Link
       href="/dashboard/customers"
-      className="border rounded-xl p-4 shadow-md"
+      className="border rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300 h-80"
     >
       <h2 className="text-xl mb-4">Customers</h2>
       <ul>
         {customers.map((customer) => (
-          <li key={customer.id}>{customer.name}</li>
+          <li key={customer.id} className="mb-2">
+            {customer.name}
+          </li>
         ))}
       </ul>
-      <a
-        className="text-blue-500 hover:text-blue-700"
-        href="/dashboard/customers"
-      >
-        ... see more
-      </a>
     </Link>
   );
 };

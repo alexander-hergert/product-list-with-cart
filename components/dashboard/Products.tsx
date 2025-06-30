@@ -7,20 +7,19 @@ interface ProductsProps {
 
 const Products: React.FC<ProductsProps> = ({ products }) => {
   return (
-    <div className="border rounded-xl p-4 shadow-md">
+    <Link
+      href="/dashboard/products"
+      className="border rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300 h-80"
+    >
       <h2 className="text-xl mb-4">Products</h2>
       <ul>
         {products.map((product) => (
-          <li key={product.id}>{product.name}</li>
+          <li key={product.id} className="mb-2">
+            {product.name}
+          </li>
         ))}
       </ul>
-      <Link
-        className="text-blue-500 hover:text-blue-700"
-        href="/dashboard/products"
-      >
-        ... see more
-      </Link>
-    </div>
+    </Link>
   );
 };
 
