@@ -54,9 +54,16 @@ export default function RootLayout({
             <ThemeProvider theme={theme}>
               <Providers>
                 <SignedOut>
-                  <div className="flex justify-between items-center w-[140px] ml-2">
-                    <SignInButton />
-                    <Link href="/signup">To SignUp</Link>
+                  <div className="flex justify-between items-center w-[220px] ml-2 mt-2">
+                    <div className="block text-center font-medium text-white bg-blue-500 w-[100px] rounded-lg p-1">
+                      <SignInButton />
+                    </div>
+                    <Link
+                      className="block text-center font-medium text-white bg-blue-500 w-[100px] rounded-lg p-1"
+                      href="/signup"
+                    >
+                      To Sign up
+                    </Link>
                   </div>
                 </SignedOut>
                 <SignedIn>
