@@ -91,11 +91,14 @@ const ProductsPage = async ({
         Create New Product
       </Link>
       <div
-        className="grid grid-cols-2 place-items-center m-auto w-[1200px] mt-4 max-lg:grid-cols-2 max-md:grid-cols-1 
-      max-lg:w-[800px] max-md:w-[400px] gap-4"
+        className="grid grid-cols-3 place-items-center m-auto w-[1200px] mt-4 max-lg:grid-cols-2 max-md:grid-cols-1 
+      max-lg:w-[800px] max-md:w-[400px] gap-4 gap-y-8"
       >
         {products.map((product) => (
-          <div key={product.id} className="border rounded-xl flex flex-col">
+          <div
+            key={product.id}
+            className="border rounded-xl flex flex-col shadow-md hover:shadow-lg transition-shadow duration-300"
+          >
             <Link href={`/dashboard/products/${product.id}`}>
               <div>
                 <div className="w-[300px]">
