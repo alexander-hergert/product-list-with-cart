@@ -46,10 +46,28 @@ const fetchUserName = async (id: string) => {
   }
 };
 
+const fetchProductName = async (id: string) => {
+  try {
+    const product = await prisma.products.findUnique({
+      where: {
+        id,
+      },
+    });
+    return product?.name;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return "";
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
   const { id } = params;
   const feedback = await fetchFeedback(id);
   const userName = await fetchUserName(feedback?.userId || "");
+  const productName = await fetchProductName(feedback?.productId || "");
+
   return (
     <div>
       <h1 className="text-2xl mb-4 text-center">Feedback Details</h1>
@@ -63,6 +81,18 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
             Username:
           </label>
           <p className="w-[300px] max-md:text-center">{userName}</p>
+        </div>
+        <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+          <label className="text-xl w-[200px] max-md:text-center">
+            Product Id:
+          </label>
+          <p className="w-[300px] max-md:text-center">{feedback?.productId}</p>
+        </div>
+        <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
+          <label className="text-xl w-[200px] max-md:text-center">
+            Product Name:
+          </label>
+          <p className="w-[300px] max-md:text-center">{productName}</p>
         </div>
         <div className="flex gap-4 items-center max-md:flex-col text-center">
           <label className="text-xl w-[200px] max-md:text-center">
@@ -78,7 +108,7 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
         </div>
       </div>
       <Link
-        className="text-blue-500 hover:text-blue-700"
+        className="text-blue-500 hover:text-blue-700 block m-auto text-center mt-4"
         href="/dashboard/feedback"
       >
         ... Back to Feedback

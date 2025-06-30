@@ -100,7 +100,10 @@ const FeedbackPage = async ({
           </div>
         ))}
       </div>
-      <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
+      <Link
+        className="text-blue-500 hover:text-blue-700 block m-auto text-center mt-4"
+        href="/dashboard"
+      >
         To Dashboard
       </Link>
     </div>
