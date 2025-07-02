@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import Rating from "@mui/material/Rating";
+import Feedbacks from "@/components/feedback/Feedbacks";
 
 const prisma = new PrismaClient();
 
@@ -88,7 +89,7 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
             <p>{product?.description}</p>
           </div>
           <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
-            <label>Price:</label>
+            <label htmlFor="price">Price:</label>
             <p>${product?.price}</p>
           </div>
           <div className="flex gap-2">
@@ -96,16 +97,10 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
             <Rating name="rating" value={product?.rating} readOnly />
           </div>
         </div>
-        <div>
-          <h3>Feedback for product</h3>
-          {feedbacks?.map((singleFeedback, i) => (
-            <div key={singleFeedback.id} className="border">
-              <p>{singleFeedback.title}</p>
-              <p>{singleFeedback.comment}</p>
-              <p>By: {users?.[i]?.email}</p>
-            </div>
-          ))}
-        </div>
+        <Feedbacks
+          feedbacks={feedbacks ?? []}
+          users={users.filter((u): u is NonNullable<typeof u> => u !== null)}
+        />
         <Link
           className="text-blue-500 hover:text-blue-700"
           href={`/products/${product?.main_category.toLocaleLowerCase()}`}
