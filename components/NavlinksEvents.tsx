@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { set } from "zod";
 
 type NavlinksEventsProps = {
   isAdmin: boolean | undefined;

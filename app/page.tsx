@@ -20,7 +20,7 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center">
       <section className="flex justify-between gap-12 max-lg:flex-col-reverse max-lg:gap-8 max-lg:items-center">
         <aside className="flex flex-col gap-4 items-center max-w-[600px] max-lg:text-center">
-          <h1 className="drop-shadow-lg pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl">
+          <h1 className="text-black dark:text-white drop-shadow-lg pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl">
             Your Daily Cravings, Delivered
           </h1>
           <h2 className="text-center text-lg font-medium text-gray-400">

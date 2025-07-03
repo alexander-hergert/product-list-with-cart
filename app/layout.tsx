@@ -21,11 +21,11 @@ import {
 import Providers from "./providers";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import Navlinks from "@/components/Navlinks";
+import Navbar from "@/components/Navbar";
 
 export const metadata = {
   metadataBase: new URL("https://postgres-prisma.vercel.app"),
-  title: "Product-List-With-Cart",
+  title: "Daily Cravings",
   description:
     "A simple Next.js app with Vercel Postgres as the database and Prisma as the ORM",
 };
@@ -70,7 +70,7 @@ export default function RootLayout({
                   <div className="flex gap-4 items-center">
                     <SignUpHandler />
                     <UserButton />
-                    <Navlinks />
+                    <Navbar />
                   </div>
                 </SignedIn>
                 {children}

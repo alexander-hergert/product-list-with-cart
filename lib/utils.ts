@@ -24,3 +24,16 @@ export const truncateToUTCDateEnd = (
   d.setUTCHours(23, 59, 59, 999);
   return d;
 };
+
+export const setThemeLocalStorage = (theme: string) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("theme", theme);
+  }
+};
+
+export const getThemeLocalStorage = (): string | null => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("theme");
+  }
+  return null;
+};
