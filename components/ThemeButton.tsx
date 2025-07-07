@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { getThemeLocalStorage } from "@/lib/utils";
 import { setThemeLocalStorage } from "@/lib/utils";
+import { MdDarkMode } from "react-icons/md";
+import { MdOutlineDarkMode } from "react-icons/md";
 
 const ThemeButton = () => {
   const [theme, setTheme] = useState("light");
@@ -28,8 +30,13 @@ const ThemeButton = () => {
   }, []);
 
   return (
-    <button onClick={handleThemeToggle} className="btn">
-      Switch to {theme === "light" ? "Dark" : "Light"} Mode
+    <button
+      onClick={handleThemeToggle}
+      className="btn border-2 border-gray-300 dark:border-gray-700 p-2 rounded-lg"
+    >
+      <p aria-label="Toggle theme">
+        {theme === "light" ? <MdDarkMode /> : <MdOutlineDarkMode />}
+      </p>
     </button>
   );
 };

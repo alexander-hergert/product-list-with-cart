@@ -67,10 +67,10 @@ const SingleProduct: React.FC<SingleProductProps> = ({
         </div>
       </Link>
       {!cart[id]?.quantity && (
-        <div className="flex justify-center relative bottom-[8rem] z-10">
+        <div className="flex justify-center relative bottom-[8rem] z-10 text-black">
           <button
             onClick={handleUpClick}
-            className="flex justify-between items-center border border-red-800 rounded-[20px] px-6 p-4 w-[160px] h-[44px] bg-white"
+            className="flex justify-between items-center border border-red-800 rounded-[20px] px-6 p-4 w-[160px] h-[44px] bg-white dark:bg-slate-200"
           >
             <Image
               src="/images/icon-add-to-cart.svg"

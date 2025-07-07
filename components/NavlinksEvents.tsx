@@ -66,9 +66,9 @@ const NavlinksEvents = ({ isAdmin }: NavlinksEventsProps) => {
       {isHovered && (
         <div
           onMouseLeave={handleLeaveBox}
-          className="absolute top-6 left-20 bg-white shadow-lg p-4 rounded-md"
+          className="absolute top-6 left-20 bg-white dark:dark:bg-slate-200 shadow-lg p-4 rounded-md"
         >
-          <h2 className="text-lg font-bold">Products</h2>
+          <h2 className="text-lg font-bold text-black">Products</h2>
           <ul>
             {productLinks.map(({ href, label }) => (
               <li key={href} className="text-blue-500 hover:text-blue-700">

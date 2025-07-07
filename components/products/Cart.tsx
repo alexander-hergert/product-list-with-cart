@@ -5,7 +5,6 @@ import { CartContext } from "@/lib/cartContext";
 import { ModalContext } from "@/lib/modalContext";
 import { OrderIdContext } from "@/lib/orderIdContext";
 import Image from "next/image";
-import { set } from "zod";
 
 const Cart = () => {
   const cartContext = useContext(CartContext);
@@ -18,6 +17,10 @@ const Cart = () => {
 
   if (!modalContext) {
     return <div>Error: ModalContext is not available.</div>;
+  }
+
+  if (!orderIdContext) {
+    return <div>Error: OrderIdContext is not available.</div>;
   }
 
   const { cart, removeProduct } = cartContext;
@@ -71,7 +74,9 @@ const Cart = () => {
             width={200}
             height={200}
           />
-          <p className="text-amber-900">You added items will appear here</p>
+          <p className="text-amber-900 dark:text-white">
+            You added items will appear here
+          </p>
         </div>
       )}
       {Object.keys(cart).map(
@@ -115,8 +120,8 @@ const Cart = () => {
               width={20}
               height={20}
             />
-            <p>
-              This is a <span className="font-bold">carbon-neutral</span>{" "}
+            <p className="text-black">
+              This is a <span className="font-bold ">carbon-neutral</span>{" "}
               delivery
             </p>
           </div>

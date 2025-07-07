@@ -77,7 +77,7 @@ const Filter = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`rounded-xl m-auto p-3 bg-amber-900 text-white flex gap-4 h-[80px]
+      className={`rounded-xl m-auto p-3 bg-amber-900 dark:bg-amber-950 text-white flex gap-4 h-[80px]
         max-lg:flex-col max-lg:h-[300px] max-lg:w-[688px] max-md:h-[450px] max-md:w-[327px]
         [&_input]:text-black [&_input]:rounded [&_select]:text-black [&_select]:rounded
         ${
@@ -206,7 +206,7 @@ const Filter = () => {
         </div>
       )}
       <button
-        className="p-4 bg-orange-700 text-white rounded-[25px] w-[100px] h-[53px] m-auto"
+        className="p-4 bg-orange-700 dark:bg-orange-800 text-white rounded-[25px] w-[100px] h-[53px] m-auto"
         type="submit"
       >
         Filter

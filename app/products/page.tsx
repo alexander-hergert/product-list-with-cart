@@ -62,7 +62,7 @@ export default function ProductsPage() {
                     />
                   </div>
                 </Link>
-                <h2 className="mt-4 text-center text-black font-bold">
+                <h2 className="mt-4 text-center font-bold">
                   {singleCathegory.name}
                 </h2>
               </div>

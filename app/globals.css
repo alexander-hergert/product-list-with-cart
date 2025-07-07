@@ -11,3 +11,10 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+input,
+select,
+textarea {
+  padding-left: 4px;
+  color: black;
+}
