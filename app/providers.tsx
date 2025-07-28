@@ -10,6 +10,7 @@ import { ReactNode } from "react";
 import { CartProvider } from "../lib/cartContext";
 import { ModalProvider } from "@/lib/modalContext";
 import { OrderIdProvider } from "@/lib/orderIdContext";
+import { MenuProvider } from "@/lib/menuContext";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -43,11 +44,13 @@ export default function Providers({ children }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <OrderIdProvider>
-          <ModalProvider>{children}</ModalProvider>
-        </OrderIdProvider>
-      </CartProvider>
+      <MenuProvider>
+        <CartProvider>
+          <OrderIdProvider>
+            <ModalProvider>{children}</ModalProvider>
+          </OrderIdProvider>
+        </CartProvider>
+      </MenuProvider>
     </QueryClientProvider>
   );
 }

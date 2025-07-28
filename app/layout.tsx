@@ -16,12 +16,12 @@ import {
   SignInButton,
   SignedIn,
   SignedOut,
-  UserButton,
 } from "@clerk/nextjs";
 import Providers from "./providers";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
+import MobileNavbar from "@/components/MobileNavbar";
 
 export const metadata = {
   metadataBase: new URL("https://postgres-prisma.vercel.app"),
@@ -67,10 +67,10 @@ export default function RootLayout({
                   </div>
                 </SignedOut>
                 <SignedIn>
-                  <div className="flex gap-4 items-center">
+                  <div className="flex gap-4 items-center m-2">
                     <SignUpHandler />
-                    <UserButton />
                     <Navbar />
+                    <MobileNavbar />
                   </div>
                 </SignedIn>
                 {children}
