@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import Rating from "@mui/material/Rating";
 import Feedbacks from "@/components/feedback/Feedbacks";
+import dynamic from "next/dynamic";
+import AddToCart from "@/components/products/AddToCart";
 
 const prisma = new PrismaClient();
 
@@ -61,6 +63,22 @@ const fetchUsers = async (id: string) => {
 const ProductsDetailsPage = async ({ params }: { params: Params }) => {
   const { id } = params;
   const product = await fetchProduct(id);
+
+  if (!product) {
+    return (
+      <div>
+        <h1 className="text-2xl mb-4 text-center">Product Not Found</h1>
+        <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/3 m-auto max-md:w-[80%]">
+          <Link className="text-blue-500 hover:text-blue-700" href="/products">
+            ... Back to Products
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const { image, name, price } = product;
+
   const feedbacks = await fetchFeedbacks(id);
   const users = feedbacks
     ? await Promise.all(
@@ -75,26 +93,34 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
         <div>
           <Image
             className="rounded-xl m-auto"
-            src={product ? product.image : ""}
-            alt={product ? product.name : ""}
+            src={product.image}
+            alt={product.name}
             width={300}
             height={300}
           />
           <div className="flex gap-4 font-bold items-center max-md:flex-col text-center my-4">
             <label>Name:</label>
-            <h2>{product?.name}</h2>
+            <h2>{product.name}</h2>
           </div>
           <div className="flex gap-4 max-md:flex-col text-center my-4">
             <label>Description:</label>
-            <p>{product?.description}</p>
+            <p>{product.description}</p>
           </div>
           <div className="flex gap-4 items-center max-md:flex-col text-center my-4">
             <label htmlFor="price">Price:</label>
-            <p>${product?.price}</p>
+            <p>${product.price}</p>
           </div>
           <div className="flex gap-2">
             <label htmlFor="rating">Rating</label>
-            <Rating name="rating" value={product?.rating} readOnly />
+            <Rating name="rating" value={product.rating} readOnly />
+          </div>
+          <div>
+            <AddToCart
+              id={product.id}
+              name={product.name}
+              image={product.image}
+              price={product.price}
+            />
           </div>
         </div>
         <Feedbacks
@@ -103,7 +129,7 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
         />
         <Link
           className="text-blue-500 hover:text-blue-700"
-          href={`/products/${product?.main_category.toLocaleLowerCase()}`}
+          href={`/products/${product.main_category.toLocaleLowerCase()}`}
         >
           ... Back to Products
         </Link>
