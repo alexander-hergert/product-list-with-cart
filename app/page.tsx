@@ -1,14 +1,7 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import Table from "@/components/table";
-import TablePlaceholder from "@/components/table-placeholder";
 import dynamic from "next/dynamic";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 import Image from "next/image";
+import AnimatedImageContainer from "@/components/AnimatedImageContainer";
 
 //moved to layout for now
 const SignUpHandler = dynamic(() => import("@/components/SignUpHandler"), {
@@ -34,17 +27,8 @@ export default async function Home() {
             Explore the Shop
           </Link>
         </aside>
-        <Image
-          className="rounded-lg"
-          src="/images/image-cake-mobile.jpg"
-          width={500}
-          height={500}
-          alt="food"
-        />
+        <AnimatedImageContainer />
       </section>
-      {/* <Suspense fallback={<TablePlaceholder />}>
-        <Table />
-      </Suspense> */}
     </main>
   );
 }
