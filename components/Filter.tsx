@@ -50,11 +50,14 @@ const Filter = () => {
       query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
     } else if (page === "feedback") {
       // Access form values for /dashboard/feedback page
+      const username = (
+        target.elements.namedItem("username") as HTMLInputElement
+      ).value;
       const minDate = (target.elements.namedItem("minDate") as HTMLInputElement)
         .value;
       const maxDate = (target.elements.namedItem("maxDate") as HTMLInputElement)
         .value;
-      query = `?minDate=${minDate}&maxDate=${maxDate}`;
+      query = `?username=${username}&minDate=${minDate}&maxDate=${maxDate}`;
     } else if (pageProducts === "products") {
       // Access form values for /products page
       const productName = (
@@ -165,12 +168,15 @@ const Filter = () => {
           </div>
         </div>
       )}
-      {/** Show form fields for /dashboard/feedback */}
       {page === "feedback" && (
         <div
           className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-1
-        max-md:grid-rows-2 max-md:grid-cols-1"
+          max-md:grid-rows-2 max-md:grid-cols-1"
         >
+          <div className="flex flex-col gap-2">
+            <label htmlFor="username">Username:</label>
+            <input id="username" type="text" name="username" />
+          </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="minDate">Min. Date:</label>
             <input id="minDate" type="date" name="minDate" />

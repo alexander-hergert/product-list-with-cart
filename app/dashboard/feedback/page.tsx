@@ -10,6 +10,7 @@ import DeleteFeedback from "@/components/feedback/DeleteFeedback";
 const prisma = new PrismaClient();
 
 const fetchFeedbacks = async (
+  username: string | undefined,
   minDate: string | undefined,
   maxDate: string | undefined,
   order: string | undefined
@@ -20,15 +21,29 @@ const fetchFeedbacks = async (
 
   //Fetch data
   try {
+    //Fetch queried user
+    const queriedUser = await prisma.users.findMany({
+      where: {
+        name: {
+          contains: username,
+          mode: "insensitive",
+        },
+      },
+    });
     const feedbacks = await prisma.feedbacks.findMany({
       where: {
-        userId: (!isAdmin && userId) || undefined,
+        //Map the userIds only from queriedUser
+        userId:
+          (isAdmin ? { in: queriedUser.map((user) => user.id) } : userId) ||
+          undefined,
         createdAt: {
           ...(minDate && { gte: truncateToUTCDateStart(minDate) }),
           ...(maxDate && { lte: truncateToUTCDateEnd(maxDate) }),
         },
       },
       orderBy: {
+        ...((order === "usernameAsc" && { user: { name: "asc" } }) ||
+          (order === "usernameDesc" && { user: { name: "desc" } })),
         ...((order === "dateAsc" && { createdAt: "asc" }) ||
           (order === "dateDesc" && { createdAt: "desc" })),
       },
@@ -43,6 +58,7 @@ const fetchFeedbacks = async (
 };
 
 type SearchParams = {
+  username?: string;
   minDate?: string;
   maxDate?: string;
   order?: string;
@@ -53,8 +69,8 @@ const FeedbackPage = async ({
 }: {
   searchParams: SearchParams;
 }) => {
-  const { minDate, maxDate, order } = searchParams;
-  const feedbacks = await fetchFeedbacks(minDate, maxDate, order);
+  const { username, minDate, maxDate, order } = searchParams;
+  const feedbacks = await fetchFeedbacks(username, minDate, maxDate, order);
   return (
     <div>
       <div className="m-auto max-lg:flex-col max-md:w-[327px]">

@@ -31,10 +31,11 @@ const Sort = () => {
       const order = target.value;
       query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}&order=${order}`;
     } else if (page === "feedback") {
+      const username = searchParams.get("username") || "";
       const minDate = searchParams.get("minDate") || "";
       const maxDate = searchParams.get("maxDate") || "";
       const order = target.value;
-      query = `?minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
+      query = `?username=${username}&minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
     } else if (pageProducts === "products") {
       const productname = searchParams.get("productname") || "";
       const productCategory = searchParams.get("productCategory") || "";
@@ -84,6 +85,8 @@ const Sort = () => {
         )}
         {page === "feedback" && (
           <>
+            <option value="usernameAsc">Username ascending</option>
+            <option value="usernameDesc">Username descending</option>
             <option value="dateAsc">Date ascending</option>
             <option value="dateDesc">Date descending</option>
           </>
