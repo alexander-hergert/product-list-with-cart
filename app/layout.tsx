@@ -67,7 +67,7 @@ export default function RootLayout({
                   </div>
                 </SignedOut>
                 <SignedIn>
-                  <div className="flex gap-4 items-center m-2">
+                  <div className="flex gap-4 items-center">
                     <SignUpHandler />
                     <Navbar />
                     <MobileNavbar />

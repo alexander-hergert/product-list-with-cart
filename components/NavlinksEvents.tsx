@@ -54,7 +54,7 @@ const NavlinksEvents = ({ isAdmin }: NavlinksEventsProps) => {
             <Link
               onMouseEnter={handleMousehover}
               onMouseLeave={handleMouseleave}
-              className="text-blue-500 hover:text-blue-700"
+              className="hover:underline hover:decoration-white"
               key={`${href}${label}`}
               href={href}
             >

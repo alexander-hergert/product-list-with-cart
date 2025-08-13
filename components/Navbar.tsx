@@ -15,7 +15,7 @@ const Navbar = async () => {
   const isAdmin: boolean = await checkIfAdmin(userId);
 
   return (
-    <nav className="flex justify-between items-center w-full">
+    <nav className="p-2 flex justify-between items-center w-full bg-gradient-to-r from-red-700 dark:from-red-800 to-red-950 text-white">
       <div className="flex items-center gap-4">
         <div className="md:hidden">
           <MenuButton />

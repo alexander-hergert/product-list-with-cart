@@ -77,7 +77,7 @@ const Filter = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`rounded-xl m-auto p-3 bg-amber-900 dark:bg-amber-950 text-white flex gap-4 h-[80px]
+      className={`rounded-xl m-auto p-3 bg-gradient-to-r from-red-700 dark:from-red-800 to-red-950 dark:bg-amber-950 text-white flex gap-4 h-[80px]
         max-lg:flex-col max-lg:h-[300px] max-lg:w-[688px] max-md:h-[450px] max-md:w-[327px]
         [&_input]:text-black [&_input]:rounded [&_select]:text-black [&_select]:rounded
         ${
