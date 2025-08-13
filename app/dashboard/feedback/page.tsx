@@ -69,6 +69,8 @@ const FeedbackPage = async ({
 }: {
   searchParams: SearchParams;
 }) => {
+  const { userId } = auth();
+  const isAdmin = await checkIfAdmin(userId);
   const { username, minDate, maxDate, order } = searchParams;
   const feedbacks = await fetchFeedbacks(username, minDate, maxDate, order);
   return (
@@ -76,11 +78,11 @@ const FeedbackPage = async ({
       <div className="m-auto max-lg:flex-col max-md:w-[327px]">
         <div>
           <h2 className="text-2xl text-center">Filter</h2>
-          <Filter />
+          <Filter isAdmin={isAdmin} />
         </div>
         <div>
           <h2 className="text-2xl text-center">Sort</h2>
-          <Sort />
+          <Sort isAdmin={isAdmin} />
         </div>
       </div>
       <div

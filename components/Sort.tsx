@@ -1,6 +1,11 @@
 "use client";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-const Sort = () => {
+
+interface SortProps {
+  isAdmin: boolean;
+}
+
+const Sort = ({ isAdmin }: SortProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -35,7 +40,11 @@ const Sort = () => {
       const minDate = searchParams.get("minDate") || "";
       const maxDate = searchParams.get("maxDate") || "";
       const order = target.value;
-      query = `?username=${username}&minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
+      if (isAdmin) {
+        query = `?username=${username}&minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
+      } else {
+        query = `?minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
+      }
     } else if (pageProducts === "products") {
       const productname = searchParams.get("productname") || "";
       const productCategory = searchParams.get("productCategory") || "";
@@ -85,8 +94,12 @@ const Sort = () => {
         )}
         {page === "feedback" && (
           <>
-            <option value="usernameAsc">Username ascending</option>
-            <option value="usernameDesc">Username descending</option>
+            {isAdmin && (
+              <>
+                <option value="usernameAsc">Username ascending</option>
+                <option value="usernameDesc">Username descending</option>
+              </>
+            )}
             <option value="dateAsc">Date ascending</option>
             <option value="dateDesc">Date descending</option>
           </>

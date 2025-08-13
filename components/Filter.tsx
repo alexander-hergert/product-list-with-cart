@@ -1,7 +1,11 @@
 "use client";
 import { useRouter, usePathname } from "next/navigation";
 
-const Filter = () => {
+interface FilterProps {
+  isAdmin: boolean;
+}
+
+const Filter = ({ isAdmin }: FilterProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const page = pathname.split("/")[2];
@@ -57,7 +61,9 @@ const Filter = () => {
         .value;
       const maxDate = (target.elements.namedItem("maxDate") as HTMLInputElement)
         .value;
-      query = `?username=${username}&minDate=${minDate}&maxDate=${maxDate}`;
+      isAdmin
+        ? (query = `?username=${username}&minDate=${minDate}&maxDate=${maxDate}`)
+        : (query = `?minDate=${minDate}&maxDate=${maxDate}`);
     } else if (pageProducts === "products") {
       // Access form values for /products page
       const productName = (
@@ -173,10 +179,12 @@ const Filter = () => {
           className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-1
           max-md:grid-rows-2 max-md:grid-cols-1"
         >
-          <div className="flex flex-col gap-2">
-            <label htmlFor="username">Username:</label>
-            <input id="username" type="text" name="username" />
-          </div>
+          {isAdmin && (
+            <div className="flex flex-col gap-2">
+              <label htmlFor="username">Username:</label>
+              <input id="username" type="text" name="username" />
+            </div>
+          )}
           <div className="flex flex-col gap-2">
             <label htmlFor="minDate">Min. Date:</label>
             <input id="minDate" type="date" name="minDate" />
