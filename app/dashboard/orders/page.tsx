@@ -10,6 +10,7 @@ import { checkIfAdmin } from "@/lib/auth";
 const prisma = new PrismaClient();
 
 const fetchOrders = async (
+  id: string | undefined,
   username: string | undefined,
   status: OrderStatus | undefined,
   minDate: string | undefined,
@@ -47,6 +48,7 @@ const fetchOrders = async (
           ...(minDate && { gte: truncateToUTCDateStart(minDate) }),
           ...(maxDate && { lte: truncateToUTCDateEnd(maxDate) }),
         },
+        ...(id && { id: { contains: id, mode: "insensitive" } }),
       },
       orderBy: {
         ...((order === "usernameAsc" && { user: { name: "asc" } }) ||
@@ -67,6 +69,7 @@ const fetchOrders = async (
 };
 
 type SearchParams = {
+  id?: string;
   username?: string;
   status?: OrderStatus;
   minDate?: string;
@@ -80,6 +83,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   const { userId } = auth();
   const isAdmin = await checkIfAdmin(userId);
   const {
+    id,
     username,
     status,
     minDate,
@@ -89,6 +93,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
     order,
   } = searchParams;
   const orders = await fetchOrders(
+    id,
     username,
     status,
     minDate,

@@ -40,6 +40,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
       query = `?username=${username}&email=${email}&address=${address}`;
     } else if (page === "orders") {
       // Access form values for /dashboard/orders page
+      const id = (target.elements.namedItem("id") as HTMLInputElement).value;
       const username = (
         target.elements.namedItem("username") as HTMLInputElement
       ).value;
@@ -56,9 +57,9 @@ const Filter = ({ isAdmin }: FilterProps) => {
         target.elements.namedItem("maxTotalPrice") as HTMLInputElement
       ).value;
       if (isAdmin) {
-        query = `?username=${username}&status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
+        query = `?username=${username}&id=${id}&status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
       } else {
-        query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
+        query = `?id=${id}&status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
       }
     } else if (page === "feedback") {
       // Access form values for /dashboard/feedback page
@@ -109,7 +110,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
         }
         ${
           page === "orders"
-            ? "w-[1200px] max-md:h-[575px] max-lg:h-[300px]"
+            ? "w-[1300px] max-md:h-[650px] max-lg:h-[400px]"
             : ""
         }
         ${
@@ -169,6 +170,10 @@ const Filter = ({ isAdmin }: FilterProps) => {
               <option value="Delivered">Delivered</option>
               <option value="Cancelled">Cancelled</option>
             </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="id">Order ID:</label>
+            <input id="id" type="text" name="id" />
           </div>
           {isAdmin && (
             <div className="flex flex-col gap-2">
