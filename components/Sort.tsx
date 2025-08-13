@@ -28,13 +28,18 @@ const Sort = ({ isAdmin }: SortProps) => {
       const order = target.value;
       query = `?username=${username}&email=${email}&address=${address}&order=${order}`;
     } else if (page === "orders") {
+      const username = searchParams.get("username") || "";
       const status = searchParams.get("status") || "";
       const minDate = searchParams.get("minDate") || "";
       const maxDate = searchParams.get("maxDate") || "";
       const minTotalPrice = searchParams.get("minTotalPrice") || "";
       const maxTotalPrice = searchParams.get("maxTotalPrice") || "";
       const order = target.value;
-      query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}&order=${order}`;
+      if (isAdmin) {
+        query = `?username=${username}&status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}&order=${order}`;
+      } else {
+        query = `?minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}&order=${order}`;
+      }
     } else if (page === "feedback") {
       const username = searchParams.get("username") || "";
       const minDate = searchParams.get("minDate") || "";
@@ -86,6 +91,12 @@ const Sort = ({ isAdmin }: SortProps) => {
         )}
         {page === "orders" && (
           <>
+            {isAdmin && (
+              <>
+                <option value="usernameAsc">Username ascending</option>
+                <option value="usernameDesc">Username descending</option>
+              </>
+            )}
             <option value="dateAsc">Date ascending</option>
             <option value="dateDesc">Date descending</option>
             <option value="totalPriceAsc">Total price ascending</option>

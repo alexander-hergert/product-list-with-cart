@@ -17,4 +17,5 @@ select,
 textarea {
   padding-left: 4px;
   color: black;
+  height: 2rem;
 }

@@ -6,6 +6,7 @@ interface FilterProps {
 }
 
 const Filter = ({ isAdmin }: FilterProps) => {
+  const today = new Date().toISOString().split("T")[0];
   const router = useRouter();
   const pathname = usePathname();
   const page = pathname.split("/")[2];
@@ -39,6 +40,9 @@ const Filter = ({ isAdmin }: FilterProps) => {
       query = `?username=${username}&email=${email}&address=${address}`;
     } else if (page === "orders") {
       // Access form values for /dashboard/orders page
+      const username = (
+        target.elements.namedItem("username") as HTMLInputElement
+      ).value;
       const status = (target.elements.namedItem("status") as HTMLSelectElement)
         .value;
       const minDate = (target.elements.namedItem("minDate") as HTMLInputElement)
@@ -51,7 +55,11 @@ const Filter = ({ isAdmin }: FilterProps) => {
       const maxTotalPrice = (
         target.elements.namedItem("maxTotalPrice") as HTMLInputElement
       ).value;
-      query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
+      if (isAdmin) {
+        query = `?username=${username}&status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
+      } else {
+        query = `?status=${status}&minDate=${minDate}&maxDate=${maxDate}&minTotalPrice=${minTotalPrice}&maxTotalPrice=${maxTotalPrice}`;
+      }
     } else if (page === "feedback") {
       // Access form values for /dashboard/feedback page
       const username = (
@@ -87,23 +95,28 @@ const Filter = ({ isAdmin }: FilterProps) => {
     <form
       onSubmit={handleSubmit}
       className={`rounded-xl m-auto p-3 bg-gradient-to-r from-red-700 dark:from-red-800 to-red-950 dark:bg-amber-950 text-white flex gap-4 h-[80px]
-        max-lg:flex-col max-lg:h-[300px] max-lg:w-[688px] max-md:h-[450px] max-md:w-[327px]
+        max-lg:flex-col max-lg:w-[688px] max-md:w-[327px]
         [&_input]:text-black [&_input]:rounded [&_select]:text-black [&_select]:rounded
         ${
           page === "feedback"
-            ? "w-[500px] max-md:h-[250px] max-lg:h-[150px]"
-            : "w-[900px]"
+            ? "w-[600px] max-md:h-[325px] max-lg:h-[150px]"
+            : ""
         }
         ${
           page === "customers" || page === "products"
-            ? "w-[500px] max-md:h-[300px] max-lg:h-[300px]"
-            : "w-[900px]"
+            ? "w-[700px] max-md:h-[325px] max-lg:h-[300px]"
+            : ""
+        }
+        ${
+          page === "orders"
+            ? "w-[1200px] max-md:h-[575px] max-lg:h-[300px]"
+            : ""
         }
         ${
           pageProducts === "products"
-            ? "w-[500px] max-md:h-[375px] max-lg:h-[250px]"
-            : "w-[900px]"
-        }
+            ? "w-[900px] max-md:h-[400px] max-lg:h-[250px]"
+            : ""
+        }      
         `}
     >
       {/* Show form fields for /dashboard/products page */}
@@ -149,6 +162,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
           <div className="flex flex-col gap-2">
             <label htmlFor="status">Status:</label>
             <select id="status" name="status">
+              <option value="">All</option>
               <option value="Pending">Pending</option>
               <option value="Paid">Paid</option>
               <option value="Shipped">Shipped</option>
@@ -156,13 +170,25 @@ const Filter = ({ isAdmin }: FilterProps) => {
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
+          {isAdmin && (
+            <div className="flex flex-col gap-2">
+              <label htmlFor="username">Username:</label>
+              <input id="username" type="text" name="username" />
+            </div>
+          )}
           <div className="flex flex-col gap-2">
             <label htmlFor="minDate">Min. Date:</label>
             <input id="minDate" type="date" name="minDate" />
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="maxDate">Max. Date:</label>
-            <input id="maxDate" type="date" name="maxDate" />
+            <input
+              id="maxDate"
+              type="date"
+              name="maxDate"
+              max={today}
+              value={today}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="minTotalPrice">Min. Total Price:</label>
@@ -191,7 +217,13 @@ const Filter = ({ isAdmin }: FilterProps) => {
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="maxDate">Max. Date:</label>
-            <input id="maxDate" type="date" name="maxDate" />
+            <input
+              id="maxDate"
+              type="date"
+              name="maxDate"
+              max={today}
+              value={today}
+            />
           </div>
         </div>
       )}

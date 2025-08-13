@@ -10,6 +10,7 @@ import { checkIfAdmin } from "@/lib/auth";
 const prisma = new PrismaClient();
 
 const fetchOrders = async (
+  username: string | undefined,
   status: OrderStatus | undefined,
   minDate: string | undefined,
   maxDate: string | undefined,
@@ -23,9 +24,20 @@ const fetchOrders = async (
 
   //Fetch data
   try {
+    //Fetch queried user
+    const queriedUser = await prisma.users.findMany({
+      where: {
+        name: {
+          contains: username,
+          mode: "insensitive",
+        },
+      },
+    });
     const orders = await prisma.orders.findMany({
       where: {
-        userId: (!isAdmin && userId) || undefined,
+        userId:
+          (isAdmin ? { in: queriedUser.map((user) => user.id) } : userId) ||
+          undefined,
         ...(status && { status }),
         totalPrice: {
           ...(minTotalPrice && { gte: Number(minTotalPrice) }),
@@ -37,6 +49,8 @@ const fetchOrders = async (
         },
       },
       orderBy: {
+        ...((order === "usernameAsc" && { user: { name: "asc" } }) ||
+          (order === "usernameDesc" && { user: { name: "desc" } })),
         ...((order === "dateAsc" && { createdAt: "asc" }) ||
           (order === "dateDesc" && { createdAt: "desc" })),
         ...((order === "totalPriceAsc" && { totalPrice: "asc" }) ||
@@ -53,6 +67,7 @@ const fetchOrders = async (
 };
 
 type SearchParams = {
+  username?: string;
   status?: OrderStatus;
   minDate?: string;
   maxDate?: string;
@@ -62,9 +77,19 @@ type SearchParams = {
 };
 
 const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
-  const { status, minDate, maxDate, minTotalPrice, maxTotalPrice, order } =
-    searchParams;
+  const { userId } = auth();
+  const isAdmin = await checkIfAdmin(userId);
+  const {
+    username,
+    status,
+    minDate,
+    maxDate,
+    minTotalPrice,
+    maxTotalPrice,
+    order,
+  } = searchParams;
   const orders = await fetchOrders(
+    username,
     status,
     minDate,
     maxDate,
@@ -77,11 +102,11 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
       <div className="m-auto max-lg:flex-col max-md:w-[327px]">
         <div>
           <h2 className="text-2xl text-center">Filter</h2>
-          <Filter />
+          <Filter isAdmin={isAdmin} />
         </div>
         <div>
           <h2 className="text-2xl text-center">Sort</h2>
-          <Sort />
+          <Sort isAdmin={isAdmin} />
         </div>
       </div>
       <h1 className="text-2xl text-center mt-4">Orders</h1>
