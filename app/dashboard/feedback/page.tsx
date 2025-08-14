@@ -119,10 +119,10 @@ const FeedbackPage = async ({
         ))}
       </div>
       <Link
-        className="text-blue-500 hover:text-blue-700 block m-auto text-center mt-4"
+        className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
         href="/dashboard"
       >
-        To Dashboard
+        ... Back to Dashboard
       </Link>
     </div>
   );

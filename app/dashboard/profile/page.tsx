@@ -32,7 +32,7 @@ export default async function ProfilePage() {
 
   return (
     <main className="grid place-content-center">
-      <h1 className="text-2xl font-bold my-4">Profile</h1>
+      <h1 className="text-2xl font-bold my-4 text-center">Profile</h1>
       <section className="w-[800px] border rounded-xl flex justify-between max-md:flex-col max-md:w-[100%]">
         <Image
           className="rounded-l-xl w-[100%]"

@@ -72,16 +72,17 @@ const ProductsPage = async ({
 }) => {
   const { productname, minPrice, maxPrice, order } = searchParams;
   const products = await fetchProducts(productname, minPrice, maxPrice, order);
+  const isAdmin = await checkIfAdmin(auth().userId);
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="m-auto max-lg:flex-col max-md:w-[327px]">
         <div>
           <h2 className="text-2xl text-center">Filter</h2>
-          <Filter />
+          <Filter isAdmin={isAdmin} />
         </div>
         <div>
           <h2 className="text-2xl text-center">Sort</h2>
-          <Sort />
+          <Sort isAdmin={isAdmin} />
         </div>
       </div>
       <Link
@@ -140,8 +141,11 @@ const ProductsPage = async ({
           </div>
         ))}
       </div>
-      <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
-        To Dashboard
+      <Link
+        className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
+        href="/dashboard"
+      >
+        ... Back to Dashboard
       </Link>
     </div>
   );

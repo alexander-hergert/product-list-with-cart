@@ -99,10 +99,10 @@ const DashboardPage = async () => {
         <Feedback feedbacks={feedbacks} />
       </div>
       <Link
-        className="text-blue-500 hover:text-blue-700 mt-4 text-center"
+        className="border block w-[50%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
         href="/"
       >
-        To Home
+        ... To Home
       </Link>
     </div>
   );
