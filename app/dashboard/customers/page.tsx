@@ -72,11 +72,11 @@ const CustomersPage = async ({
       <div className="m-auto max-lg:flex-col max-md:w-[327px]">
         <div>
           <h2 className="text-2xl text-center">Filter</h2>
-          <Filter />
+          <Filter isAdmin={false} />
         </div>
         <div>
           <h2 className="text-2xl text-center">Sort</h2>
-          <Sort />
+          <Sort isAdmin={false} />
         </div>
       </div>
       <div
@@ -91,7 +91,7 @@ const CustomersPage = async ({
           >
             <div className="w-[300px]">
               <Image
-                className="w-full rounded-t-xl"
+                className="rounded-t-xl w-[300px] h-[300px] object-cover m-auto"
                 src={customer.image}
                 alt={customer.name}
                 width={300}
@@ -99,24 +99,27 @@ const CustomersPage = async ({
               />
             </div>
             <div className="p-2">
-              <div className="flex gap-4 items-center max-w-[250px]">
-                <label>Username:</label>
-                <h2 className="truncate">{customer?.name}</h2>
+              <div className="flex items-center max-w-[250px]">
+                <label className="w-[100px]">Username:</label>
+                <h2 className="truncate w-[150px]">{customer?.name}</h2>
               </div>
-              <div className="flex gap-4 items-center max-w-[250px]">
-                <label>Email:</label>
-                <h2 className="truncate">{customer?.email}</h2>
+              <div className="flex items-center max-w-[250px]">
+                <label className="w-[100px]">Email:</label>
+                <h2 className="truncate w-[150px]">{customer?.email}</h2>
               </div>
-              <div className="flex gap-4 items-center max-w-[250px]">
-                <label>Address:</label>
-                <h2 className="truncate">{customer?.address}</h2>
+              <div className="flex items-center max-w-[250px]">
+                <label className="w-[100px]">Address:</label>
+                <h2 className="truncate w-[150px]">{customer?.address}</h2>
               </div>
             </div>
           </Link>
         ))}
       </div>
-      <Link className="text-blue-500 hover:text-blue-700" href="/dashboard">
-        To Dashboard
+      <Link
+        className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
+        href="/dashboard"
+      >
+        ... Back to Dashboard
       </Link>
     </div>
   );

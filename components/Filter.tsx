@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 interface FilterProps {
   isAdmin: boolean;
@@ -12,6 +12,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
   const page = pathname.split("/")[2];
   const pageProducts = pathname.split("/")[1];
   let query = "";
+  const username = useSearchParams().get("username") || "";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,7 +106,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
         }
         ${
           page === "customers" || page === "products"
-            ? "w-[700px] max-md:h-[325px] max-lg:h-[300px]"
+            ? "w-[700px] max-md:h-[325px] max-lg:h-[325px]"
             : ""
         }
         ${
@@ -178,7 +179,12 @@ const Filter = ({ isAdmin }: FilterProps) => {
           {isAdmin && (
             <div className="flex flex-col gap-2">
               <label htmlFor="username">Username:</label>
-              <input id="username" type="text" name="username" />
+              <input
+                id="username"
+                type="text"
+                name="username"
+                defaultValue={username}
+              />
             </div>
           )}
           <div className="flex flex-col gap-2">
@@ -213,7 +219,12 @@ const Filter = ({ isAdmin }: FilterProps) => {
           {isAdmin && (
             <div className="flex flex-col gap-2">
               <label htmlFor="username">Username:</label>
-              <input id="username" type="text" name="username" />
+              <input
+                id="username"
+                type="text"
+                name="username"
+                defaultValue={username}
+              />
             </div>
           )}
           <div className="flex flex-col gap-2">
