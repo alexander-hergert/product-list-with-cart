@@ -113,7 +113,16 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
           <label className="text-xl w-[200px] max-md:text-center">
             Username:
           </label>
-          <p className="w-[300px] max-md:text-center">{userName}</p>
+          {isAdmin ? (
+            <Link
+              href={`/dashboard/customers/${feedback?.userId}`}
+              className="w-[300px] max-md:text-center text-blue-500"
+            >
+              {userName}
+            </Link>
+          ) : (
+            <p className="w-[300px] max-md:text-center">{userName}</p>
+          )}
         </div>
         <Link
           href={
@@ -153,7 +162,9 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
           </p>
         </div>
         <Image
-          className="rounded-xl w-[150px] h-[150px] object-cover my-4"
+          className="rounded-xl w-[250px] h-[250px] object-cover my-4"
+          width={250}
+          height={250}
           src={
             typeof product === "object" &&
             product !== null &&
@@ -170,8 +181,6 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
               ? product.name
               : "Product Image"
           }
-          width={150}
-          height={150}
         />
         <div className="flex gap-4 items-center max-md:flex-col text-center">
           <label className="text-xl w-[200px] max-md:text-center">

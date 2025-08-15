@@ -47,7 +47,7 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
   const product = await fetchProduct(id);
   return (
     <div>
-      <h1 className="text-2xl mb-4 text-center">Product Details</h1>
+      <h1 className="text-2xl my-4 text-center">Product Details</h1>
       <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/3 m-auto max-md:w-[80%]">
         <div>
           <Image
@@ -74,12 +74,7 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
             <Rating name="rating" value={product?.rating} readOnly />
           </div>
         </div>
-        <Link
-          className="text-blue-500 hover:text-blue-700"
-          href="/dashboard/products"
-        >
-          ... Back to Products
-        </Link>
+
         <Link
           href={`/dashboard/products/${id}/edit_product`}
           className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-[95%] text-center"
@@ -88,6 +83,12 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
         </Link>
         <DeleteProduct id={id} />
       </div>
+      <Link
+        className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
+        href="/dashboard/products"
+      >
+        ... Back to Products
+      </Link>
     </div>
   );
 };
