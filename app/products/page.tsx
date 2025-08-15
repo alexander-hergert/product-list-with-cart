@@ -6,6 +6,13 @@ const Modal = dynamic(() => import("@/components/products/Modal"), {
   ssr: false,
 });
 
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
+
 const category = [
   {
     name: "Breakfast",
@@ -43,9 +50,9 @@ export default function ProductsPage() {
           className="flex m-auto gap-8 w-[1216px] mt-4 max-lg:flex-col max-lg:w-[688px] max-lg:items-center
         max-md:w-[327px] max-md:block max-md:m-auto"
         >
-          <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-4">
-            <h1 className="text-2xl text-center col-span-full">
-              Welcome, please select your topic.
+          <section className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-4 max-md:mb-4">
+            <h1 className="text-4xl text-center col-span-full my-4 font-bold font-sans">
+              Welcome, please select your category.
             </h1>
             {category.map((singleCathegory) => (
               <div>
@@ -62,12 +69,12 @@ export default function ProductsPage() {
                     />
                   </div>
                 </Link>
-                <h2 className="mt-4 text-center font-bold">
+                <h2 className="mt-4 text-center font-bold text-xl">
                   {singleCathegory.name}
                 </h2>
               </div>
             ))}
-          </div>
+          </section>
           <Cart />
         </div>
       </div>

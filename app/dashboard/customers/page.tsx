@@ -69,18 +69,17 @@ const CustomersPage = async ({
   const customers = await fetchCustomers(username, email, address, order);
   return (
     <div>
-      <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+      <div className="mt-4 gap-4 flex flex-wrap justify-center m-auto max-lg:flex-col max-md:w-[327px]">
         <div>
-          <h2 className="text-2xl text-center">Filter</h2>
           <Filter isAdmin={false} />
         </div>
         <div>
-          <h2 className="text-2xl text-center">Sort</h2>
           <Sort isAdmin={false} />
         </div>
       </div>
+      <h1 className="text-2xl text-center mt-4 font-bold">Customers</h1>
       <div
-        className="grid grid-cols-2 place-items-center m-auto w-[1200px] mt-4 max-lg:grid-cols-2 max-md:grid-cols-1 
+        className="grid grid-cols-3 place-items-center m-auto w-full mt-4 max-lg:grid-cols-2 max-md:grid-cols-1 
       max-lg:w-[800px] max-md:w-[400px] gap-4"
       >
         {customers.map((customer) => (
@@ -116,7 +115,7 @@ const CustomersPage = async ({
         ))}
       </div>
       <Link
-        className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
+        className="border block w-[20%] max-lg:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
         href="/dashboard"
       >
         ... Back to Dashboard

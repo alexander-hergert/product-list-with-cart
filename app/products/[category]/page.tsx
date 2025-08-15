@@ -26,14 +26,12 @@ export default function ProductsPathPage({
     <>
       <Modal />
       <div>
-        <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+        <div className="mt-4 gap-4 flex flex-wrap justify-center m-auto max-lg:flex-col max-md:w-[327px]">
           <div>
-            <h2 className="text-2xl text-center">Filter</h2>
-            <Filter />
+            <Filter isAdmin={false} />
           </div>
           <div>
-            <h2 className="text-2xl text-center">Sort</h2>
-            <Sort />
+            <Sort isAdmin={false} />
           </div>
         </div>
         <div

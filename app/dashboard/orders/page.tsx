@@ -104,17 +104,15 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   );
   return (
     <div>
-      <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+      <div className="mt-4 gap-4 flex justify-center m-auto max-lg:flex-col max-md:w-[327px] flex-wrap">
         <div>
-          <h2 className="text-2xl text-center">Filter</h2>
           <Filter isAdmin={isAdmin} />
         </div>
         <div>
-          <h2 className="text-2xl text-center">Sort</h2>
           <Sort isAdmin={isAdmin} />
         </div>
       </div>
-      <h1 className="text-2xl text-center mt-4">Orders</h1>
+      <h1 className="text-2xl text-center mt-4 font-bold">Orders</h1>
       <div
         className="m-auto w-[1200px] mt-4 grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 
       max-lg:w-[800px] max-md:w-[400px] gap-4"

@@ -66,7 +66,7 @@ const ProductFeedback = async ({ params }: { params: Params }) => {
   const product = await fetchProduct(productId);
   return (
     <div>
-      <h1 className="text-2xl mb-4 text-center">Create Feedback</h1>
+      <h1 className="text-2xl my-4 text-center font-bold">Create Feedback</h1>
       <h2 className="text-xl mb-4 text-center">
         Create Feedback for product{" "}
         <span className="font-bold">{product?.name}</span> in order{" "}

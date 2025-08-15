@@ -47,7 +47,7 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
   const product = await fetchProduct(id);
   return (
     <div>
-      <h1 className="text-2xl my-4 text-center">Product Details</h1>
+      <h1 className="text-2xl my-4 text-center font-bold">Product Details</h1>
       <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/3 m-auto max-md:w-[80%]">
         <div>
           <Image

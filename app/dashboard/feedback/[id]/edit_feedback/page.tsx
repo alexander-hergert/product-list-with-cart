@@ -46,7 +46,7 @@ const EditFeedbackPage = async ({ params }: EditFeedbackPageProps) => {
   const feedback = await fetchFeedback(id);
   return (
     <div>
-      <h1 className="text-2xl my-4 text-center">Edit Feedback</h1>
+      <h1 className="text-2xl my-4 text-center font-bold">Edit Feedback</h1>
       <EditFeedback feedback={feedback} id={id} />
       <Link
         className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"

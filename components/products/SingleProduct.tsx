@@ -54,7 +54,7 @@ const SingleProduct: React.FC<SingleProductProps> = ({
             />
           </div>
           <div className="w-full max-w-xs truncate">
-            <h2 className="text-gray-500 truncate">{sub_category}</h2>
+            <h3 className="text-gray-500 truncate">{sub_category}</h3>
             <h2 className="font-bold truncate">{name}</h2>
             <p className="text-red-800 truncate">${price.toFixed(2)}</p>
           </div>

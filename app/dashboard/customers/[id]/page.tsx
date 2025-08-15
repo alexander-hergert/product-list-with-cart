@@ -39,7 +39,9 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
   return (
     <>
       <div>
-        <h1 className="text-2xl my-4 text-center">Customer Details</h1>
+        <h1 className="text-2xl my-4 text-center font-bold">
+          Customer Details
+        </h1>
         <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[600px] md:w-1/4 m-auto max-md:w-[80%]">
           <div>
             <Image
@@ -70,7 +72,7 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
           </Link>
         </div>
       </div>
-      <div className="flex md:min-w-[600px] md:w-1/4 m-auto max-md:w-[80%]">
+      <div className="flex gap-4 md:min-w-[600px] md:w-1/4 m-auto max-md:w-[80%]">
         <Link
           className="border block w-[50%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
           href={`/dashboard/feedback?username=${customer?.name}`}

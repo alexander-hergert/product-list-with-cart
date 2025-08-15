@@ -75,16 +75,15 @@ const ProductsPage = async ({
   const isAdmin = await checkIfAdmin(auth().userId);
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="m-auto max-lg:flex-col max-md:w-[327px]">
+      <div className="mt-4 gap-4 flex flex-wrap justify-center m-auto max-lg:flex-col max-md:w-[327px]">
         <div>
-          <h2 className="text-2xl text-center">Filter</h2>
           <Filter isAdmin={isAdmin} />
         </div>
         <div>
-          <h2 className="text-2xl text-center">Sort</h2>
           <Sort isAdmin={isAdmin} />
         </div>
       </div>
+      <h1 className="text-2xl text-center mt-4 font-bold">Products</h1>
       <Link
         className="className= border rounded p-4 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] text-center"
         href="/dashboard/products/new_product"

@@ -62,6 +62,8 @@ const Sort = ({ isAdmin }: SortProps) => {
   };
   return (
     <form
+      role="toolbar"
+      aria-label="Sort"
       action=""
       className="rounded-xl w-[300px] m-auto p-4 bg-gradient-to-r from-red-700 dark:from-red-800 to-red-950 dark:bg-amber-950 h-[80px] grid place-content-center max-md:w-[327px] [&_select]:rounded"
     >

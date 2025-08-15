@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Rating from "@mui/material/Rating";
 import Feedbacks from "@/components/feedback/Feedbacks";
-import dynamic from "next/dynamic";
 import AddToCart from "@/components/products/AddToCart";
 
 const prisma = new PrismaClient();
@@ -67,7 +66,7 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
   if (!product) {
     return (
       <div>
-        <h1 className="text-2xl mb-4 text-center">Product Not Found</h1>
+        <h1 className="text-2xl my-4 text-center">Product Not Found</h1>
         <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/3 m-auto max-md:w-[80%]">
           <Link className="text-blue-500 hover:text-blue-700" href="/products">
             ... Back to Products
@@ -76,8 +75,6 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
       </div>
     );
   }
-
-  const { image, name, price } = product;
 
   const feedbacks = await fetchFeedbacks(id);
   const users = feedbacks
@@ -88,7 +85,7 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
 
   return (
     <div>
-      <h1 className="text-2xl mb-4 text-center">Product Details</h1>
+      <h1 className="text-2xl my-4 text-center font-bold">Product Details</h1>
       <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/3 m-auto max-md:w-[80%]">
         <div>
           <Image
@@ -110,7 +107,7 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
             <label htmlFor="price">Price:</label>
             <p>${product.price}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-4 justify-self-center">
             <label htmlFor="rating">Rating</label>
             <Rating name="rating" value={product.rating} readOnly />
           </div>

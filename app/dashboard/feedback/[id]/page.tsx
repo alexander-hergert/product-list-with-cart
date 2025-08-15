@@ -103,7 +103,7 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
 
   return (
     <div>
-      <h1 className="text-2xl my-4 text-center">Feedback Details</h1>
+      <h1 className="text-2xl my-4 text-center font-bold">Feedback Details</h1>
       <div className="flex flex-col items-center border rounded-xl p-4 shadow-md md:min-w-[800px] md:w-1/2 m-auto max-md:w-[80%]">
         <div className="flex gap-4 items-center max-md:flex-col text-center">
           <label className="text-xl w-[200px] max-md:text-center">Title:</label>

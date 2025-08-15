@@ -18,7 +18,9 @@ const NewProductPage = async () => {
   }
   return (
     <div>
-      <h1 className="text-2xl mb-4 text-center">Create New Product</h1>
+      <h1 className="text-2xl my-4 text-center font-bold">
+        Create New Product
+      </h1>
       <CreateNewProduct />
     </div>
   );

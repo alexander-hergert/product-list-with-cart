@@ -95,13 +95,15 @@ const Filter = ({ isAdmin }: FilterProps) => {
 
   return (
     <form
+      role="toolbar"
+      aria-label="Filter"
       onSubmit={handleSubmit}
       className={`rounded-xl m-auto p-3 bg-gradient-to-r from-red-700 dark:from-red-800 to-red-950 dark:bg-amber-950 text-white flex gap-4 h-[80px]
         max-lg:flex-col max-lg:w-[688px] max-md:w-[327px]
         [&_input]:text-black [&_input]:rounded [&_select]:text-black [&_select]:rounded
         ${
           page === "feedback"
-            ? "w-[600px] max-md:h-[325px] max-lg:h-[150px]"
+            ? "w-[600px] max-md:h-[325px] max-lg:h-[250px]"
             : ""
         }
         ${

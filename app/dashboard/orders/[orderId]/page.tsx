@@ -50,7 +50,7 @@ const OrderDetailsPage = async ({ params }: { params: Params }) => {
 
   return (
     <div className="m-auto max-w-[600px] max:md:max-w-[327px] pb-4">
-      <h1 className="text-2xl text-center my-4">Order Details</h1>
+      <h1 className="text-2xl text-center my-4 font-bold">Order Details</h1>
       <div className="border p-2 rounded-xl">
         <div className="flex gap-4 items-start">
           <label className="w-[6rem]">Order ID:</label>
