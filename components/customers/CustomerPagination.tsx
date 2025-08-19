@@ -2,31 +2,30 @@
 import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type SearchParams = {
-  productName?: string;
-  productCategory?: string;
-  minPrice?: string;
-  maxPrice?: string;
+  username?: string;
+  email?: string;
+  address?: string;
   page?: number;
   order?: string;
 };
 
-export default function BasicPagination({
+export default function CustomerPagination({
   searchParams,
   total,
-  productName,
-  productCategory,
-  minPrice,
-  maxPrice,
+  username,
+  email,
+  address,
 }: {
   searchParams: SearchParams;
   total: number;
-  productName?: string | "";
-  productCategory?: string | "";
-  minPrice?: string | "";
-  maxPrice?: string | "";
+  username?: string | "";
+  email?: string | "";
+  address?: string | "";
+  page?: number | undefined;
+  order?: string | "";
 }) {
   const pageSize = 9;
   const totalPages = Math.ceil(total / pageSize);
@@ -34,11 +33,10 @@ export default function BasicPagination({
   const page = searchParams.page ? Number(searchParams.page) : 1;
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    const query = `?productName=${
-      productName ? productName : ""
-    }&productCategory=${productCategory ? productCategory : ""}&minPrice=${
-      minPrice ? minPrice : ""
-    }&maxPrice=${maxPrice ? maxPrice : ""}&page=${value ? value : 1}`;
+    const query = `?username=${username ? username : ""}&email=${
+      email ? email : ""
+    }&address=${address ? address : ""}&page=${value ? value : 1}
+    `;
     router.push(query);
   };
 

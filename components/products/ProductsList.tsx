@@ -3,8 +3,8 @@ import { Product } from "@/lib/types";
 import { PrismaClient } from "@prisma/client";
 import dynamic from "next/dynamic";
 
-const BasicPagination = dynamic(
-  () => import("@/components/products/BasicPagination"),
+const ProductPagination = dynamic(
+  () => import("@/components/products/ProductPagination"),
   { ssr: false }
 );
 
@@ -138,7 +138,7 @@ const ProductsList = async ({
           {total} items<span className="max-md:hidden"> found</span>
         </h2>
       </div>
-      <BasicPagination
+      <ProductPagination
         searchParams={searchParams}
         total={total}
         productName={productName}
