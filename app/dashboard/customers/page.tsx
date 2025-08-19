@@ -128,7 +128,6 @@ const CustomersPage = async ({
           username={username}
           email={email}
           address={address}
-          order={order}
         />
       </div>
       <div

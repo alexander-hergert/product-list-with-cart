@@ -6,6 +6,7 @@ import { truncateToUTCDateStart, truncateToUTCDateEnd } from "@/lib/utils";
 import Filter from "@/components/Filter";
 import Sort from "@/components/Sort";
 import { checkIfAdmin } from "@/lib/auth";
+import OrderPagination from "@/components/orders/OrderPagination";
 
 const prisma = new PrismaClient();
 
@@ -17,6 +18,7 @@ const fetchOrders = async (
   maxDate: string | undefined,
   minTotalPrice: string | undefined,
   maxTotalPrice: string | undefined,
+  page: number | undefined,
   order: string | undefined
 ) => {
   const { userId } = auth();
@@ -58,11 +60,45 @@ const fetchOrders = async (
         ...((order === "totalPriceAsc" && { totalPrice: "asc" }) ||
           (order === "totalPriceDesc" && { totalPrice: "desc" })),
       },
+      skip: ((page || 1) - 1) * 9, //optional depending on page number,
+      take: 9, //fix value pagesize
     });
     return orders;
   } catch (error) {
     console.error("Error fetching orders:", error);
     return [];
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+const countOrders = async (
+  id: string | undefined,
+  username: string | undefined,
+  status: OrderStatus | undefined,
+  minDate: string | undefined,
+  maxDate: string | undefined,
+  minTotalPrice: string | undefined,
+  maxTotalPrice: string | undefined
+): Promise<number> => {
+  try {
+    const total = await prisma.orders.count({
+      where: {
+        ...(id && { id: { contains: id, mode: "insensitive" } }),
+        ...(username && {
+          user: { name: { contains: username, mode: "insensitive" } },
+        }),
+        ...(status && { status }),
+        ...(minDate && { createdAt: { gte: truncateToUTCDateStart(minDate) } }),
+        ...(maxDate && { createdAt: { lte: truncateToUTCDateEnd(maxDate) } }),
+        ...(minTotalPrice && { totalPrice: { gte: Number(minTotalPrice) } }),
+        ...(maxTotalPrice && { totalPrice: { lte: Number(maxTotalPrice) } }),
+      },
+    });
+    return total;
+  } catch (error) {
+    console.error("Error counting customers:", error);
+    return 0;
   } finally {
     await prisma.$disconnect();
   }
@@ -76,6 +112,7 @@ type SearchParams = {
   maxDate?: string;
   minTotalPrice?: string;
   maxTotalPrice?: string;
+  page?: number;
   order?: string;
 };
 
@@ -90,6 +127,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
     maxDate,
     minTotalPrice,
     maxTotalPrice,
+    page,
     order,
   } = searchParams;
   const orders = await fetchOrders(
@@ -100,7 +138,17 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
     maxDate,
     minTotalPrice,
     maxTotalPrice,
+    page,
     order
+  );
+  const total = await countOrders(
+    id,
+    username,
+    status,
+    minDate,
+    maxDate,
+    minTotalPrice,
+    maxTotalPrice
   );
   return (
     <div>
@@ -112,7 +160,26 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
           <Sort isAdmin={isAdmin} />
         </div>
       </div>
-      <h1 className="text-2xl text-center mt-4 font-bold">Orders</h1>
+      <div
+        className="flex items-center justify-center m-auto w-full max-lg:w-[800px] max-md:w-[400px]
+       gap-4 my-4"
+      >
+        <h1 className="text-2xl text-center font-bold">Orders</h1>
+        <h2 className="text-xl max-md:text-2xl">
+          {total} orders<span className="max-md:hidden"> found</span>
+        </h2>
+      </div>
+      <OrderPagination
+        searchParams={searchParams}
+        total={total}
+        id={id}
+        username={username}
+        status={status}
+        minDate={minDate}
+        maxDate={maxDate}
+        minTotalPrice={minTotalPrice}
+        maxTotalPrice={maxTotalPrice}
+      />
       <div
         className="m-auto w-[1200px] mt-4 grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 
       max-lg:w-[800px] max-md:w-[400px] gap-4"

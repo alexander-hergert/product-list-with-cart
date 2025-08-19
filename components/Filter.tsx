@@ -200,7 +200,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
               type="date"
               name="maxDate"
               max={today}
-              value={today}
+              defaultValue={today}
             />
           </div>
           <div className="flex flex-col gap-2">

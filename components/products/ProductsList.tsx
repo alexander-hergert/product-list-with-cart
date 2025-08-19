@@ -1,12 +1,7 @@
 import SingleProduct from "@/components/products/SingleProduct";
 import { Product } from "@/lib/types";
 import { PrismaClient } from "@prisma/client";
-import dynamic from "next/dynamic";
-
-const ProductPagination = dynamic(
-  () => import("@/components/products/ProductPagination"),
-  { ssr: false }
-);
+import ProductPagination from "@/components/products/ProductPagination";
 
 const prisma = new PrismaClient();
 

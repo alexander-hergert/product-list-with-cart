@@ -3,26 +3,40 @@ import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useRouter } from "next/navigation";
+import { OrderStatus } from "@prisma/client";
 
 type SearchParams = {
+  id?: string;
   username?: string;
-  email?: string;
-  address?: string;
+  status?: OrderStatus;
+  minDate?: string;
+  maxDate?: string;
+  minTotalPrice?: string;
+  maxTotalPrice?: string;
   page?: number;
+  order?: string;
 };
 
-export default function CustomerPagination({
+export default function OrderPagination({
   searchParams,
   total,
+  id,
   username,
-  email,
-  address,
+  status,
+  minDate,
+  maxDate,
+  minTotalPrice,
+  maxTotalPrice,
 }: {
   searchParams: SearchParams;
   total: number;
+  id?: string | "";
   username?: string | "";
-  email?: string | "";
-  address?: string | "";
+  status?: OrderStatus | "";
+  minDate?: string | "";
+  maxDate?: string | "";
+  minTotalPrice?: string | "";
+  maxTotalPrice?: string | "";
   page?: number | undefined;
 }) {
   const pageSize = 9;
@@ -31,9 +45,15 @@ export default function CustomerPagination({
   const page = searchParams.page ? Number(searchParams.page) : 1;
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    const query = `?username=${username ? username : ""}&email=${
-      email ? email : ""
-    }&address=${address ? address : ""}&page=${value ? value : 1}
+    const query = `?username=${username ? username : ""}&id=${
+      id ? id : ""
+    }&status=${status ? status : ""}&minDate=${
+      minDate ? minDate : ""
+    }&maxDate=${maxDate ? maxDate : ""}&minTotalPrice=${
+      minTotalPrice ? minTotalPrice : ""
+    }&maxTotalPrice=${maxTotalPrice ? maxTotalPrice : ""}&page=${
+      value ? value : 1
+    }
     `;
     router.push(query);
   };
