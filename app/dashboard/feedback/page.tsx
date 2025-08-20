@@ -6,6 +6,7 @@ import Filter from "@/components/Filter";
 import Sort from "@/components/Sort";
 import { checkIfAdmin } from "@/lib/auth";
 import DeleteFeedback from "@/components/feedback/DeleteFeedback";
+import FeedbackPagination from "@/components/feedback/FeedbackPagination";
 
 const prisma = new PrismaClient();
 
@@ -13,6 +14,7 @@ const fetchFeedbacks = async (
   username: string | undefined,
   minDate: string | undefined,
   maxDate: string | undefined,
+  page: number | undefined,
   order: string | undefined
 ) => {
   const { userId } = auth();
@@ -47,6 +49,8 @@ const fetchFeedbacks = async (
         ...((order === "dateAsc" && { createdAt: "asc" }) ||
           (order === "dateDesc" && { createdAt: "desc" })),
       },
+      skip: ((page || 1) - 1) * 9, //optional depending on page number,
+      take: 9, //fix value pagesize
     });
     return feedbacks;
   } catch (error) {
@@ -57,10 +61,35 @@ const fetchFeedbacks = async (
   }
 };
 
+const countFeedbacks = async (
+  username: string | undefined,
+  minDate: string | undefined,
+  maxDate: string | undefined
+): Promise<number> => {
+  try {
+    const total = await prisma.feedbacks.count({
+      where: {
+        ...(username && {
+          user: { name: { contains: username, mode: "insensitive" } },
+        }),
+        ...(minDate && { createdAt: { gte: truncateToUTCDateStart(minDate) } }),
+        ...(maxDate && { createdAt: { lte: truncateToUTCDateEnd(maxDate) } }),
+      },
+    });
+    return total;
+  } catch (error) {
+    console.error("Error counting customers:", error);
+    return 0;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 type SearchParams = {
   username?: string;
   minDate?: string;
   maxDate?: string;
+  page?: number;
   order?: string;
 };
 
@@ -71,8 +100,16 @@ const FeedbackPage = async ({
 }) => {
   const { userId } = auth();
   const isAdmin = await checkIfAdmin(userId);
-  const { username, minDate, maxDate, order } = searchParams;
-  const feedbacks = await fetchFeedbacks(username, minDate, maxDate, order);
+  const { username, minDate, maxDate, page, order } = searchParams;
+  const feedbacks = await fetchFeedbacks(
+    username,
+    minDate,
+    maxDate,
+    page,
+    order
+  );
+  const total = await countFeedbacks(username, minDate, maxDate);
+
   return (
     <div>
       <div className="mt-4 gap-4 flex flex-wrap justify-center m-auto max-lg:flex-col max-md:w-[327px]">
@@ -83,7 +120,22 @@ const FeedbackPage = async ({
           <Sort isAdmin={isAdmin} />
         </div>
       </div>
-      <h1 className="text-2xl text-center mt-4 font-bold">Feedback</h1>
+      <div
+        className="flex items-center justify-center m-auto w-full max-lg:w-[800px] max-md:w-[400px]
+       gap-4 my-4"
+      >
+        <h1 className="text-2xl text-center font-bold">Feedback</h1>
+        <h2 className="text-xl max-md:text-2xl">
+          {total} items<span className="max-md:hidden"> found</span>
+        </h2>
+      </div>
+      <FeedbackPagination
+        searchParams={searchParams}
+        total={total}
+        username={username}
+        minDate={minDate}
+        maxDate={maxDate}
+      />
       <div
         className="m-auto w-[1200px] mt-4 grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 
       max-lg:w-[800px] max-md:w-[400px] gap-4"

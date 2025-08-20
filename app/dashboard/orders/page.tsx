@@ -166,7 +166,7 @@ const OrdersPage = async ({ searchParams }: { searchParams: SearchParams }) => {
       >
         <h1 className="text-2xl text-center font-bold">Orders</h1>
         <h2 className="text-xl max-md:text-2xl">
-          {total} orders<span className="max-md:hidden"> found</span>
+          {total} items<span className="max-md:hidden"> found</span>
         </h2>
       </div>
       <OrderPagination

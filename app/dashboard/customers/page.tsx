@@ -118,7 +118,7 @@ const CustomersPage = async ({
       >
         <h1 className="text-2xl text-center font-bold">Customers</h1>
         <h2 className="text-xl max-md:text-2xl">
-          {total} customers<span className="max-md:hidden"> found</span>
+          {total} items<span className="max-md:hidden"> found</span>
         </h2>
       </div>
       <div>
