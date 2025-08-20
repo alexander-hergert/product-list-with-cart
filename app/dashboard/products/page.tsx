@@ -2,25 +2,21 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import Filter from "@/components/Filter";
 import Sort from "@/components/Sort";
 import { checkIfAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import DeleteProduct from "@/components/products/DeleteProduct";
+import ProductAdminPagination from "@/components/ProductAdminPagination";
 
 const prisma = new PrismaClient();
 
-const DeleteProduct = dynamic(
-  () => import("@/components/products/DeleteProduct"),
-  {
-    ssr: false,
-  }
-);
-
 const fetchProducts = async (
+  id: string | undefined,
   productname: string | undefined,
   minPrice: string | undefined,
   maxPrice: string | undefined,
+  page: number | undefined,
   order: string | undefined
 ) => {
   const { userId } = auth();
@@ -32,6 +28,7 @@ const fetchProducts = async (
   try {
     const products = await prisma.products.findMany({
       where: {
+        ...(id && { id: { contains: id, mode: "insensitive" } }),
         ...(productname && {
           name: { contains: productname, mode: "insensitive" },
         }),
@@ -48,6 +45,8 @@ const fetchProducts = async (
         ...((order === "priceAsc" && { price: "asc" }) ||
           (order === "priceDesc" && { price: "desc" })),
       },
+      skip: ((page || 1) - 1) * 9, //optional depending on page number,
+      take: 9, //fix value pagesize
     });
     return products;
   } catch (error) {
@@ -58,10 +57,38 @@ const fetchProducts = async (
   }
 };
 
+const countProducts = async (
+  id: string | undefined,
+  productname: string | undefined,
+  minPrice: string | undefined,
+  maxPrice: string | undefined
+): Promise<number> => {
+  try {
+    const total = await prisma.products.count({
+      where: {
+        ...(id && { id: { contains: id, mode: "insensitive" } }),
+        ...(productname && {
+          name: { contains: productname, mode: "insensitive" },
+        }),
+        ...(minPrice && { price: { gte: Number(minPrice) } }),
+        ...(maxPrice && { price: { lte: Number(maxPrice) } }),
+      },
+    });
+    return total;
+  } catch (error) {
+    console.error("Error counting products:", error);
+    return 0;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 type SearchParams = {
+  id?: string;
   productname?: string;
   minPrice?: string;
   maxPrice?: string;
+  page?: number;
   order?: string;
 };
 
@@ -70,8 +97,16 @@ const ProductsPage = async ({
 }: {
   searchParams: SearchParams;
 }) => {
-  const { productname, minPrice, maxPrice, order } = searchParams;
-  const products = await fetchProducts(productname, minPrice, maxPrice, order);
+  const { id, productname, minPrice, maxPrice, page, order } = searchParams;
+  const products = await fetchProducts(
+    id,
+    productname,
+    minPrice,
+    maxPrice,
+    page,
+    order
+  );
+  const total = await countProducts(id, productname, minPrice, maxPrice);
   const isAdmin = await checkIfAdmin(auth().userId);
   return (
     <div className="flex flex-col items-center gap-4">
@@ -83,7 +118,24 @@ const ProductsPage = async ({
           <Sort isAdmin={isAdmin} />
         </div>
       </div>
-      <h1 className="text-2xl text-center mt-4 font-bold">Products</h1>
+      <ProductAdminPagination
+        searchParams={searchParams}
+        total={total}
+        id={id}
+        productName={productname}
+        //productCategory={productCategory}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+      />
+      <div
+        className="flex items-center justify-center m-auto w-full max-lg:w-[800px] max-md:w-[400px]
+       gap-4 my-4"
+      >
+        <h1 className="text-2xl text-center font-bold">Products</h1>
+        <h2 className="text-xl max-md:text-2xl">
+          {total} items<span className="max-md:hidden"> found</span>
+        </h2>
+      </div>
       <Link
         className="className= border rounded p-4 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] text-center"
         href="/dashboard/products/new_product"
