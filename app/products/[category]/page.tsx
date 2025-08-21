@@ -2,10 +2,8 @@ import Cart from "@/components/products/Cart";
 import ProductsList from "@/components/products/ProductsList";
 import Filter from "@/components/Filter";
 import Sort from "@/components/Sort";
-import dynamic from "next/dynamic";
-const Modal = dynamic(() => import("@/components/products/Modal"), {
-  ssr: false,
-});
+import Modal from "@/components/products/Modal";
+import { redirect } from "next/navigation";
 
 type SearchParams = {
   productName?: string;
@@ -15,6 +13,8 @@ type SearchParams = {
   order?: string;
 };
 
+const pathnames = ["breakfast", "lunch", "dessert", "drinks", "menu"];
+
 export default function ProductsPathPage({
   searchParams,
   params,
@@ -22,6 +22,9 @@ export default function ProductsPathPage({
   searchParams: SearchParams;
   params: { category: string };
 }) {
+  const pathname = params.category.toLowerCase();
+  if (!pathnames.includes(pathname)) redirect("/products");
+
   return (
     <>
       <Modal />

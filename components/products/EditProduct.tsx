@@ -2,7 +2,7 @@
 
 import { FC, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { string, z } from "zod";
+import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { Product } from "@/lib/types";
 import { CldUploadWidget } from "next-cloudinary";
@@ -10,7 +10,8 @@ import Image from "next/image";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 character"),
-  category: z.string().min(3, "Category must be at least 3 character"),
+  main_category: z.string().min(1, "Please select a main category"),
+  sub_category: z.string().min(3, "Sub category must be at least 3 character"),
   description: z.string().min(3, "Description must be at least 3 character"),
   price: z.string().min(1, "Price must be at least 1"),
   img: z.string().url("Invalid URL"),
@@ -22,20 +23,23 @@ interface EditProductProps {
 }
 
 const EditProduct: FC<EditProductProps> = ({ product, id }) => {
-  const { name, category, description, price, image } = product || {};
+  const { name, main_category, sub_category, description, price, image } =
+    product || {};
   const queryClient = useQueryClient();
   const router = useRouter();
   const [input, setInput] = useState<{
     id: string;
     name: string;
-    category: string;
+    main_category: string;
+    sub_category: string;
     description: string;
     price: number;
     img: string;
   }>({
     id: id,
     name: name || "",
-    category: category || "",
+    main_category: main_category || "",
+    sub_category: sub_category || "",
     description: description || "",
     price: price || 0,
     img: image || "",
@@ -66,14 +70,17 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
 
   const [errors, setErrors] = useState<{
     name?: string;
-    category?: string;
+    main_category?: string;
+    sub_category?: string;
     description?: string;
     price?: number;
     img?: string;
   }>({});
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setInput({
       ...input,
@@ -123,22 +130,55 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
         />
         {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
       </div>
-      <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between my-4">
+      <div
+        className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between my-4
+      "
+      >
         <label
           className="text-xl w-[200px] max-md:text-center"
-          htmlFor="category"
+          htmlFor="main_category"
         >
-          Category:
+          Main Category:
+        </label>
+        <select
+          id="main_category"
+          name="main_category"
+          onChange={handleChange}
+          defaultValue={main_category}
+          className="w-[300px] max-md:text-center border rounded px-2"
+        >
+          <option value="">Select a category</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dessert">Dessert</option>
+          <option value="Drinks">Drinks</option>
+          <option value="Menu">Menu</option>
+        </select>
+        {errors.main_category && (
+          <p style={{ color: "red" }}>{errors.main_category}</p>
+        )}
+      </div>
+      <div
+        className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between mb-4
+      "
+      >
+        <label
+          className="text-xl w-[200px] max-md:text-center"
+          htmlFor="sub_category"
+        >
+          Sub Category:
         </label>
         <input
-          id="category"
+          id="sub_category"
           type="text"
-          name="category"
+          name="sub_category"
           onChange={handleChange}
-          defaultValue={category}
+          defaultValue={sub_category}
           className="w-[300px] max-md:text-center border rounded px-2"
         />
-        {errors.category && <p style={{ color: "red" }}>{errors.category}</p>}
+        {errors.sub_category && (
+          <p style={{ color: "red" }}>{errors.sub_category}</p>
+        )}
       </div>
       <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between">
         <label

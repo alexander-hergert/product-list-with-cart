@@ -1,14 +1,7 @@
-import dynamic from "next/dynamic";
 import { auth } from "@clerk/nextjs/server";
 import { checkIfAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
-
-const CreateNewProduct = dynamic(
-  () => import("@/components/products/CreateNewProduct"),
-  {
-    ssr: false,
-  }
-);
+import CreateNewProduct from "@/components/products/CreateNewProduct";
 
 const NewProductPage = async () => {
   const { userId } = auth();

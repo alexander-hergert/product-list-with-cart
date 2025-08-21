@@ -2,19 +2,12 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { checkIfAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Rating from "@mui/material/Rating";
+import DeleteProduct from "@/components/products/DeleteProduct";
 
 const prisma = new PrismaClient();
-
-const DeleteProduct = dynamic(
-  () => import("@/components/products/DeleteProduct"),
-  {
-    ssr: false,
-  }
-);
 
 const fetchProduct = async (id: string) => {
   const { userId } = auth();
@@ -76,7 +69,7 @@ const ProductDetailsPage = async ({ params }: { params: Params }) => {
         </div>
 
         <Link
-          href={`/dashboard/products/${id}/edit_product`}
+          href={`/dashboard/products/${product?.main_category.toLocaleLowerCase()}/${id}/edit_product`}
           className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-[95%] text-center"
         >
           Edit

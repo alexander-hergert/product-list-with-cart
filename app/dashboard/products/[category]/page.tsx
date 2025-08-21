@@ -14,6 +14,7 @@ const prisma = new PrismaClient();
 const fetchProducts = async (
   id: string | undefined,
   productName: string | undefined,
+  mainCategory: string,
   productCategory: string | undefined,
   minPrice: string | undefined,
   maxPrice: string | undefined,
@@ -33,6 +34,9 @@ const fetchProducts = async (
         ...(id && { id: { contains: id, mode: "insensitive" } }),
         ...(productName && {
           name: { contains: productName, mode: "insensitive" },
+        }),
+        ...(mainCategory && {
+          main_category: { contains: mainCategory, mode: "insensitive" },
         }),
         ...(productCategory && {
           sub_category: { contains: productCategory, mode: "insensitive" },
@@ -64,7 +68,8 @@ const fetchProducts = async (
 
 const countProducts = async (
   id: string | undefined,
-  productname: string | undefined,
+  productName: string | undefined,
+  mainCategory: string,
   minPrice: string | undefined,
   maxPrice: string | undefined
 ): Promise<number> => {
@@ -72,8 +77,11 @@ const countProducts = async (
     const total = await prisma.products.count({
       where: {
         ...(id && { id: { contains: id, mode: "insensitive" } }),
-        ...(productname && {
-          name: { contains: productname, mode: "insensitive" },
+        ...(productName && {
+          name: { contains: productName, mode: "insensitive" },
+        }),
+        ...(mainCategory && {
+          main_category: { contains: mainCategory, mode: "insensitive" },
         }),
         ...(minPrice && { price: { gte: Number(minPrice) } }),
         ...(maxPrice && { price: { lte: Number(maxPrice) } }),
@@ -99,6 +107,7 @@ type SearchParams = {
 };
 
 const pathnames = [
+  { name: "All", src: "/dashboard/products" },
   { name: "Breakfast", src: "/dashboard/products/breakfast" },
   { name: "Lunch", src: "/dashboard/products/lunch" },
   { name: "Dessert", src: "/dashboard/products/dessert" },
@@ -106,17 +115,26 @@ const pathnames = [
   { name: "Menu", src: "/dashboard/products/menu" },
 ];
 
-const ProductsPage = async ({
+const ProductsSubPage = async ({
   searchParams,
+  params,
 }: {
   searchParams: SearchParams;
+  params: { category: string };
 }) => {
+  const pathname = params.category.toLowerCase();
+  if (!pathnames.map((p) => p.name.toLowerCase()).includes(pathname))
+    redirect("/dashboard/products");
   const { id, productName, productCategory, minPrice, maxPrice, page, order } =
     searchParams;
+
+  const { category } = params;
+  const mainCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
   const products = await fetchProducts(
     id,
     productName,
+    mainCategory,
     productCategory,
     minPrice,
     maxPrice,
@@ -124,8 +142,15 @@ const ProductsPage = async ({
     order
   );
 
-  const total = await countProducts(id, productName, minPrice, maxPrice);
+  const total = await countProducts(
+    id,
+    productName,
+    mainCategory,
+    minPrice,
+    maxPrice
+  );
   const isAdmin = await checkIfAdmin(auth().userId);
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="mt-4 gap-4 flex flex-wrap justify-center m-auto max-lg:flex-col max-md:w-[327px]">
@@ -237,4 +262,4 @@ const ProductsPage = async ({
   );
 };
 
-export default ProductsPage;
+export default ProductsSubPage;

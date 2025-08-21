@@ -2,13 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { checkIfAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import EditProduct from "@/components/products/EditProduct";
 
 const prisma = new PrismaClient();
-
-import dynamic from "next/dynamic";
-const EditProduct = dynamic(() => import("@/components/products/EditProduct"), {
-  ssr: false,
-});
 
 const fetchProduct = async (id: string) => {
   const { userId } = auth();
