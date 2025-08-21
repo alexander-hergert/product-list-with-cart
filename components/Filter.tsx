@@ -18,18 +18,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     // Access form values for /dashboard/products page
-    if (page === "products") {
-      const productname = (
-        target.elements.namedItem("productname") as HTMLInputElement
-      ).value;
-      const minPrice = (
-        target.elements.namedItem("minPrice") as HTMLInputElement
-      ).value;
-      const maxPrice = (
-        target.elements.namedItem("maxPrice") as HTMLInputElement
-      ).value;
-      query = `?productname=${productname}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
-    } else if (page === "customers") {
+    if (page === "customers") {
       // Access form values for /dashboard/customers page
       const username = (
         target.elements.namedItem("username") as HTMLInputElement
@@ -74,8 +63,11 @@ const Filter = ({ isAdmin }: FilterProps) => {
       isAdmin
         ? (query = `?username=${username}&minDate=${minDate}&maxDate=${maxDate}`)
         : (query = `?minDate=${minDate}&maxDate=${maxDate}`);
-    } else if (pageProducts === "products") {
+    } else if (pageProducts === "products" || page === "products") {
       // Access form values for /products page
+      const productId = (
+        target.elements.namedItem("productId") as HTMLInputElement
+      ).value;
       const productName = (
         target.elements.namedItem("productName") as HTMLInputElement
       ).value;
@@ -88,7 +80,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
       const maxPrice = (
         target.elements.namedItem("maxPrice") as HTMLInputElement
       ).value;
-      query = `?productName=${productName}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+      query = `?productId=${productId}&productName=${productName}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     }
     router.push(query);
   };
@@ -117,18 +109,29 @@ const Filter = ({ isAdmin }: FilterProps) => {
             : ""
         }
         ${
-          pageProducts === "products"
-            ? "w-[900px] max-md:h-[400px] max-lg:h-[250px]"
+          pageProducts === "products" || page === "products"
+            ? "w-[1100px] max-md:h-[500px] max-lg:h-[350px]"
             : ""
         }      
         `}
     >
-      {/* Show form fields for /dashboard/products page */}
-      {page === "products" && (
-        <>
+      {/* Show form fields for /dashboard/products and products page */}
+      {(page === "products" || pageProducts === "products") && (
+        <div
+          className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-2
+        max-md:grid-rows-4 max-md:grid-cols-1"
+        >
           <div className="flex flex-col gap-2">
-            <label htmlFor="productname">Product Name</label>
-            <input id="productname" type="text" name="productname" />
+            <label htmlFor="productId">Product-Id</label>
+            <input id="productId" type="text" name="productId" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="productName">Product Name</label>
+            <input id="productName" type="text" name="productName" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="productCategory">Product Category</label>
+            <input id="productCategory" type="text" name="productCategory" />
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="minPrice">Min. Price</label>
@@ -138,7 +141,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
             <label htmlFor="maxPrice">Max. Price</label>
             <input id="maxPrice" type="number" name="maxPrice" />
           </div>
-        </>
+        </div>
       )}
       {/** Show form fields for /dashboard/customers */}
       {page === "customers" && (
@@ -242,30 +245,6 @@ const Filter = ({ isAdmin }: FilterProps) => {
               max={today}
               value={today}
             />
-          </div>
-        </div>
-      )}
-      {/** Show form fields for /products */}
-      {pageProducts === "products" && (
-        <div
-          className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-2
-        max-md:grid-rows-4 max-md:grid-cols-1"
-        >
-          <div className="flex flex-col gap-2">
-            <label htmlFor="productName">Product Name</label>
-            <input id="productName" type="text" name="productName" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="productCategory">Product Category</label>
-            <input id="productCategory" type="text" name="productCategory" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="minPrice">Min. Price</label>
-            <input id="minPrice" type="number" name="minPrice" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="maxPrice">Max. Price</label>
-            <input id="maxPrice" type="number" name="maxPrice" />
           </div>
         </div>
       )}

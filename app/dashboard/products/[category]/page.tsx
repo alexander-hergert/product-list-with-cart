@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 const prisma = new PrismaClient();
 
 const fetchProducts = async (
-  id: string | undefined,
+  productId: string | undefined,
   productName: string | undefined,
   mainCategory: string,
   productCategory: string | undefined,
@@ -31,7 +31,7 @@ const fetchProducts = async (
   try {
     const products = await prisma.products.findMany({
       where: {
-        ...(id && { id: { contains: id, mode: "insensitive" } }),
+        id: { contains: productId, mode: "insensitive" },
         ...(productName && {
           name: { contains: productName, mode: "insensitive" },
         }),
@@ -67,21 +67,25 @@ const fetchProducts = async (
 };
 
 const countProducts = async (
-  id: string | undefined,
+  productId: string | undefined,
   productName: string | undefined,
   mainCategory: string,
+  productCategory: string | undefined,
   minPrice: string | undefined,
   maxPrice: string | undefined
 ): Promise<number> => {
   try {
     const total = await prisma.products.count({
       where: {
-        ...(id && { id: { contains: id, mode: "insensitive" } }),
+        ...(productId && { id: { contains: productId, mode: "insensitive" } }),
         ...(productName && {
           name: { contains: productName, mode: "insensitive" },
         }),
         ...(mainCategory && {
           main_category: { contains: mainCategory, mode: "insensitive" },
+        }),
+        ...(productCategory && {
+          sub_category: { contains: productCategory, mode: "insensitive" },
         }),
         ...(minPrice && { price: { gte: Number(minPrice) } }),
         ...(maxPrice && { price: { lte: Number(maxPrice) } }),
@@ -97,7 +101,7 @@ const countProducts = async (
 };
 
 type SearchParams = {
-  id?: string;
+  productId?: string;
   productName?: string;
   productCategory?: string;
   minPrice?: string;
@@ -125,14 +129,21 @@ const ProductsSubPage = async ({
   const pathname = params.category.toLowerCase();
   if (!pathnames.map((p) => p.name.toLowerCase()).includes(pathname))
     redirect("/dashboard/products");
-  const { id, productName, productCategory, minPrice, maxPrice, page, order } =
-    searchParams;
+  const {
+    productId,
+    productName,
+    productCategory,
+    minPrice,
+    maxPrice,
+    page,
+    order,
+  } = searchParams;
 
   const { category } = params;
   const mainCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
   const products = await fetchProducts(
-    id,
+    productId,
     productName,
     mainCategory,
     productCategory,
@@ -143,9 +154,10 @@ const ProductsSubPage = async ({
   );
 
   const total = await countProducts(
-    id,
+    productId,
     productName,
     mainCategory,
+    productCategory,
     minPrice,
     maxPrice
   );
@@ -164,7 +176,7 @@ const ProductsSubPage = async ({
       <ProductAdminPagination
         searchParams={searchParams}
         total={total}
-        id={id}
+        id={productId}
         productName={productName}
         productCategory={productCategory}
         minPrice={minPrice}

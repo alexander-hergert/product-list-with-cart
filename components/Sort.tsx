@@ -16,12 +16,7 @@ const Sort = ({ isAdmin }: SortProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     const target = e.target;
-    if (page === "products") {
-      const productname = searchParams.get("productname") || "";
-      const price = searchParams.get("price") || "";
-      const order = target.value;
-      query = `?productname=${productname}&price=${price}&order=${order}`;
-    } else if (page === "customers") {
+    if (page === "customers") {
       const username = searchParams.get("username") || "";
       const email = searchParams.get("email") || "";
       const address = searchParams.get("address") || "";
@@ -50,13 +45,14 @@ const Sort = ({ isAdmin }: SortProps) => {
       } else {
         query = `?minDate=${minDate}&maxDate=${maxDate}&order=${order}`;
       }
-    } else if (pageProducts === "products") {
+    } else if (pageProducts === "products" || page === "products") {
+      const productId = searchParams.get("id") || "";
       const productname = searchParams.get("productname") || "";
       const productCategory = searchParams.get("productCategory") || "";
       const minPrice = searchParams.get("minPrice") || "";
       const maxPrice = searchParams.get("maxPrice") || "";
       const order = target.value;
-      query = `?productname=${productname}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}&order=${order}`;
+      query = `?productId=${productId}&productname=${productname}&productCategory=${productCategory}&minPrice=${minPrice}&maxPrice=${maxPrice}&order=${order}`;
     }
     router.push(query);
   };
@@ -73,14 +69,6 @@ const Sort = ({ isAdmin }: SortProps) => {
         name="order"
         onChange={handleChange}
       >
-        {page === "products" && (
-          <>
-            <option value="productnameAsc">Productname ascending</option>
-            <option value="productnameDesc">Productname descending</option>
-            <option value="priceAsc">Price ascending</option>
-            <option value="priceDesc">Price descending</option>
-          </>
-        )}
         {page === "customers" && (
           <>
             <option value="usernameAsc">Username ascending</option>
@@ -117,7 +105,7 @@ const Sort = ({ isAdmin }: SortProps) => {
             <option value="dateDesc">Date descending</option>
           </>
         )}
-        {pageProducts === "products" && (
+        {(pageProducts === "products" || page === "products") && (
           <>
             <option value="productnameAsc">Productname ascending</option>
             <option value="productnameDesc">Productname descending</option>

@@ -6,6 +6,7 @@ import ProductPagination from "@/components/products/ProductPagination";
 const prisma = new PrismaClient();
 
 const getProducts = async (
+  productId: string | undefined,
   productName: string | undefined,
   mainCategory: string,
   productCategory: string | undefined,
@@ -17,6 +18,9 @@ const getProducts = async (
   try {
     const products: Product[] = await prisma.products.findMany({
       where: {
+        ...(productId && {
+          id: { contains: productId, mode: "insensitive" },
+        }),
         ...(productName && {
           name: { contains: productName, mode: "insensitive" },
         }),
@@ -34,6 +38,8 @@ const getProducts = async (
       orderBy: {
         ...((order === "productnameAsc" && { name: "asc" }) ||
           (order === "productnameDesc" && { name: "desc" })),
+        ...((order === "productCategoryAsc" && { sub_category: "asc" }) ||
+          (order === "productCategoryDesc" && { sub_category: "desc" })),
         ...((order === "priceAsc" && { price: "asc" }) ||
           (order === "priceDesc" && { price: "desc" })),
       },
@@ -50,6 +56,7 @@ const getProducts = async (
 };
 
 const countProducts = async (
+  productId: string | undefined,
   productName: string | undefined,
   mainCategory: string,
   productCategory: string | undefined,
@@ -59,6 +66,7 @@ const countProducts = async (
   try {
     const total = await prisma.products.count({
       where: {
+        ...(productId && { id: { contains: productId, mode: "insensitive" } }),
         ...(productName && {
           name: { contains: productName, mode: "insensitive" },
         }),
@@ -84,6 +92,7 @@ const countProducts = async (
 };
 
 type SearchParams = {
+  productId?: string;
   productName?: string;
   productCategory?: string;
   minPrice?: string;
@@ -99,13 +108,21 @@ const ProductsList = async ({
   searchParams: SearchParams;
   params: { category: string };
 }) => {
-  const { productName, productCategory, minPrice, maxPrice, page, order } =
-    searchParams;
+  const {
+    productId,
+    productName,
+    productCategory,
+    minPrice,
+    maxPrice,
+    page,
+    order,
+  } = searchParams;
 
   const { category } = params;
   const mainCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
   const products = await getProducts(
+    productId,
     productName,
     mainCategory,
     productCategory,
@@ -116,6 +133,7 @@ const ProductsList = async ({
   );
   //count total value to display and for pagination
   const total = await countProducts(
+    productId,
     productName,
     mainCategory,
     productCategory,

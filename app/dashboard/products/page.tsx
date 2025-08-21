@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 const prisma = new PrismaClient();
 
 const fetchProducts = async (
-  id: string | undefined,
+  productId: string | undefined,
   productName: string | undefined,
   productCategory: string | undefined,
   minPrice: string | undefined,
@@ -30,7 +30,7 @@ const fetchProducts = async (
   try {
     const products = await prisma.products.findMany({
       where: {
-        ...(id && { id: { contains: id, mode: "insensitive" } }),
+        id: { contains: productId, mode: "insensitive" },
         ...(productName && {
           name: { contains: productName, mode: "insensitive" },
         }),
@@ -63,17 +63,21 @@ const fetchProducts = async (
 };
 
 const countProducts = async (
-  id: string | undefined,
-  productname: string | undefined,
+  productId: string | undefined,
+  productName: string | undefined,
+  productCategory: string | undefined,
   minPrice: string | undefined,
   maxPrice: string | undefined
 ): Promise<number> => {
   try {
     const total = await prisma.products.count({
       where: {
-        ...(id && { id: { contains: id, mode: "insensitive" } }),
-        ...(productname && {
-          name: { contains: productname, mode: "insensitive" },
+        ...(productId && { id: { contains: productId, mode: "insensitive" } }),
+        ...(productName && {
+          name: { contains: productName, mode: "insensitive" },
+        }),
+        ...(productCategory && {
+          sub_category: { contains: productCategory, mode: "insensitive" },
         }),
         ...(minPrice && { price: { gte: Number(minPrice) } }),
         ...(maxPrice && { price: { lte: Number(maxPrice) } }),
@@ -89,7 +93,7 @@ const countProducts = async (
 };
 
 type SearchParams = {
-  id?: string;
+  productId?: string;
   productName?: string;
   productCategory?: string;
   minPrice?: string;
@@ -108,14 +112,23 @@ const pathnames = [
 
 const ProductsPage = async ({
   searchParams,
+  params,
 }: {
   searchParams: SearchParams;
+  params: { category: string };
 }) => {
-  const { id, productName, productCategory, minPrice, maxPrice, page, order } =
-    searchParams;
+  const {
+    productId,
+    productName,
+    productCategory,
+    minPrice,
+    maxPrice,
+    page,
+    order,
+  } = searchParams;
 
   const products = await fetchProducts(
-    id,
+    productId,
     productName,
     productCategory,
     minPrice,
@@ -124,7 +137,13 @@ const ProductsPage = async ({
     order
   );
 
-  const total = await countProducts(id, productName, minPrice, maxPrice);
+  const total = await countProducts(
+    productId,
+    productName,
+    productCategory,
+    minPrice,
+    maxPrice
+  );
   const isAdmin = await checkIfAdmin(auth().userId);
   return (
     <div className="flex flex-col items-center gap-4">
@@ -139,7 +158,7 @@ const ProductsPage = async ({
       <ProductAdminPagination
         searchParams={searchParams}
         total={total}
-        id={id}
+        id={productId}
         productName={productName}
         productCategory={productCategory}
         minPrice={minPrice}
