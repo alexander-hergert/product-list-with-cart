@@ -8,21 +8,71 @@ import { Product } from "@/lib/types";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 
-const productSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 character"),
-  main_category: z.string().min(1, "Please select a main category"),
-  sub_category: z.string().min(3, "Sub category must be at least 3 character"),
-  description: z.string().min(3, "Description must be at least 3 character"),
-  price: z.string().min(1, "Price must be at least 1"),
-  img: z.string().url("Invalid URL"),
-});
+// build schema at runtime based on existing subCategories
+const productSchema = (subCategories: string[]) =>
+  z
+    .object({
+      id: z.string().min(1, "Missing product ID"),
+      name: z.string().min(3, "Name must be at least 3 characters"),
+      main_category: z.string().min(1, "Please select a main category"),
+      sub_category: z.string().min(1, "Please select a sub category"),
+      sub_category_new: z
+        .string()
+        .optional()
+        .refine((val) => val === undefined || val !== "Add new", {
+          message: "Sub category name cannot be 'Add new'",
+        }),
+      description: z
+        .string()
+        .min(3, "Description must be at least 3 characters"),
+      // Coerce string -> number and validate
+      price: z.preprocess((val) => {
+        if (typeof val === "string") {
+          const n = Number(val);
+          return Number.isFinite(n) ? n : val;
+        }
+        return val;
+      }, z.number().positive("Price must be greater than 0")),
+      img: z.string().url("Invalid URL"),
+    })
+    .superRefine((data, ctx) => {
+      if (data.sub_category === "Add new") {
+        const newVal = data.sub_category_new?.trim();
+        if (!newVal) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["sub_category_new"],
+            message: "Please enter a new sub category",
+          });
+        }
+        // min 3 chars if "Add new"
+        else if (newVal && newVal.length < 3) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["sub_category_new"],
+            message: "Sub category name must be at least 3 characters",
+          });
+        } else if (
+          subCategories
+            .map((s) => s.toLowerCase().trim())
+            .includes(newVal.toLowerCase())
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["sub_category_new"],
+            message: "This sub category already exists",
+          });
+        }
+      }
+    });
 
 interface EditProductProps {
   product: Product | null;
   id: string;
+  subCategories: string[];
 }
 
-const EditProduct: FC<EditProductProps> = ({ product, id }) => {
+const EditProduct: FC<EditProductProps> = ({ product, id, subCategories }) => {
   const { name, main_category, sub_category, description, price, image } =
     product || {};
   const queryClient = useQueryClient();
@@ -32,6 +82,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
     name: string;
     main_category: string;
     sub_category: string;
+    sub_category_new?: string;
     description: string;
     price: number;
     img: string;
@@ -40,6 +91,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
     name: name || "",
     main_category: main_category || "",
     sub_category: sub_category || "",
+    sub_category_new: "",
     description: description || "",
     price: price || 0,
     img: image || "",
@@ -69,9 +121,11 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
   });
 
   const [errors, setErrors] = useState<{
+    id?: string;
     name?: string;
     main_category?: string;
     sub_category?: string;
+    sub_category_new?: string;
     description?: string;
     price?: number;
     img?: string;
@@ -92,9 +146,10 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
     e.preventDefault();
     // Validate input using Zod schema
     try {
-      productSchema.parse(input);
+      // Validate and coerce with Zod
+      const parsed = productSchema(subCategories).parse(input);
       setErrors({});
-      mutation.mutate(input);
+      mutation.mutate(parsed);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
@@ -128,8 +183,8 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
           defaultValue={name}
           className="w-[300px] max-md:text-center border rounded px-2"
         />
-        {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
       </div>
+      <div>{errors.name && <p style={{ color: "red" }}>{errors.name}</p>}</div>
       <div
         className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between my-4
       "
@@ -147,13 +202,14 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
           defaultValue={main_category}
           className="w-[300px] max-md:text-center border rounded px-2"
         >
-          <option value="">Select a category</option>
           <option value="Breakfast">Breakfast</option>
           <option value="Lunch">Lunch</option>
           <option value="Dessert">Dessert</option>
           <option value="Drinks">Drinks</option>
           <option value="Menu">Menu</option>
         </select>
+      </div>
+      <div>
         {errors.main_category && (
           <p style={{ color: "red" }}>{errors.main_category}</p>
         )}
@@ -168,16 +224,47 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
         >
           Sub Category:
         </label>
-        <input
+        <select
           id="sub_category"
-          type="text"
           name="sub_category"
           onChange={handleChange}
           defaultValue={sub_category}
           className="w-[300px] max-md:text-center border rounded px-2"
-        />
+        >
+          <option value="Add new">Add new sub category</option>
+          {subCategories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
         {errors.sub_category && (
           <p style={{ color: "red" }}>{errors.sub_category}</p>
+        )}
+      </div>
+      {input.sub_category === "Add new" && (
+        <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between mb-4">
+          <label
+            className="text-xl w-[200px] max-md:text-center"
+            htmlFor="sub_category_new"
+          >
+            New Sub Category:
+          </label>
+          <input
+            id="sub_category_new"
+            type="text"
+            name="sub_category_new"
+            value={input.sub_category_new}
+            onChange={handleChange}
+            className="w-[300px] max-md:text-center border rounded px-2"
+          />
+        </div>
+      )}
+      <div>
+        {errors.sub_category_new && (
+          <p style={{ color: "red" }}>{errors.sub_category_new}</p>
         )}
       </div>
       <div className="flex max-md:flex-col gap-2 items-center w-[600px] justify-between">
@@ -194,6 +281,8 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
           defaultValue={description}
           className="border rounded w-[300px] min-h-[200px] px-2"
         />
+      </div>
+      <div>
         {errors.description && (
           <p style={{ color: "red" }}>{errors.description}</p>
         )}
@@ -206,22 +295,29 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
           type="number"
           id="price"
           name="price"
+          inputMode="decimal"
+          step="0.01"
           onChange={handleChange}
           defaultValue={price}
+          value={input.price}
           className="w-[300px] max-md:text-center border rounded px-2"
         />
+      </div>
+      <div>
         {errors.price && <p style={{ color: "red" }}>{errors.price}</p>}
       </div>
       <div>
         <CldUploadWidget
           signatureEndpoint="/api/sign-cloudinary-params"
           onSuccess={(result) => {
-            if (typeof result.info !== "string") {
-              setInput({ ...input, img: result?.info?.secure_url || "" });
+            const secureUrl = (result.info as any)?.secure_url;
+            if (typeof secureUrl === "string") {
+              setInput((prev) => ({
+                ...prev,
+                img: secureUrl,
+              }));
             } else {
-              console.error(
-                "Unexpected type: result.info is a string, not an object."
-              );
+              console.error("Unexpected result format:", result.info);
             }
           }}
         >
@@ -230,6 +326,7 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
               <button
                 className="className= border rounded p-2 my-2 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] mt-4"
                 name="img"
+                type="button"
                 onClick={(e) => {
                   e.preventDefault;
                   open();
@@ -254,8 +351,8 @@ const EditProduct: FC<EditProductProps> = ({ product, id }) => {
             />
           </div>
         )}
-        {errors.img && <p style={{ color: "red" }}>{errors.img}</p>}
       </div>
+      <div>{errors.img && <p style={{ color: "red" }}>{errors.img}</p>}</div>
       <button
         type="submit"
         className="className= border rounded p-2 my-2 hover:bg-blue-700 hover:text-white md:w-[600px] max-md:w-[300px] mt-4"

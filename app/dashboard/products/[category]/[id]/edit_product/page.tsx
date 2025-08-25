@@ -27,6 +27,28 @@ const fetchProduct = async (id: string) => {
   }
 };
 
+//fetch sub_category for selectable slots
+const fetchSubCategories = async () => {
+  try {
+    const subCategories = await prisma.products.findMany({
+      distinct: ["sub_category"], // unique values only
+      select: {
+        sub_category: true, // only fetch sub_category
+      },
+      orderBy: {
+        sub_category: "asc", // sort alphabetically A → Z
+      },
+    });
+
+    return subCategories.map((item) => item.sub_category);
+  } catch (error) {
+    console.error("Error fetching subcategories:", error);
+    return [];
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 interface EditProductPageProps {
   params: {
     id: string;
@@ -36,10 +58,11 @@ interface EditProductPageProps {
 const EditProductPage = async ({ params }: EditProductPageProps) => {
   const { id } = params;
   const product = await fetchProduct(id);
+  const subCategories = await fetchSubCategories();
   return (
     <div>
       <h1 className="text-2xl my-4 text-center font-bold">Edit Product</h1>
-      <EditProduct product={product} id={id} />
+      <EditProduct product={product} id={id} subCategories={subCategories} />
     </div>
   );
 };

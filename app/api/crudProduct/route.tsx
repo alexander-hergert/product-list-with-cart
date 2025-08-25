@@ -132,8 +132,16 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const { id, name, main_category, sub_category, description, price, img } =
-    await request.json();
+  const {
+    id,
+    name,
+    main_category,
+    sub_category,
+    sub_category_new,
+    description,
+    price,
+    img,
+  } = await request.json();
 
   //Check if user is admin
   const { userId } = auth();
@@ -150,6 +158,7 @@ export async function PUT(request: Request) {
       name,
       main_category,
       sub_category,
+      sub_category_new,
       description,
       price: parseInt(price),
       img,
@@ -162,7 +171,8 @@ export async function PUT(request: Request) {
       data: {
         name,
         main_category,
-        sub_category,
+        sub_category:
+          sub_category === "Add new" ? sub_category_new : sub_category,
         description,
         price: parseInt(price),
         image: img,
