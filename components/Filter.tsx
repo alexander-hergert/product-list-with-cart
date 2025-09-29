@@ -99,7 +99,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
             : ""
         }
         ${
-          page === "customers" || page === "products"
+          page === "customers"
             ? "w-[700px] max-md:h-[325px] max-lg:h-[325px]"
             : ""
         }
