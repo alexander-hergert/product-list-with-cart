@@ -166,21 +166,6 @@ const Filter = ({ isAdmin }: FilterProps) => {
           className="flex justify-center gap-4 max-lg:grid max-lg:grid-cols-2 max-lg:grid-rows-2
         max-md:grid-rows-4 max-md:grid-cols-1"
         >
-          <div className="flex flex-col gap-2">
-            <label htmlFor="status">Status:</label>
-            <select id="status" name="status">
-              <option value="">All</option>
-              <option value="Pending">Pending</option>
-              <option value="Paid">Paid</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="id">Order ID:</label>
-            <input id="id" type="text" name="id" />
-          </div>
           {isAdmin && (
             <div className="flex flex-col gap-2">
               <label htmlFor="username">Username:</label>
@@ -192,6 +177,21 @@ const Filter = ({ isAdmin }: FilterProps) => {
               />
             </div>
           )}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="id">Order ID:</label>
+            <input id="id" type="text" name="id" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="status">Status:</label>
+            <select id="status" name="status">
+              <option value="">All</option>
+              <option value="Pending">Pending</option>
+              <option value="Paid">Paid</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="minDate">Min. Date:</label>
             <input id="minDate" type="date" name="minDate" />
