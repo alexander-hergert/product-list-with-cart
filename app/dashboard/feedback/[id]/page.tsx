@@ -186,12 +186,14 @@ const FeedbackDetailsPage = async ({ params }: { params: Params }) => {
             </div>
           </aside>
         </div>
-        <Link
-          href={`/dashboard/feedback/${feedback?.id}/edit_feedback`}
-          className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-full text-center"
-        >
-          Edit
-        </Link>
+        {!isAdmin && (
+          <Link
+            href={`/dashboard/feedback/${feedback?.id}/edit_feedback`}
+            className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-full text-center"
+          >
+            Edit
+          </Link>
+        )}
         <DeleteFeedback id={feedback?.id || ""} />
       </section>
       <Link

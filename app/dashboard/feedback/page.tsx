@@ -136,39 +136,46 @@ const FeedbackPage = async ({
         minDate={minDate}
         maxDate={maxDate}
       />
-      <div
+      <section
         className="m-auto w-[1200px] mt-4 grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 
       max-lg:w-[800px] max-md:w-[400px] gap-4"
       >
         {feedbacks.map((feedback) => (
-          <div
+          <aside
             key={feedback.id}
-            className="border p-2 rounded-xl flex flex-col shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="h-[300px] justify-around border p-4 rounded-xl flex flex-col shadow-md hover:shadow-lg transition-shadow duration-300"
           >
-            <Link href={`/dashboard/feedback/${feedback.id}`}>
+            <Link
+              href={`/dashboard/feedback/${feedback.id}`}
+              className="h-[200px]"
+            >
               <div className="flex gap-4 items-center">
-                <label>Title:</label>
+                <label className="font-bold">Title:</label>
                 <h2 className="truncate-text">{feedback?.title}</h2>
               </div>
-              <div className="flex gap-4 items-center">
-                <label>Comment:</label>
+              <div className="flex gap-4 items-start">
+                <label className="font-bold">Comment:</label>
                 <p className="truncate-text">{feedback?.comment}</p>
               </div>
               <div className="flex gap-4 items-center">
-                <label>Date:</label>
+                <label className="font-bold">Date:</label>
                 <p>{feedback?.createdAt.toDateString()}</p>
               </div>
             </Link>
-            <Link
-              href={`/dashboard/feedback/${feedback?.id}/edit_feedback`}
-              className="border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-full text-center"
-            >
-              Edit
-            </Link>
-            <DeleteFeedback id={feedback?.id} />
-          </div>
+            <div className="flex flex-col h-[100px] justify-end">
+              {!isAdmin && (
+                <Link
+                  href={`/dashboard/feedback/${feedback?.id}/edit_feedback`}
+                  className="block border rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center w-full text-center"
+                >
+                  Edit
+                </Link>
+              )}
+              <DeleteFeedback id={feedback?.id} />
+            </div>
+          </aside>
         ))}
-      </div>
+      </section>
       <Link
         className="border block w-[20%] max-md:w-[50%] m-auto mt-4 rounded p-2 my-2 hover:bg-blue-700 hover:text-white self-center text-center"
         href="/dashboard"
