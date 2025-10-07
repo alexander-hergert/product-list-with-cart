@@ -28,7 +28,7 @@ export default function ProductsPathPage({
   return (
     <>
       <Modal />
-      <div>
+      <main>
         <div className="mt-4 gap-4 flex flex-wrap justify-center m-auto max-lg:flex-col max-md:w-[327px]">
           <div>
             <Filter isAdmin={false} />
@@ -44,7 +44,7 @@ export default function ProductsPathPage({
           <ProductsList searchParams={searchParams} params={params} />
           <Cart />
         </div>
-      </div>
+      </main>
     </>
   );
 }
