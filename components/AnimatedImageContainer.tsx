@@ -33,6 +33,7 @@ function AnimatedImageContainer() {
       {images.map((img, i) =>
         i === imageNumber ? (
           <Image
+            data-testid="animated-image"
             key={img.src}
             className="rounded-lg animate-fadeIn"
             src={img.src}
