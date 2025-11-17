@@ -50,6 +50,7 @@ export default function ProductAdminPagination({
     <div className="flex items-center justify-center my-4 border dark:bg-slate-200 p-4 rounded-lg w-2/3 m-auto">
       <Stack spacing={2}>
         <Pagination
+          data-testid="product-admin-pagination"
           size="large"
           count={totalPages}
           page={page}

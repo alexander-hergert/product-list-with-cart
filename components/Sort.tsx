@@ -58,6 +58,7 @@ const Sort = ({ isAdmin }: SortProps) => {
   };
   return (
     <form
+      data-testid="sort-form"
       role="toolbar"
       aria-label="Sort"
       action=""

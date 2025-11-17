@@ -87,6 +87,7 @@ const Filter = ({ isAdmin }: FilterProps) => {
 
   return (
     <form
+      data-testid="filter-form"
       role="toolbar"
       aria-label="Filter"
       onSubmit={handleSubmit}

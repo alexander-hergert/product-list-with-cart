@@ -159,7 +159,7 @@ const ProductsList = async ({
         minPrice={minPrice}
         maxPrice={maxPrice}
       />
-      <div className="grid grid-cols-3 gap-4 w-[800px] max-lg:w-[688px] max-md:w-[327px] max-md:grid-cols-1">
+      <div data-testid="products-list" className="grid grid-cols-3 gap-4 w-[800px] max-lg:w-[688px] max-md:w-[327px] max-md:grid-cols-1">
         {products.map((singleProduct: Product) => (
           <SingleProduct
             key={singleProduct.id}
