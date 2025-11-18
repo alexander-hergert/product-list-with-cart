@@ -34,6 +34,14 @@ const Cart = () => {
   //SendOder function POST request to the server
   const sendOrder = async () => {
     try {
+      const validCart = Object.fromEntries(
+        Object.entries(cart).filter(([_, item]) => item.quantity > 0)
+      );
+
+      if (Object.keys(validCart).length === 0) {
+        console.log("No items to order!");
+        return;
+      }
       const response = await fetch("/api/order", {
         method: "POST",
         headers: {
@@ -96,7 +104,10 @@ const Cart = () => {
                 </div>
               </div>
               <div className="grid place-items-center p-1 border-2 rounded-[50%]">
-                <button data-testid="remove-button" onClick={() => removeProduct(id)}>
+                <button
+                  data-testid="remove-button"
+                  onClick={() => removeProduct(id)}
+                >
                   <Image
                     src="/images/icon-remove-item.svg"
                     alt="remove-icon"

@@ -1,6 +1,5 @@
 import React from "react";
 import { useStripe } from "@stripe/react-stripe-js";
-import { svgIconClasses } from "@mui/material";
 
 const SuccessIcon = (
   <svg

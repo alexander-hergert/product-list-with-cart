@@ -22,6 +22,7 @@ export default function StripeForm() {
   const [confirmed, setConfirmed] = React.useState(false);
   const { cart, setCart } = useContext(CartContext);
   const { orderId } = useContext(OrderIdContext);
+
   const router = useRouter();
 
   React.useEffect(() => {

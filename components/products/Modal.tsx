@@ -4,10 +4,13 @@ import { ModalContext } from "@/lib/modalContext";
 import { CartContext } from "@/lib/cartContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useUser, useAuth } from "@clerk/nextjs";
+import { IoMdClose } from "react-icons/io";
 
 const Modal = () => {
   const cartContext = useContext(CartContext);
   const modalContext = useContext(ModalContext);
+  const { user } = useUser();
   const router = useRouter();
 
   if (!cartContext) {
@@ -43,15 +46,33 @@ const Modal = () => {
   return (
     <>
       {isModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-20 overflow-auto">
-          <div className="bg-white p-6 rounded-lg shadow-lg overflow-auto max-w-[90%] max-h-[90%]">
-            <Image
-              src="/images/icon-order-confirmed.svg"
-              alt="confirmed-icon"
-              width={50}
-              height={50}
-            />
-            <h1 className="text-2xl font-bold mb-4 text-left mt-4">
+        <div
+          data-testid="modal"
+          className=" fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-20 overflow-auto"
+        >
+          <div className="bg-white dark:bg-slate-500 p-6 rounded-lg shadow-lg overflow-auto max-w-[90%] max-h-[90%]">
+            <div className="flex justify-between items-center">
+              <Image
+                src="/images/icon-order-confirmed.svg"
+                alt="confirmed-icon"
+                width={50}
+                height={50}
+              />
+              <button
+                aria-label="Close modal"
+                onClick={() => setIsModal(false)}
+              >
+                <IoMdClose />
+              </button>
+            </div>
+            <div className="flex justify-center">
+              {!user && (
+                <p className="text-red-600">
+                  You have to be logged in to place an order.
+                </p>
+              )}
+            </div>
+            <h1 className="text-2xl font-bold mb-4 text-left mt-4 text-black">
               Order Confirmed
             </h1>
             <p className="text-slate-500 mb-6">We hope you enjoy your food!</p>
@@ -78,7 +99,9 @@ const Modal = () => {
                           />
                         </div>
                         <div>
-                          <h3 className="font-bold">{cart[id].name}</h3>
+                          <h3 className="font-bold text-black">
+                            {cart[id].name}
+                          </h3>
                           <div className="flex gap-2">
                             <p className="text-red-800">{cart[id].quantity}x</p>
                             <p className="text-gray-500">@${cart[id].price}</p>
@@ -92,8 +115,8 @@ const Modal = () => {
               {itemTypes > 0 && (
                 <>
                   <div className="flex justify-between item-center mb-4">
-                    <p>Order Total</p>
-                    <p className="text-2xl font-bold">
+                    <p className="text-black">Order Total</p>
+                    <p className="text-2xl font-bold text-black">
                       ${totalPrice.toFixed(2)}
                     </p>
                   </div>
@@ -104,6 +127,7 @@ const Modal = () => {
             <div className="text-center mt-4">
               <button
                 onClick={handleModal}
+                disabled={!user}
                 className="bg-amber-800 hover:bg-amber-900 text-white py-2 px-4 rounded-lg"
               >
                 Go to Checkout
