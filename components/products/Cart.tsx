@@ -96,7 +96,7 @@ const Cart = () => {
                 </div>
               </div>
               <div className="grid place-items-center p-1 border-2 rounded-[50%]">
-                <button onClick={() => removeProduct(id)}>
+                <button data-testid="remove-button" onClick={() => removeProduct(id)}>
                   <Image
                     src="/images/icon-remove-item.svg"
                     alt="remove-icon"

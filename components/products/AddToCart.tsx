@@ -48,6 +48,7 @@ const AddToCart: React.FC<AddToCartProps> = ({
           }
         >
           <button
+            data-testid="add-to-cart-button"
             onClick={handleUpClick}
             className="flex justify-between items-center border border-red-800 rounded-[20px] px-6 p-4 w-[160px] h-[44px] bg-white dark:bg-slate-200"
           >
@@ -69,7 +70,7 @@ const AddToCart: React.FC<AddToCartProps> = ({
           }
         >
           <div className="flex justify-between items-center rounded-[20px] bg-orange-700 text-white px-6 p-4 w-[160px] h-[44px]">
-            <button onClick={handleDownClick}>
+            <button data-testid="decrement-button" onClick={handleDownClick}>
               <div className="grid place-items-center border rounded-[50%] h-4 w-4">
                 <Image
                   src="/images/icon-decrement-quantity.svg"
@@ -81,7 +82,7 @@ const AddToCart: React.FC<AddToCartProps> = ({
             </button>
             <div>{cart[id] ? cart[id].quantity : 0}</div>
             <div className="grid place-items-center border border-white rounded-[50%] h-4 w-4">
-              <button onClick={handleUpClick}>
+              <button data-testid="increment-button" onClick={handleUpClick}>
                 <Image
                   src="/images/icon-increment-quantity.svg"
                   alt="increment-icon"
