@@ -91,6 +91,7 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
         <section className="flex flex-col items-center border rounded-xl p-4 shadow-md">
           <div className="flex max-md:gap-4 gap-8 max-lg:flex-col">
             <Image
+              data-testid="product-image"
               className="rounded-xl m-auto"
               src={product.image}
               alt={product.name}
@@ -100,7 +101,7 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
             <aside>
               <div className="flex gap-4 items-center max-lg:flex-col text-center my-4 min-xl:w-[300px]">
                 <label className="font-bold">Name:</label>
-                <h2>{product.name}</h2>
+                <h2 data-testid="product-title">{product.name}</h2>
               </div>
               <div className="flex gap-4 items-center max-lg:flex-col text-center my-4 min-xl:w-[300px]">
                 <label className="font-bold" htmlFor="mainCategory">
@@ -116,13 +117,13 @@ const ProductsDetailsPage = async ({ params }: { params: Params }) => {
               </div>
               <div className="flex gap-4 max-lg:flex-col max-lg:text-center my-4 min-lg:w-[300px]">
                 <label className="font-bold">Description:</label>
-                <p>{product?.description}</p>
+                <p data-testid="product-description">{product?.description}</p>
               </div>
               <div className="flex gap-4 items-center max-lg:flex-col text-center my-4 min-xl:w-[300px]">
                 <label className="font-bold" htmlFor="price">
                   Price:
                 </label>
-                <p>${product.price}</p>
+                <p data-testid="product-price">${product.price}</p>
               </div>
               <div className="flex gap-4 items-center max-lg:flex-col text-center my-4 min-xl:w-[300px]">
                 <label className="font-bold" htmlFor="rating">
