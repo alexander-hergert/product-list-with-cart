@@ -56,6 +56,20 @@ describe("Filter forms submission", () => {
     cy.get("[data-testid='products-list']").should("not.contain", "Granola");
   });
 
+  it("should show 0 items when no products match filter", () => {
+    cy.visit("http://localhost:3000/products/breakfast");
+    //get filter and type into product name input
+    cy.get("form[data-testid='filter-form'] input[name='productName']").type(
+      "NonExistentProduct"
+    );
+    //submit the form
+    cy.get("form[data-testid='filter-form']").submit();
+    //assert url contains productName query
+    cy.url().should("contain", "productName=NonExistentProduct");
+    //it should show no products
+    cy.contains("0 items found");
+  });
+
   it("should filter by product category", () => {
     cy.visit("http://localhost:3000/products/breakfast");
     //get filter and select category
