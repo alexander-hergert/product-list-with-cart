@@ -62,7 +62,16 @@ const InfoIcon = (
   </svg>
 );
 
-const STATUS_CONTENT_MAP = {
+type PaymentStatus =
+  | "succeeded"
+  | "processing"
+  | "requires_payment_method"
+  | "default";
+
+const STATUS_CONTENT_MAP: Record<
+  PaymentStatus,
+  { text: string; iconColor: string; icon: JSX.Element }
+> = {
   succeeded: {
     text: "Payment succeeded",
     iconColor: "#30B130",
@@ -88,8 +97,8 @@ const STATUS_CONTENT_MAP = {
 export default function CompletePage() {
   const stripe = useStripe();
 
-  const [status, setStatus] = React.useState("default");
-  const [intentId, setIntentId] = React.useState(null);
+  const [status, setStatus] = React.useState<PaymentStatus>("default");
+  const [intentId, setIntentId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (!stripe) {
@@ -109,7 +118,8 @@ export default function CompletePage() {
         return;
       }
 
-      setStatus(paymentIntent.status);
+      const nextStatus = paymentIntent.status as PaymentStatus;
+      setStatus(nextStatus in STATUS_CONTENT_MAP ? nextStatus : "default");
       setIntentId(paymentIntent.id);
     });
   }, [stripe]);
