@@ -10,36 +10,37 @@ import { useRouter } from "next/navigation";
 export default function SignUpHandler() {
   const { isLoaded, userId } = useAuth();
   const router = useRouter();
-  const createdUser = localStorage.getItem("createdUser");
-
-  const handlePostSignUp = async () => {
-    if (createdUser) return;
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        console.log(response);
-        console.log("Custom logic executed successfully");
-        localStorage.setItem("createdUser", "true");
-        router.push("/success");
-      } else {
-        console.error("Failed to execute custom logic");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   useEffect(() => {
-    if (isLoaded && userId) {
-      handlePostSignUp();
-    }
-  }, [isLoaded, userId]);
+    if (!isLoaded || !userId) return;
 
-  return <></>;
+    const createdUser = localStorage.getItem("createdUser");
+
+    const handlePostSignUp = async () => {
+      if (createdUser) return;
+
+      try {
+        const response = await fetch("/api/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          console.log("Custom logic executed successfully");
+          localStorage.setItem("createdUser", "true");
+          router.push("/success");
+        } else {
+          console.error("Failed to execute custom logic");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    handlePostSignUp();
+  }, [isLoaded, userId, router]);
+
+  return null;
 }

@@ -55,8 +55,8 @@ export default function ProductsPage() {
               Welcome, please select your category.
             </h1>
             {category.map((singleCathegory) => (
-              <div>
-                <Link key={singleCathegory.name} href={singleCathegory.src}>
+              <div key={singleCathegory.name}>
+                <Link href={singleCathegory.src}>
                   <div className="bg-white group w-[250px] max-lg:w-[213px] max-md:w-[327px] overflow-hidden shadow-lg transition-transform duration-300 hover:shadow-xl hover:scale-105 rounded-lg cursor-pointer">
                     <Image
                       className="w-full object-cover aspect-square rounded-t-lg"

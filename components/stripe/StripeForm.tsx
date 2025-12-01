@@ -9,64 +9,64 @@ import { useRouter } from "next/navigation";
 import CheckoutForm from "@/components/stripe/CheckoutForm";
 import CompletePage from "@/components/stripe/CompletePage";
 
-// Make sure to call loadStripe outside of a component’s render to avoid
-// recreating the Stripe object on every render.
-// This is your test publishable API key.
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
 export default function StripeForm() {
   const [clientSecret, setClientSecret] = React.useState("");
   const [dpmCheckerLink, setDpmCheckerLink] = React.useState("");
   const [confirmed, setConfirmed] = React.useState(false);
+
   const { cart, setCart } = useContext(CartContext);
   const { orderId } = useContext(OrderIdContext);
 
   const router = useRouter();
 
+  // Fix 1 — Prevent infinite loops
   React.useEffect(() => {
-    setConfirmed(
-      new URLSearchParams(window.location.search).get(
-        "payment_intent_client_secret"
-      )
+    const secret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
     );
-    if (!clientSecret) {
-      setClientSecret(
-        new URLSearchParams(window.location.search).get(
-          "payment_intent_client_secret"
-        )
-      );
-    }
-  });
 
+    if (secret) {
+      setConfirmed(secret);
+
+      if (!clientSecret) {
+        setClientSecret(secret);
+      }
+    }
+  }, [clientSecret]);
+
+  // Fix 2 — Correct dependency logic for payment intent creation
   React.useEffect(() => {
-    if (!orderId) {
-      // Don't proceed if no active order
-      //router.push("/");
-      return;
-    }
+    if (!orderId || !cart) return;
 
-    // Create PaymentIntent when cart is not empty
-    fetch("/api/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart, orderId }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
+    const createIntent = async () => {
+      try {
+        const res = await fetch("/api/create-payment-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cart, orderId }),
+        });
+
+        const data = await res.json();
+
         setClientSecret(data.clientSecret);
-        setCart({}); // Clear cart after processing
+        setCart({});
         localStorage.setItem("cart", JSON.stringify({}));
-        // [DEV] For demo purposes only
-        setDpmCheckerLink(data.dpmCheckerLink);
-      })
-      .catch((err) => console.error("Error creating PaymentIntent:", err));
-  }, []);
 
-  const appearance = {
-    theme: "stripe",
-  };
+        setDpmCheckerLink(data.dpmCheckerLink);
+      } catch (err) {
+        console.error("Error creating PaymentIntent:", err);
+      }
+    };
+
+    createIntent();
+  }, [orderId]); // Only re-run when order is created
+
+  const appearance = { theme: "stripe" };
+
   const options = {
     clientSecret,
     appearance,

@@ -27,16 +27,16 @@ const SingleProduct: React.FC<SingleProductProps> = ({
   }
 
   const { cart } = cartContext;
-
   const { id, image, name, sub_category, price } = singleProduct;
 
   useEffect(() => {
-    //check if localstorage has the cart
     const localCart = localStorage.getItem("cart");
+
+    // Only write to localStorage if not already present
     if (!localCart) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
-  }, []);
+  }, [cart]);
 
   return (
     <div className="max-md:mb-4 w-[250px] h-[347px] justify-self-start max-lg:w-[213px] max-md:w-[327px] max-md:h-[400px]">
@@ -47,12 +47,13 @@ const SingleProduct: React.FC<SingleProductProps> = ({
               className={`cursor-pointer rounded-lg w-full object-cover aspect-square ${
                 cart[id]?.quantity ? "border-2 border-red-800" : ""
               }`}
-              src={singleProduct.image}
+              src={image}
               width={200}
               height={200}
-              alt={singleProduct.name}
+              alt={name}
             />
           </div>
+
           <div className="w-full max-w-xs truncate">
             <h3 className="text-gray-500 truncate">{sub_category}</h3>
             <h2 className="font-bold truncate">{name}</h2>
@@ -60,6 +61,7 @@ const SingleProduct: React.FC<SingleProductProps> = ({
           </div>
         </div>
       </Link>
+
       <AddToCart id={id} image={image} name={name} price={price} shift={true} />
     </div>
   );
