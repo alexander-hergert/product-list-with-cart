@@ -31,9 +31,10 @@ const Filter = ({ isAdmin }: FilterProps) => {
     } else if (page === "orders") {
       // Access form values for /dashboard/orders page
       const id = (target.elements.namedItem("id") as HTMLInputElement).value;
-      const username = (
-        target.elements.namedItem("username") as HTMLInputElement
-      ).value;
+      const usernameInput = target.elements.namedItem(
+        "username"
+      ) as HTMLInputElement | null;
+      const username = usernameInput?.value || "";
       const status = (target.elements.namedItem("status") as HTMLSelectElement)
         .value;
       const minDate = (target.elements.namedItem("minDate") as HTMLInputElement)
@@ -53,9 +54,11 @@ const Filter = ({ isAdmin }: FilterProps) => {
       }
     } else if (page === "feedback") {
       // Access form values for /dashboard/feedback page
-      const username = (
-        target.elements.namedItem("username") as HTMLInputElement
-      ).value;
+      const usernameInput = target.elements.namedItem(
+        "username"
+      ) as HTMLInputElement | null;
+      const username = usernameInput?.value || "";
+
       const minDate = (target.elements.namedItem("minDate") as HTMLInputElement)
         .value;
       const maxDate = (target.elements.namedItem("maxDate") as HTMLInputElement)
