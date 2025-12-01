@@ -1,9 +1,8 @@
-import { createContext, useState } from "react";
-import { ReactNode } from "react";
+import { createContext, useState, ReactNode } from "react";
 
-interface OrderIdContextType {
-  orderId: string;
-  setOrderId: (orderId: string) => void;
+export interface OrderIdContextType {
+  orderId: string | null;
+  setOrderId: (orderId: string | null) => void;
 }
 
 export const OrderIdContext = createContext<OrderIdContextType | undefined>(
@@ -11,7 +10,7 @@ export const OrderIdContext = createContext<OrderIdContextType | undefined>(
 );
 
 export const OrderIdProvider = ({ children }: { children: ReactNode }) => {
-  const [orderId, setOrderId] = useState<string>("");
+  const [orderId, setOrderId] = useState<string | null>(null);
 
   return (
     <OrderIdContext.Provider value={{ orderId, setOrderId }}>
