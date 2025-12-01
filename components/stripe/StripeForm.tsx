@@ -18,27 +18,34 @@ export default function StripeForm() {
   const [dpmCheckerLink, setDpmCheckerLink] = React.useState("");
   const [confirmed, setConfirmed] = React.useState(false);
 
-  const { cart, setCart } = useContext(CartContext);
-  const { orderId } = useContext(OrderIdContext);
+  const cartCtx = useContext(CartContext);
+  if (!cartCtx) {
+    return <div>Error: CartContext is not available.</div>;
+  }
+  const { cart, setCart } = cartCtx;
+
+  const orderIdCtx = useContext(OrderIdContext);
+  if (!orderIdCtx) {
+    return <div>Error: OrderIdContext is not available.</div>;
+  }
+  const { orderId } = orderIdCtx;
 
   const router = useRouter();
 
-  // Fix 1 — Prevent infinite loops
   React.useEffect(() => {
     const secret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
 
     if (secret) {
-      setConfirmed(secret);
-
+      setConfirmed(true);
       if (!clientSecret) {
         setClientSecret(secret);
       }
     }
   }, [clientSecret]);
 
-  // Fix 2 — Correct dependency logic for payment intent creation
+
   React.useEffect(() => {
     if (!orderId || !cart) return;
 
@@ -63,9 +70,9 @@ export default function StripeForm() {
     };
 
     createIntent();
-  }, [orderId]); // Only re-run when order is created
+  }, [orderId]);
 
-  const appearance = { theme: "stripe" };
+  const appearance = { theme: "stripe" } as const;
 
   const options = {
     clientSecret,
