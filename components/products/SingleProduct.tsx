@@ -22,21 +22,22 @@ const SingleProduct: React.FC<SingleProductProps> = ({
 }) => {
   const cartContext = useContext(CartContext);
 
-  if (!cartContext) {
-    return <div>Error: CartContext is not available.</div>;
-  }
+  const cart = cartContext?.cart ?? {};
 
-  const { cart } = cartContext;
   const { id, image, name, sub_category, price } = singleProduct;
 
   useEffect(() => {
-    const localCart = localStorage.getItem("cart");
+    if (!cartContext) return;
 
-    // Only write to localStorage if not already present
+    const localCart = localStorage.getItem("cart");
     if (!localCart) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
-  }, [cart]);
+  }, [cartContext, cart]);
+
+  if (!cartContext) {
+    return <div>Error: CartContext is not available.</div>;
+  }
 
   return (
     <div className="max-md:mb-4 w-[250px] h-[347px] justify-self-start max-lg:w-[213px] max-md:w-[327px] max-md:h-[400px]">
