@@ -39,7 +39,7 @@ export default function CheckoutForm({ dpmCheckerLink }: CheckoutFormProps) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: process.env.STRIPE_RETURN_URL!,
+        return_url: process.env.NEXT_PUBLIC_STRIPE_RETURN_URL!,
       },
     });
 
